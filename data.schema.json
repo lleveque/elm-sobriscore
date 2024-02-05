@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/example.schema.json",
+  "title": "Sobriscore",
+  "description": "Two quizzes sharing some questions",
+  "type": "object",
+  "properties": {
+    "climateForm": {
+      "type": "array",
+      "items" : {
+        "type": "object",
+        "properties" : {
+          "text": { "type": "string" },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type" : "object",
+              "properties": {
+                "showIf": {"type": "string"},
+                "type": {"type": "string"},
+                "text": {"type": "string"},
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {"type": "string"},
+                      "text": {"type": "string"},
+                      "score": {"type": "integer"},
+                      "feedback": {"type": "string"}
+                    },
+                    "required": [ "id", "text", "score" ]
+                  }
+                }
+              },
+              "required": [ "type", "text", "options" ]
+            }
+          }
+        },
+        "required": [ "text", "questions" ]
+      }
+    }
+  },
+  "required": [ "climateForm" ]
+}
