@@ -3,9 +3,11 @@ module Main exposing (main)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onCheck)
+import Html.Events exposing (onCheck, onClick)
+import Html.Keyed
 import Json.Decode
 import Set
+import List.Extra
 
 -- MAIN
 
@@ -17,8 +19,11 @@ type alias Model =
   {
     climateForm : Form,
     status : Status,
-    checkedItems : Set.Set String
+    checkedItems : Set.Set String,
+    currentScreen : Screen
   }
+
+type Screen = Intro | Step (Maybe Int) | Results
 
 type Status = OK | KO String
 
@@ -42,7 +47,26 @@ sectionDecoder = Json.Decode.map2 Section
   ( Json.Decode.field "questions" ( Json.Decode.list questionDecoder ))
 
 vSection : Set.Set String -> Section -> Html Msg
-vSection checkedItems s = div [] ([ div [] [ h2 [] [ text s.name ]]] ++ ( List.map ( vQuestion checkedItems ) s.questions ))
+vSection checkedItems s = Html.Keyed.node "div" []
+  (( "section-title", div [] [ h2 [] [ text s.name ]] )
+  :: ( List.map ( keyedVQuestion checkedItems ) s.questions )
+  )
+
+vSectionWithNumber : Form -> Int -> Set.Set String -> Html Msg
+vSectionWithNumber form sectionNumber checkedItems =
+  let
+    mSection = List.Extra.getAt sectionNumber form
+  in
+    case mSection of
+      Just section ->
+        div []
+        [ vSection checkedItems section
+        , div []
+          [ button [ onClick ( LoadSection ( sectionNumber - 1 ) ) ] [ text "Précédent"]
+          , button [ onClick ( LoadSection ( sectionNumber + 1 ) ) ] [ text "Suivant"]
+          ]
+        ]
+      Nothing -> div [] [ text "Trop loin !" ]
 
 type alias Question =
   {
@@ -59,11 +83,14 @@ questionDecoder = Json.Decode.map4 Question
   ( Json.Decode.field "options" ( Json.Decode.list optionDecoder ))
   ( Json.Decode.maybe ( Json.Decode.field "showIf" Json.Decode.string ))
 
+keyedVQuestion : Set.Set String -> Question -> (String, Html Msg)
+keyedVQuestion checkedItems q = ( q.text, vQuestion checkedItems q)
+
 vQuestion : Set.Set String -> Question -> Html Msg
 vQuestion checkedItems q =
   let
-    enabled = div [] ([ div [] [ text q.text ]] ++ ( List.map ( vOption False q.type_ q.text ) q.options ))
-    disabled = div [ style "color" "#aaa" ] ([ div [] [ text q.text ]] ++ ( List.map ( vOption True q.type_ q.text ) q.options ))
+    enabled = div [] ([ div [] [ text q.text ]] ++ ( List.map ( vOption checkedItems False q.type_ q.text ) q.options ))
+    disabled = div [ style "color" "#aaa" ] ([ div [] [ text q.text ]] ++ ( List.map ( vOption checkedItems True q.type_ q.text ) q.options ))
   in
     case q.showIf of
       Nothing -> enabled
@@ -92,8 +119,8 @@ optionDecoder = Json.Decode.map4 Option
   ( Json.Decode.field "score" Json.Decode.int )
   ( Json.Decode.maybe ( Json.Decode.field "feedback" Json.Decode.string ))
 
-vOption : Bool -> QuestionType -> String -> Option -> Html Msg
-vOption disable qType qName o =
+vOption : Set.Set String -> Bool -> QuestionType -> String -> Option -> Html Msg
+vOption checkedItems disable qType qName o =
   case qType of
     Radio -> div []
       [ input
@@ -102,6 +129,7 @@ vOption disable qType qName o =
         , name qName
         , value o.text
         , onCheck ( Select o.id )
+        , checked ( Set.member o.id checkedItems )
         ] ++ ( if disable then [ disabled True ] else [] ))
         []
       , label [ for o.id ] [ text o.text ]
@@ -113,6 +141,7 @@ vOption disable qType qName o =
         , name qName
         , value o.text
         , onCheck ( Check o.id )
+        , checked ( Set.member o.id checkedItems )
         ] ++ ( if disable then [ disabled True ] else [] ))
         []
       , label [ for o.id ] [ text o.text ]
@@ -129,20 +158,22 @@ init flags =
   case Json.Decode.decodeValue flagDecoder flags of
 
     Ok form -> 
-      ( { climateForm = form, checkedItems = Set.empty, status = OK }, Cmd.none )
+      ( { climateForm = form, checkedItems = Set.empty, currentScreen = Intro, status = OK }, Cmd.none )
 
     Err e ->
-      ( { climateForm = [], checkedItems = Set.empty, status = KO (Json.Decode.errorToString e) }, Cmd.none )
+      ( { climateForm = [], checkedItems = Set.empty, currentScreen = Intro, status = KO (Json.Decode.errorToString e) }, Cmd.none )
 
 -- UPDATE
 
 type Msg
   = Check String Bool
   | Select String Bool
+  | LoadSection Int
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
+    
     Check id checked ->
       let
         checkedItems =
@@ -152,12 +183,27 @@ update msg model =
             Set.remove id model.checkedItems
       in
         ({ model | checkedItems = checkedItems }, Cmd.none )
+    
     Select id _ ->
       let
         cleanedCheckedItems = Set.filter (notSameQuestion id) model.checkedItems
         checkedItems = Set.insert id cleanedCheckedItems
       in
         ({ model | checkedItems = checkedItems }, Cmd.none )
+    
+    LoadSection index ->
+      let
+        nextScreen =
+          if index < 0
+          then
+            Intro
+          else
+            if index >= List.length model.climateForm
+            then
+              Results
+            else
+              Step ( Just index )
+      in ({ model | currentScreen = nextScreen }, Cmd.none )
 
 notSameQuestion: String -> String -> Bool
 notSameQuestion option1 option2 =
@@ -176,9 +222,24 @@ view model = case model.status of
   OK ->
     div []
       [ h1 [] [ text "Sobriscore Climat" ]
-      , vForm model.climateForm model.checkedItems
-      , h1 [] [ text ( "Votre Sobriscore Climat est de : " ++ String.fromInt (score model.climateForm model.checkedItems) )]
-      , getFeedback model.climateForm model.checkedItems
+      --, vForm model.climateForm model.checkedItems
+      , case model.currentScreen of
+
+          Intro ->
+            div []
+              [ div [] [ text "Bienvenue dans l'outil Sobriscore Climat !" ]
+              , div [] [ button [ onClick ( LoadSection 0 ) ] [ text "Commencer le formulaire"] ]
+              ]
+
+          Step ( Just section ) -> vSectionWithNumber model.climateForm section model.checkedItems
+
+          Step Nothing -> div [] [ text "Pas de section sélectionnée" ]
+
+          Results -> div []
+            [ h1 [] [ text ( "Votre Sobriscore Climat est de : " ++ String.fromInt (score model.climateForm model.checkedItems) )]
+            , getFeedback model.climateForm model.checkedItems
+            , button [ onClick ( LoadSection -1 ) ] [ text "Recommencer" ]
+            ]
       ]
 
 score : Form -> Set.Set String -> Int
