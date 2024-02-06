@@ -8,6 +8,7 @@ import Html.Keyed
 import Json.Decode
 import Set
 import List.Extra
+import Round
 
 -- MAIN
 
@@ -19,7 +20,7 @@ type alias Model =
   {
     climateForm : Form,
     status : Status,
-    checkedItems : Set.Set String,
+    answers : Set.Set String,
     currentScreen : Screen
   }
 
@@ -33,7 +34,7 @@ formDecoder : Json.Decode.Decoder Form
 formDecoder = Json.Decode.list sectionDecoder
 
 vForm : Form -> Set.Set String -> Html Msg
-vForm f checkedItems = div [] ( List.map ( vSection checkedItems ) f )
+vForm f answers = div [] ( List.map ( vSection answers ) f )
 
 type alias Section =
   {
@@ -47,21 +48,21 @@ sectionDecoder = Json.Decode.map2 Section
   ( Json.Decode.field "questions" ( Json.Decode.list questionDecoder ))
 
 vSection : Set.Set String -> Section -> Html Msg
-vSection checkedItems s = Html.Keyed.node "div" []
+vSection answers s = Html.Keyed.node "div" []
   (( "section-title", div [] [ h2 [] [ text s.name ]] )
-  :: ( List.map ( keyedVQuestion checkedItems ) s.questions )
+  :: ( List.map ( keyedVQuestion answers ) s.questions )
   )
 
 vSectionWithNumber : Form -> Int -> Set.Set String -> Html Msg
-vSectionWithNumber form sectionNumber checkedItems =
+vSectionWithNumber form sectionNumber answers =
   let
     mSection = List.Extra.getAt sectionNumber form
   in
     case mSection of
       Just section ->
         div []
-        [ vSection checkedItems section
-        , div []
+        [ vSection answers section
+        , div [ class "buttons"]
           [ button [ onClick ( LoadSection ( sectionNumber - 1 ) ) ] [ text "Précédent"]
           , button [ onClick ( LoadSection ( sectionNumber + 1 ) ) ] [ text "Suivant"]
           ]
@@ -84,17 +85,17 @@ questionDecoder = Json.Decode.map4 Question
   ( Json.Decode.maybe ( Json.Decode.field "showIf" Json.Decode.string ))
 
 keyedVQuestion : Set.Set String -> Question -> (String, Html Msg)
-keyedVQuestion checkedItems q = ( q.text, vQuestion checkedItems q)
+keyedVQuestion answers q = ( q.text, vQuestion answers q)
 
 vQuestion : Set.Set String -> Question -> Html Msg
-vQuestion checkedItems q =
+vQuestion answers q =
   let
-    enabled = div [] ([ div [] [ text q.text ]] ++ ( List.map ( vOption checkedItems False q.type_ q.text ) q.options ))
-    disabled = div [ style "color" "#aaa" ] ([ div [] [ text q.text ]] ++ ( List.map ( vOption checkedItems True q.type_ q.text ) q.options ))
+    enabled = div [] ([ div [] [ text q.text ]] ++ ( List.map ( vOption answers False q.type_ q.text ) q.options ))
+    disabled = div [ class "disabled" ] ([ div [] [ text q.text ]] ++ ( List.map ( vOption answers True q.type_ q.text ) q.options ))
   in
     case q.showIf of
       Nothing -> enabled
-      Just master -> if ( Set.member master checkedItems ) then enabled else disabled
+      Just master -> if ( Set.member master answers ) then enabled else disabled
 
 type QuestionType = Radio | Checkbox | Unknown
 
@@ -120,7 +121,7 @@ optionDecoder = Json.Decode.map4 Option
   ( Json.Decode.maybe ( Json.Decode.field "feedback" Json.Decode.string ))
 
 vOption : Set.Set String -> Bool -> QuestionType -> String -> Option -> Html Msg
-vOption checkedItems disable qType qName o =
+vOption answers disable qType qName o =
   case qType of
     Radio -> div []
       [ input
@@ -129,7 +130,7 @@ vOption checkedItems disable qType qName o =
         , name qName
         , value o.text
         , onCheck ( Select o.id )
-        , checked ( Set.member o.id checkedItems )
+        , checked ( Set.member o.id answers )
         ] ++ ( if disable then [ disabled True ] else [] ))
         []
       , label [ for o.id ] [ text o.text ]
@@ -141,7 +142,7 @@ vOption checkedItems disable qType qName o =
         , name qName
         , value o.text
         , onCheck ( Check o.id )
-        , checked ( Set.member o.id checkedItems )
+        , checked ( Set.member o.id answers )
         ] ++ ( if disable then [ disabled True ] else [] ))
         []
       , label [ for o.id ] [ text o.text ]
@@ -158,10 +159,10 @@ init flags =
   case Json.Decode.decodeValue flagDecoder flags of
 
     Ok form -> 
-      ( { climateForm = form, checkedItems = Set.empty, currentScreen = Intro, status = OK }, Cmd.none )
+      ( { climateForm = form, answers = Set.empty, currentScreen = Intro, status = OK }, Cmd.none )
 
     Err e ->
-      ( { climateForm = [], checkedItems = Set.empty, currentScreen = Intro, status = KO (Json.Decode.errorToString e) }, Cmd.none )
+      ( { climateForm = [], answers = Set.empty, currentScreen = Intro, status = KO (Json.Decode.errorToString e) }, Cmd.none )
 
 -- UPDATE
 
@@ -169,6 +170,7 @@ type Msg
   = Check String Bool
   | Select String Bool
   | LoadSection Int
+  | Reset
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -176,20 +178,20 @@ update msg model =
     
     Check id checked ->
       let
-        checkedItems =
+        answers =
           if checked then
-            Set.insert id model.checkedItems
+            Set.insert id model.answers
           else
-            Set.remove id model.checkedItems
+            Set.remove id model.answers
       in
-        ({ model | checkedItems = checkedItems }, Cmd.none )
+        ({ model | answers = answers }, Cmd.none )
     
     Select id _ ->
       let
-        cleanedCheckedItems = Set.filter (notSameQuestion id) model.checkedItems
-        checkedItems = Set.insert id cleanedCheckedItems
+        cleanedAnswers = Set.filter (notSameQuestion id) model.answers
+        answers = Set.insert id cleanedAnswers
       in
-        ({ model | checkedItems = checkedItems }, Cmd.none )
+        ({ model | answers = answers }, Cmd.none )
     
     LoadSection index ->
       let
@@ -204,6 +206,8 @@ update msg model =
             else
               Step ( Just index )
       in ({ model | currentScreen = nextScreen }, Cmd.none )
+    
+    Reset -> ({ model | currentScreen = Intro, answers = Set.empty }, Cmd.none )
 
 notSameQuestion: String -> String -> Bool
 notSameQuestion option1 option2 =
@@ -222,7 +226,7 @@ view model = case model.status of
   OK ->
     div []
       [ h1 [] [ text "Sobriscore Climat" ]
-      --, vForm model.climateForm model.checkedItems
+      --, vForm model.climateForm model.answers
       , case model.currentScreen of
 
           Intro ->
@@ -231,19 +235,37 @@ view model = case model.status of
               , div [] [ button [ onClick ( LoadSection 0 ) ] [ text "Commencer le formulaire"] ]
               ]
 
-          Step ( Just section ) -> vSectionWithNumber model.climateForm section model.checkedItems
+          Step ( Just section ) -> vSectionWithNumber model.climateForm section model.answers
 
           Step Nothing -> div [] [ text "Pas de section sélectionnée" ]
 
           Results -> div []
-            [ h1 [] [ text ( "Votre Sobriscore Climat est de : " ++ String.fromInt (score model.climateForm model.checkedItems) )]
-            , getFeedback model.climateForm model.checkedItems
-            , button [ onClick ( LoadSection -1 ) ] [ text "Recommencer" ]
+            [ h1 [] [ text ( "Votre Sobriscore Climat est de : " ++ (score model.climateForm model.answers) ++ "%" )]
+            , getFeedback model.climateForm model.answers
+            , button [ onClick Reset ] [ text "Recommencer" ]
             ]
       ]
 
-score : Form -> Set.Set String -> Int
-score form answers = answers |> Set.toList |> List.map (optionFromId form) |> List.foldl scoreAdder 0
+score : Form -> Set.Set String -> String
+score form answers =
+  let
+    userScore = answers |> Set.toList |> List.map (optionFromId form) |> List.foldl scoreAdder 0
+  in
+    Round.round 0 (100 * (toFloat userScore) / (toFloat (maxPoints form)))
+
+maxPoints : Form -> Int
+maxPoints form
+  = form
+  |> List.concatMap .questions
+  |> List.map maxPointsForQuestion
+  |> List.sum
+
+maxPointsForQuestion : Question -> Int
+maxPointsForQuestion question =
+  case question.type_ of
+    Radio -> question.options |> List.map .score |> List.maximum |> ( Maybe.withDefault 0 )
+    Checkbox -> question.options |> List.map .score |> List.sum
+    _ -> 0
 
 scoreAdder : Maybe Option -> Int -> Int
 scoreAdder mOption total = case mOption of
