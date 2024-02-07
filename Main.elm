@@ -286,16 +286,37 @@ optionFromId form id
   |> List.head
 
 getFeedback : Form -> Set.Set String -> Html Msg
-getFeedback form answers = ul [] ( answers |> Set.toList |> List.map (optionFromId form) |> List.foldl feedbackAdder [] )
+getFeedback form answers =
+  let
+    feedback = form |> List.filterMap ( sectionFeedback answers )
+  in
+    if ( List.isEmpty feedback )
+    then
+      div [] ( [ h1 [] [ text "Nos conseils" ], p [] [ text "Nous n'avons pas de recommandation particulière." ] ] )
+    else
+      div [] ( [ h1 [] [ text "Nos conseils" ] ] ++ ( form |> List.filterMap ( sectionFeedback answers )))
 
-feedbackAdder : Maybe Option -> List ( Html Msg ) -> List ( Html Msg )
-feedbackAdder mOption allFeedback =
-  case mOption of
-    Just option ->
-      case option.feedback of
-        Just feedback -> List.append allFeedback [ li [] [ text feedback ] ]
-        Nothing -> allFeedback
-    Nothing -> allFeedback
+sectionFeedback : Set.Set String -> Section -> Maybe ( Html Msg )
+sectionFeedback answers section =
+  let
+    feedbacks = section.questions |> List.filterMap ( questionFeedback answers )
+  in
+    if ( List.isEmpty feedbacks )
+    then Nothing
+    else Just ( div [] ([ h2 [] [ text section.name ] ] ++ feedbacks ) )
+
+questionFeedback : Set.Set String -> Question -> Maybe ( Html Msg )
+questionFeedback answers question =
+  let
+    feedbacks
+      = question.options
+      |> List.filter (\o -> Set.member o.id answers )
+      |> List.filterMap .feedback
+      |> List.map (\feedback -> li [] [ text feedback ])
+  in
+    if ( List.isEmpty feedbacks )
+    then Nothing
+    else Just ( div [] feedbacks )
 
 renderMarkdown : String -> Html Msg
 renderMarkdown s =
