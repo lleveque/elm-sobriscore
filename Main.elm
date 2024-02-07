@@ -9,6 +9,8 @@ import Json.Decode
 import Set
 import List.Extra
 import Round
+import Markdown.Parser as Markdown
+import Markdown.Renderer
 
 -- MAIN
 
@@ -90,8 +92,8 @@ keyedVQuestion answers q = ( q.text, vQuestion answers q)
 vQuestion : Set.Set String -> Question -> Html Msg
 vQuestion answers q =
   let
-    enabled = div [] ([ div [] [ text q.text ]] ++ ( List.map ( vOption answers False q.type_ q.text ) q.options ))
-    disabled = div [ class "disabled" ] ([ div [] [ text q.text ]] ++ ( List.map ( vOption answers True q.type_ q.text ) q.options ))
+    enabled = div [] ([ renderMarkdown q.text ] ++ ( List.map ( vOption answers False q.type_ q.text ) q.options ))
+    disabled = div [ class "disabled" ] ([ renderMarkdown q.text ] ++ ( List.map ( vOption answers True q.type_ q.text ) q.options ))
   in
     case q.showIf of
       Nothing -> enabled
@@ -122,32 +124,35 @@ optionDecoder = Json.Decode.map4 Option
 
 vOption : Set.Set String -> Bool -> QuestionType -> String -> Option -> Html Msg
 vOption answers disable qType qName o =
-  case qType of
-    Radio -> div []
-      [ input
-        ([ type_ "radio"
-        , id o.id
-        , name qName
-        , value o.text
-        , onCheck ( Select o.id )
-        , checked ( Set.member o.id answers )
-        ] ++ ( if disable then [ disabled True ] else [] ))
-        []
-      , label [ for o.id ] [ text o.text ]
-      ]
-    Checkbox -> div []
-      [ input
-        ([ type_ "checkbox"
-        , id o.id
-        , name qName
-        , value o.text
-        , onCheck ( Check o.id )
-        , checked ( Set.member o.id answers )
-        ] ++ ( if disable then [ disabled True ] else [] ))
-        []
-      , label [ for o.id ] [ text o.text ]
-      ]
-    Unknown -> div [] [ text o.text ]
+  let
+    isChecked = Set.member o.id answers
+  in
+    case qType of
+      Radio -> div ([ class "option" ] ++ ( if isChecked then [ class "checked" ] else [] ))
+        [ input
+          ([ type_ "radio"
+          , id o.id
+          , name qName
+          , value o.text
+          , onCheck ( Select o.id )
+          , checked isChecked
+          ] ++ ( if disable then [ disabled True ] else [] ))
+          []
+        , label [ for o.id ] [ renderMarkdown o.text ]
+        ]
+      Checkbox -> div ([ class "option" ] ++ ( if isChecked then [ class "checked" ] else [] ))
+        [ input
+          ([ type_ "checkbox"
+          , id o.id
+          , name qName
+          , value o.text
+          , onCheck ( Check o.id )
+          , checked isChecked
+          ] ++ ( if disable then [ disabled True ] else [] ))
+          []
+        , label [ for o.id ] [ renderMarkdown o.text ]
+        ]
+      Unknown -> div [] [ renderMarkdown o.text ]
 
 -- INIT
 
@@ -291,3 +296,13 @@ feedbackAdder mOption allFeedback =
         Just feedback -> List.append allFeedback [ li [] [ text feedback ] ]
         Nothing -> allFeedback
     Nothing -> allFeedback
+
+renderMarkdown : String -> Html Msg
+renderMarkdown s =
+      case s
+        |> Markdown.parse
+        |> Result.mapError (\_ -> "Erreur de décodage du markdown")
+        |> Result.andThen (\ast -> Markdown.Renderer.render Markdown.Renderer.defaultHtmlRenderer ast)
+      of
+        Ok rendered -> div [] rendered
+        Err errors -> div [] [ text s ]

@@ -47,9 +47,9 @@ var data = {
         "type" : "radio",
         "text" : "Sur quel périmètre portait-il ? ",
         "options" : [{
-          "id" : "assessScopes/oneTwo", "text" : "Emissions directes (scope 1) et indirectes liées à l'électricité (scope 2) : les consommations d'énergie de votre entreprise et autres émissions directes", "score" : 1, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+          "id" : "assessScopes/oneTwo", "text" : "**Scopes 1 et 2**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n\n ⇨ Les **consommations d'énergie** de votre entreprise et **autres émissions directes**", "score" : 1, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
         },{
-          "id" : "assessScopes/oneTwoThree", "text" : "Emissions directes (scope 1) et indirectes liées à l'électricité (scope 2) : les consommations d'énergie de votre entreprise et autres émissions directes + les émissions indirectes de votre chaine de valeur (fournisseurs, clients, salariés - scope 3) : Achats, fret, déplacements, immobilisations matériels et immatériels, etc.", "score" : 2, "feedback" : "Limiter l'évaluation des vos émissions de gaz à effet de serre de votre entreprise isolément de votre chaine de valeur n'est pas suffisant pour agir sur l'ensemble de votre impact sur le climat."
+          "id" : "assessScopes/oneTwoThree", "text" : "**Scopes 1, 2 et 3**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n* Émissions indirectes de votre chaîne de valeur (fournisseurs, clients, salariés)\n\n ⇨ Les **consommations d'énergie** de votre entreprise, les **autres émissions directes** et **les achats, le fret, les déplacements, les immobilisations matérielles et immatérielles**, etc...", "score" : 2, "feedback" : "Limiter l'évaluation des vos émissions de gaz à effet de serre de votre entreprise isolément de votre chaine de valeur n'est pas suffisant pour agir sur l'ensemble de votre impact sur le climat."
        
         }]
       },{

@@ -1,8 +1,43 @@
 .buttons {
-    display : flex ;
-    justify-content : space-between ;
+    display: flex;
+    justify-content: space-between;
 }
 
 .disabled {
-    color : #bbb ;
+    color: #bbb;
+}
+
+.option {
+    align-content: center;
+    display: flex;
+    gap: 16px;
+    background: aliceblue;
+    padding-top: 8px;
+    margin: 4px;
+    border-radius: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 8px;
+}
+
+.option > input {
+    flex-grow: 0;
+    margin-bottom: 0;
+}
+
+.option > label {
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+
+.option.checked {
+    background: #c3e6fb;
+}
+
+.option:hover {
+    box-shadow:inset 0px 0px 0px 2px #c3e6fb;
+}
+
+.option.checked > label {
+    font-weight: bold;
 }
