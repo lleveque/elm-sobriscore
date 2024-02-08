@@ -245,14 +245,20 @@ view model = case model.status of
           Step Nothing -> div [] [ text "Pas de section sélectionnée" ]
 
           Results -> div []
-            [ h1 [] [ text ( "Votre Sobriscore Climat est de : " ++ (score model.climateForm model.answers) ++ "%" )]
+            [ getScore model.climateForm model.answers
             , getFeedback model.climateForm model.answers
             , button [ onClick Reset ] [ text "Recommencer" ]
             ]
       ]
 
-score : Form -> Set.Set String -> String
-score form answers =
+getScore : Form -> Set.Set String -> Html Msg
+getScore form answers =
+  div [] 
+    ([ h1 [] [ text ( "Votre Sobriscore Climat est de : " ++ (totalScore form answers) ++ "%" )] ]
+        ++ ( form |> List.map ( sectionScore answers ) ))
+
+totalScore : Form -> Set.Set String -> String
+totalScore form answers =
   let
     userScore = answers |> Set.toList |> List.map (optionFromId form) |> List.foldl scoreAdder 0
   in
@@ -261,9 +267,22 @@ score form answers =
 maxPoints : Form -> Int
 maxPoints form
   = form
-  |> List.concatMap .questions
-  |> List.map maxPointsForQuestion
+  |> List.map maxPointsForSection
   |> List.sum
+
+sectionScore : Set.Set String -> Section -> Html Msg
+sectionScore answers section =
+  let
+    userPoints = section.questions |> List.concatMap .options |> List.filter (\o -> Set.member o.id answers) |> List.map .score |> List.sum
+    userScore = Round.round 0 (100 * (toFloat userPoints) / (toFloat (maxPointsForSection section)))
+  in
+    h2 [] [ text ( section.name ++ " : " ++ userScore ++ "%" ), bar userScore ]
+
+bar : String -> Html Msg
+bar score = div [ style "width" "150px", style "height" "12px", style "background" "lightgrey" ] [ div [ style "background" "#3b91ec", style "height" "100%", style "width" (score++"%") ] []]
+
+maxPointsForSection : Section -> Int
+maxPointsForSection section = section.questions |> List.map maxPointsForQuestion |> List.sum
 
 maxPointsForQuestion : Question -> Int
 maxPointsForQuestion question =
