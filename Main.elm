@@ -21,12 +21,13 @@ main = Browser.element { init = init, update = update, view = view, subscription
 type alias Model =
   {
     climateForm : Form,
+    rseForm : Form,
     status : Status,
     answers : Set.Set String,
     currentScreen : Screen
   }
 
-type Screen = Intro | Step (Maybe Int) | Results
+type Screen = Intro | Step Form (Maybe Int) | Results Form
 
 type Status = OK | KO String
 
@@ -65,8 +66,8 @@ vSectionWithNumber form sectionNumber answers =
         div []
         [ vSection answers section
         , div [ class "buttons"]
-          [ button [ onClick ( LoadSection ( sectionNumber - 1 ) ) ] [ text "Précédent"]
-          , button [ onClick ( LoadSection ( sectionNumber + 1 ) ) ] [ text "Suivant"]
+          [ button [ onClick ( LoadSection form ( sectionNumber - 1 ) ) ] [ text "Précédent"]
+          , button [ onClick ( LoadSection form ( sectionNumber + 1 ) ) ] [ text "Suivant"]
           ]
         ]
       Nothing -> div [] [ text "Trop loin !" ]
@@ -156,25 +157,29 @@ vOption answers disable qType qName o =
 
 -- INIT
 
-flagDecoder : Json.Decode.Decoder Form
-flagDecoder = Json.Decode.field "climateForm" formDecoder
+type alias AllForms = { climateForm : Form, rseForm : Form }
+
+formsDecoder : Json.Decode.Decoder AllForms
+formsDecoder = Json.Decode.map2 AllForms
+  ( Json.Decode.field "climateForm" formDecoder )
+  ( Json.Decode.field "rseForm" formDecoder )
 
 init: Json.Decode.Value -> (Model, Cmd Msg)
 init flags =
-  case Json.Decode.decodeValue flagDecoder flags of
+  case Json.Decode.decodeValue formsDecoder flags of
 
-    Ok form -> 
-      ( { climateForm = form, answers = Set.empty, currentScreen = Intro, status = OK }, Cmd.none )
+    Ok forms -> 
+      ( { climateForm = forms.climateForm, rseForm = forms.rseForm, answers = Set.empty, currentScreen = Intro, status = OK }, Cmd.none )
 
     Err e ->
-      ( { climateForm = [], answers = Set.empty, currentScreen = Intro, status = KO (Json.Decode.errorToString e) }, Cmd.none )
+      ( { climateForm = [], rseForm = [], answers = Set.empty, currentScreen = Intro, status = KO (Json.Decode.errorToString e) }, Cmd.none )
 
 -- UPDATE
 
 type Msg
   = Check String Bool
   | Select String Bool
-  | LoadSection Int
+  | LoadSection Form Int
   | Reset
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -198,18 +203,18 @@ update msg model =
       in
         ({ model | answers = answers }, Cmd.none )
     
-    LoadSection index ->
+    LoadSection form index ->
       let
         nextScreen =
           if index < 0
           then
             Intro
           else
-            if index >= List.length model.climateForm
+            if index >= List.length form
             then
-              Results
+              Results form
             else
-              Step ( Just index )
+              Step form ( Just index )
       in ({ model | currentScreen = nextScreen }, Cmd.none )
     
     Reset -> ({ model | currentScreen = Intro, answers = Set.empty }, Cmd.none )
@@ -230,23 +235,24 @@ view model = case model.status of
   KO error -> article [] [ aside [ style "display" "block" ] [ div [] [ h1 [] [ text "Error" ] ], p [] [ text error ]] ]
   OK ->
     div []
-      [ h1 [] [ text "Sobriscore Climat" ]
+      [ h1 [] [ text "Sobriscore" ]
       --, vForm model.climateForm model.answers
       , case model.currentScreen of
 
           Intro ->
             div []
-              [ div [] [ text "Bienvenue dans l'outil Sobriscore Climat !" ]
-              , div [] [ button [ onClick ( LoadSection 0 ) ] [ text "Commencer le formulaire"] ]
+              [ div [] [ text "Bienvenue dans l'outil Sobriscore !" ]
+              , div [] [ button [ onClick ( LoadSection model.climateForm 0 ) ] [ text "Commencer le formulaire Climat"] ]
+              , div [] [ button [ onClick ( LoadSection model.rseForm 0 ) ] [ text "Commencer le formulaire RSE"] ]
               ]
 
-          Step ( Just section ) -> vSectionWithNumber model.climateForm section model.answers
+          Step form ( Just section ) -> vSectionWithNumber form section model.answers
 
-          Step Nothing -> div [] [ text "Pas de section sélectionnée" ]
+          Step form Nothing -> div [] [ text "Pas de section sélectionnée" ]
 
-          Results -> div []
-            [ getScore model.climateForm model.answers
-            , getFeedback model.climateForm model.answers
+          Results form -> div []
+            [ getScore form model.answers
+            , getFeedback form model.answers
             , button [ onClick Reset ] [ text "Recommencer" ]
             ]
       ]
