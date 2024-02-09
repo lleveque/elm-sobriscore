@@ -182,24 +182,45 @@ type Msg
   | LoadSection Form Int
   | Reset
 
+removeCascadingAnswers : Form -> Set.Set String -> String -> Set.Set String
+removeCascadingAnswers form answers checkedOption =
+  let
+    cascadingQuestions = form |> List.concatMap .questions |> List.filter doCascade
+    removableCascadingQuestions = cascadingQuestions |> List.filter ( parentUnchecked answers )
+    removableOptions = removableCascadingQuestions |> List.concatMap .options |> List.map .id
+  in
+    Set.filter ( \answer -> not ( List.member answer removableOptions )) answers
+
+doCascade : Question -> Bool
+doCascade q = case q.showIf of
+  Just _ -> True
+  Nothing -> False
+
+parentUnchecked : Set.Set String -> Question -> Bool
+parentUnchecked answers q = case q.showIf of
+  Just parent -> not ( Set.member parent answers )
+  Nothing -> False
+
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     
     Check id checked ->
       let
-        answers =
+        updatedAnswers =
           if checked then
             Set.insert id model.answers
           else
             Set.remove id model.answers
+        answers = removeCascadingAnswers model.climateForm updatedAnswers id -- TODO remove dependency to climateForm
       in
         ({ model | answers = answers }, Cmd.none )
     
     Select id _ ->
       let
         cleanedAnswers = Set.filter (notSameQuestion id) model.answers
-        answers = Set.insert id cleanedAnswers
+        superCleanedAnswers = removeCascadingAnswers model.climateForm cleanedAnswers id -- TODO remove dependency to climateForm
+        answers = Set.insert id superCleanedAnswers
       in
         ({ model | answers = answers }, Cmd.none )
     
@@ -260,13 +281,13 @@ view model = case model.status of
 getScore : Form -> Set.Set String -> Html Msg
 getScore form answers =
   div [] 
-    ([ h1 [] [ text ( "Votre Sobriscore Climat est de : " ++ (totalScore form answers) ++ "%" )] ]
+    ([ h1 [] [ text ( "Votre Sobriscore est de : " ++ (totalScore form answers) ++ "%" )] ]
         ++ ( form |> List.map ( sectionScore answers ) ))
 
 totalScore : Form -> Set.Set String -> String
 totalScore form answers =
   let
-    userScore = answers |> Set.toList |> List.map (optionFromId form) |> List.foldl scoreAdder 0
+    userScore = answers |> Set.toList |> List.filterMap (optionFromId form) |> List.foldl scoreAdder 0
   in
     Round.round 0 (100 * (toFloat userScore) / (toFloat (maxPoints form)))
 
@@ -297,10 +318,8 @@ maxPointsForQuestion question =
     Checkbox -> question.options |> List.map .score |> List.sum
     _ -> 0
 
-scoreAdder : Maybe Option -> Int -> Int
-scoreAdder mOption total = case mOption of
-  Just option -> total + option.score
-  Nothing -> total
+scoreAdder : Option -> Int -> Int
+scoreAdder option total = total + option.score
 
 optionFromId : Form -> String -> Maybe Option
 optionFromId form id
