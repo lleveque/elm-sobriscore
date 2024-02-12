@@ -113,15 +113,17 @@ type alias Option =
     id : String,
     text : String,
     score : Int,
-    feedback : Maybe String
+    feedback : Maybe String,
+    showFeedbackIf : Maybe String
   }
 
 optionDecoder : Json.Decode.Decoder Option
-optionDecoder = Json.Decode.map4 Option
+optionDecoder = Json.Decode.map5 Option
   ( Json.Decode.field "id" Json.Decode.string )
   ( Json.Decode.field "text" Json.Decode.string )
   ( Json.Decode.field "score" Json.Decode.int )
   ( Json.Decode.maybe ( Json.Decode.field "feedback" Json.Decode.string ))
+  ( Json.Decode.maybe ( Json.Decode.field "showFeedbackIf" Json.Decode.string ))
 
 vOption : Set.Set String -> Bool -> QuestionType -> String -> Option -> Html Msg
 vOption answers disable qType qName o =
@@ -355,12 +357,18 @@ questionFeedback answers question =
     feedbacks
       = question.options
       |> List.filter (\o -> Set.member o.id answers )
+      |> List.filter (\o -> shouldShowFeedback answers o.showFeedbackIf)
       |> List.filterMap .feedback
       |> List.map (\feedback -> li [] [ text feedback ])
   in
     if ( List.isEmpty feedbacks )
     then Nothing
     else Just ( div [] feedbacks )
+
+shouldShowFeedback : Set.Set String -> Maybe String -> Bool
+shouldShowFeedback answers mParent = case mParent of
+  Nothing -> True
+  Just parent -> if Set.member parent answers then True else False
 
 renderMarkdown : String -> Html Msg
 renderMarkdown s =

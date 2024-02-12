@@ -387,7 +387,7 @@ var data =
               "id" : "mobility/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 1
             },
             {
-              "id" : "mobility/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Si entreprise de service : Les déplacements professionnels peuvent représenter une partie importante des émissions de votre entreprise, surtout pour une entreprise de services."
+              "id" : "mobility/no", "text" : "Non / Ne sait pas", "score" : 0, "showFeedbackIf" : "activity/services", "feedback" : "Les déplacements professionnels peuvent représenter une partie importante des émissions de votre entreprise, surtout pour une entreprise de services."
             }
           ]
         },
@@ -403,7 +403,7 @@ var data =
               "id" : "transport/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 1
             },
             {
-              "id" : "transport/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Si entreprise de produits : Les émissions du transport font souvent partie des émissions dites significatives d'une entreprise commercialisant des produits."
+              "id" : "transport/no", "text" : "Non / Ne sait pas", "score" : 0, "showFeedbackIf" : "activity/products", "feedback" : "Les émissions du transport font souvent partie des émissions dites significatives d'une entreprise commercialisant des produits."
             }
           ]
         },
