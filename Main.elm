@@ -383,7 +383,7 @@ questionFeedback answers question =
       |> List.filter (\o -> Set.member o.id answers )
       |> List.filter (\o -> shouldShowFeedback answers o.showFeedbackIf)
       |> List.filterMap .feedback
-      |> List.map (\feedback -> li [] [ text feedback ])
+      |> List.map (\feedback -> li [] [ renderMarkdown feedback ])
   in
     if ( List.isEmpty feedbacks )
     then Nothing

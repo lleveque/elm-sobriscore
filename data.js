@@ -205,7 +205,7 @@ var data =
               "id" : "knowlaw/yes", "text" : "Oui", "score" : 5
             },
             {
-              "id" : "knowlaw/no", "text" : "Non", "score" : 0, "feedback" : "La réglementation BEGES (https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048246757) impose notamment l'établissement d'un bilan d'émissions de gaz à effet de serre pour toute entreprise de plus de 500 salariés."
+              "id" : "knowlaw/no", "text" : "Non", "score" : 0, "feedback" : "La [réglementation BEGES](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048246757) impose notamment l'établissement d'un bilan d'émissions de gaz à effet de serre pour toute entreprise de plus de 500 salariés."
             }
           ]
         },
