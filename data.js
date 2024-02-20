@@ -189,7 +189,7 @@ var data =
           "options" :
           [
             {
-              "id" : "canexplain/yes", "text" : "Oui", "score" : 1
+              "id" : "canexplain/yes", "text" : "Oui", "score" : 10
             },
             {
               "id" : "canexplain/no", "text" : "Non", "score" : 0, "feedback" : "La connaissance du changement climatique et la capacité à l'expliquer en précisant le rôle de l'entreprise est le commencement de la démarche."
@@ -202,7 +202,7 @@ var data =
           "options" :
           [
             {
-              "id" : "knowlaw/yes", "text" : "Oui", "score" : 1
+              "id" : "knowlaw/yes", "text" : "Oui", "score" : 5
             },
             {
               "id" : "knowlaw/no", "text" : "Non", "score" : 0, "feedback" : "La réglementation BEGES (https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048246757) impose notamment l'établissement d'un bilan d'émissions de gaz à effet de serre pour toute entreprise de plus de 500 salariés."
@@ -215,7 +215,7 @@ var data =
           "options" :
           [
             {
-              "id" : "knowrisksandoppo/yes", "text" : "Oui", "score" : 1
+              "id" : "knowrisksandoppo/yes", "text" : "Oui", "score" : 10
             },
             {
               "id" : "knowrisksandoppo/no", "text" : "Non/Ne sait pas", "score" : 0, "feedback" : "Vous n'avez pas encore identifé les risques et opportunités liés au changement climatique L'identification des risques et opportunités liés au changement climatique fait partie intégrante de la mise en place d'une stratégie climat."
@@ -228,7 +228,7 @@ var data =
           "options" :
           [
             {
-              "id" : "didAssess/yes", "text" : "Oui", "score" : 1
+              "id" : "didAssess/yes", "text" : "Oui", "score" : 10
             },
             {
               "id" : "didAssess/no", "text" : "Non", "score" : 0, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
@@ -242,10 +242,10 @@ var data =
           "options" :
           [
             {
-              "id" : "dateAssess/between13y", "text" : "Entre 1 et 3 ans", "score" : 1, "feedback" : "Mettre à jour votre Bilan GES est important pour s'assurer des évolutions de votre stratégie climat dans le temps."
+              "id" : "dateAssess/between13y", "text" : "Entre 1 et 3 ans", "score" : 10, "feedback" : "Mettre à jour votre Bilan GES est important pour s'assurer des évolutions de votre stratégie climat dans le temps."
             },
             {
-              "id" : "dateAssess/more3y", "text" : "Il y a plus de 3 ans", "score" : 0, "feedback" : "Mettre à jour votre Bilan GES est important pour s'assurer des évolutions de votre stratégie climat dans le temps."
+              "id" : "dateAssess/more3y", "text" : "Il y a plus de 3 ans", "score" : 5, "feedback" : "Mettre à jour votre Bilan GES est important pour s'assurer des évolutions de votre stratégie climat dans le temps."
             }
           ]
         },
@@ -256,21 +256,22 @@ var data =
           "options" :
           [
             {
-              "id" : "assessScopes/oneTwo", "text" : "**Scopes 1 et 2**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n\n ⇨ Les **consommations d'énergie** de votre entreprise et **autres émissions directes**", "score" : 1, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+              "id" : "assessScopes/oneTwo", "text" : "**Scopes 1 et 2**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n\n ⇨ Les **consommations d'énergie** de votre entreprise et **autres émissions directes**", "score" : 5, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
             },
             {
-              "id" : "assessScopes/oneTwoThree", "text" : "**Scopes 1, 2 et 3**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n* Émissions indirectes de votre chaîne de valeur (fournisseurs, clients, salariés)\n\n ⇨ Les **consommations d'énergie** de votre entreprise, les **autres émissions directes** et **les achats, le fret, les déplacements, les immobilisations matérielles et immatérielles**, etc...", "score" : 2, "feedback" : "Limiter l'évaluation des vos émissions de gaz à effet de serre de votre entreprise isolément de votre chaine de valeur n'est pas suffisant pour agir sur l'ensemble de votre impact sur le climat."
+              "id" : "assessScopes/oneTwoThree", "text" : "**Scopes 1, 2 et 3**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n* Émissions indirectes de votre chaîne de valeur (fournisseurs, clients, salariés)\n\n ⇨ Les **consommations d'énergie** de votre entreprise, les **autres émissions directes** et **les achats, le fret, les déplacements, les immobilisations matérielles et immatérielles**, etc...", "score" : 15, "feedback" : "Limiter l'évaluation des vos émissions de gaz à effet de serre de votre entreprise isolément de votre chaine de valeur n'est pas suffisant pour agir sur l'ensemble de votre impact sur le climat."
            
             }
           ]
         },
         {
+          "showIf" : "didAssess/no",
           "type" : "radio",
           "text" : "Est-ce que vous prévoyez de faire un bilan cette année ?",
           "options" :
           [
             {
-              "id" : "willAssess/yes", "text" : "Oui", "score" : 3, "feedback" : "La réalisation d'un BEGES est simplifiée par le passage via un prestataire extérieur. Eco CO2 peut vous accompagner."
+              "id" : "willAssess/yes", "text" : "Oui", "score" : 5, "feedback" : "La réalisation d'un BEGES est simplifiée par le passage via un prestataire extérieur. Eco CO2 peut vous accompagner."
             },
             {
               "id" : "willAssess/no", "text" : "Non", "score" : 0
@@ -283,7 +284,7 @@ var data =
           "options" :
           [
             {
-              "id" : "hasObj/yes", "text" : "Oui", "score" : 1
+              "id" : "hasObj/yes", "text" : "Oui", "score" : 5
             },
             {
               "id" : "hasObj/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, se fixer des objectifs de réduction des émissions à court, moyen et long terme est nécessaire."
@@ -297,13 +298,13 @@ var data =
           "options" :
           [
             {
-              "id" : "objTerm/short", "text" : "Court terme (1 - 3ans)", "score" : 1
+              "id" : "objTerm/short", "text" : "Court terme (1 - 3ans)", "score" : 5
             },
             {
-              "id" : "objTerm/medium", "text" : "Moyen terme  (3 - 10 ans)", "score" : 1
+              "id" : "objTerm/medium", "text" : "Moyen terme  (3 - 10 ans)", "score" : 10
             },
             {
-              "id" : "objTerm/long", "text" : "Long terme (10 - 30 ans)", "score" : 1
+              "id" : "objTerm/long", "text" : "Long terme (10 - 30 ans)", "score" : 15
             }
           ]
         },
@@ -314,7 +315,7 @@ var data =
           "options" :
           [
             {
-              "id" : "parisCompat/yes", "text" : "Oui", "score" : 2
+              "id" : "parisCompat/yes", "text" : "Oui", "score" : 10
             },
             {
               "id" : "parisCompat/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Les accord internationaux et leur déclinaison politique française (SNBC) sont ambitieux et peuvent constituer un cadre intéressant à suivre pour vos objectifs."
@@ -327,7 +328,7 @@ var data =
           "options" :
           [
             {
-              "id" : "goodThinking/yes", "text" : "Oui", "score" : 1
+              "id" : "goodThinking/yes", "text" : "Oui", "score" : 10
             },
             {
               "id" : "goodThinking/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone ont un avantage commercial intéressant."
@@ -340,10 +341,10 @@ var data =
           "options" :
           [
             {
-              "id" : "investGreen/yes", "text" : "Oui, c'est un critère essentiel", "score" : 2
+              "id" : "investGreen/yes", "text" : "Oui, c'est un critère essentiel", "score" : 5
             },
             {
-              "id" : "investGreen/justabit", "text" : "Oui, à la marge", "score" : 1
+              "id" : "investGreen/justabit", "text" : "Oui, à la marge", "score" : 3
             },
             {
               "id" : "investGreen/no", "text" : "Non / Ne sait pas", "score" : 0
@@ -362,7 +363,7 @@ var data =
           "options" :
           [
             {
-              "id" : "anyoneInCharge/yes", "text" : "Oui", "score" : 1
+              "id" : "anyoneInCharge/yes", "text" : "Oui", "score" : 0
             },
             {
               "id" : "anyoneInCharge/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Responsabiliser dans les fonctions d'une ou plusieurs personnes permet de stabiliser dans le temps les progrès et le suivi dans le temps de la stratégie climat."
@@ -376,16 +377,16 @@ var data =
           "options" :
           [
             {
-              "id" : "whoInCharge/looseteam", "text" : "Une équipe composée de représentants de différentes fonctions/métiers dans l'entreprise (ex: maintenance, achats, commercial,...)", "score" : 0
+              "id" : "whoInCharge/looseteam", "text" : "Une équipe composée de représentants de différentes fonctions/métiers dans l'entreprise (ex: maintenance, achats, commercial,...)", "score" : 5
             },
             {
-              "id" : "whoInCharge/looseone", "text" : "La mission est une composante d'un poste d'une personne", "score" : 1
+              "id" : "whoInCharge/looseone", "text" : "La mission est une composante d'un poste d'une personne", "score" : 15
             },
             {
-              "id" : "whoInCharge/fullone", "text" : "Un poste à temps plein est présent", "score" : 2
+              "id" : "whoInCharge/fullone", "text" : "Un poste à temps plein est présent", "score" : 20
             },
             {
-              "id" : "whoInCharge/fullteam", "text" : "Une équipe est dédiée à ces sujets (minimum 2 personnes)", "score" : 3
+              "id" : "whoInCharge/fullteam", "text" : "Une équipe est dédiée à ces sujets (minimum 2 personnes)", "score" : 25
            
             }
           ]
@@ -396,7 +397,7 @@ var data =
           "options" :
           [
             {
-              "id" : "hasPlan/yes", "text" : "Oui", "score" : 1
+              "id" : "hasPlan/yes", "text" : "Oui", "score" : 0
             },
             {
               "id" : "hasPlan/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, que se fixer des objectifs est nécessire, l'étape cruciale est la mise en place d'un plan de transition."
@@ -410,13 +411,13 @@ var data =
           "options" :
           [
             {
-              "id" : "planTerm/short", "text" : "Court terme (1 - 3ans)", "score" : 1
+              "id" : "planTerm/short", "text" : "Court terme (1 - 3ans)", "score" : 10
             },
             {
-              "id" : "planTerm/medium", "text" : "Moyen terme  (3 - 10 ans)", "score" : 1
+              "id" : "planTerm/medium", "text" : "Moyen terme  (3 - 10 ans)", "score" : 10
             },
             {
-              "id" : "planTerm/long", "text" : "Long terme (10 - 30 ans)", "score" : 1
+              "id" : "planTerm/long", "text" : "Long terme (10 - 30 ans)", "score" : 10
             }
           ]
         },
@@ -427,7 +428,7 @@ var data =
           "options" :
           [
             {
-              "id" : "gainEval/yes", "text" : "Oui", "score" : 1
+              "id" : "gainEval/yes", "text" : "Oui", "score" : 20
             },
             {
               "id" : "gainEval/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Aller au-delà de l'établissement d'une liste d'actions en quantifiant les gains potentiels permet à l'organisation de pouvoir prioriser les actions à fort gain potentiel, et de comparer ce gain au coût économique de mise en place de l'action"
@@ -441,7 +442,7 @@ var data =
           "options" :
           [
             {
-              "id" : "committee/yes", "text" : "Oui", "score" : 1
+              "id" : "committee/yes", "text" : "Oui", "score" : 20
             },
             {
               "id" : "committee/no", "text" : "Non / Ne sait pas", "score" : 0
@@ -460,7 +461,7 @@ var data =
           "options" :
           [
             {
-              "id" : "workshops/yes", "text" : "Oui", "score" : 1, "feedback" : "Concernant la sensibilisation, n'hésitez pas à aller plus loin en effectuant des formations ciblées aux types de profilss/métiers."
+              "id" : "workshops/yes", "text" : "Oui", "score" : 10, "feedback" : "Concernant la sensibilisation, n'hésitez pas à aller plus loin en effectuant des formations ciblées aux types de profilss/métiers."
             },
             {
               "id" : "workshops/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Mettre en place des formations ou sensibilisations permet une compréhension accrue des enjeux climatiques et un passage à l'action facilitée."
@@ -510,10 +511,10 @@ var data =
           "options" :
           [
             {
-              "id" : "ecodesign/yes", "text" : "Oui, tous", "score" : 2
+              "id" : "ecodesign/yes", "text" : "Oui, tous", "score" : 5
             },
             {
-              "id" : "ecodesign/justabit", "text" : "Oui, en partie", "score" : 1
+              "id" : "ecodesign/justabit", "text" : "Oui, en partie", "score" : 3
             },
             {
               "id" : "ecodesign/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "La réflexion amont dans la conception d'un produit ou service permet la réduction à la source des émissions de l'activité de l'entreprise."
@@ -526,10 +527,10 @@ var data =
           "options" :
           [
             {
-              "id" : "energy/yes", "text" : "Oui et un plan d'action a été mis en place", "score" : 2
+              "id" : "energy/yes", "text" : "Oui et un plan d'action a été mis en place", "score" : 20
             },
             {
-              "id" : "energy/justabit", "text" : "Oui, un suivi est effectué", "score" : 1, "feedback" : "Associer votre suivi des consommations énergétiques à un plan d'actions vous permettra de mesurer les progrès réalisés."
+              "id" : "energy/justabit", "text" : "Oui, un suivi est effectué", "score" : 15, "feedback" : "Associer votre suivi des consommations énergétiques à un plan d'actions vous permettra de mesurer les progrès réalisés."
             },
             {
               "id" : "energy/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Le suivi des factures en données financières globales n'est pas suffisante pour s'assurer de traiter de ce poste d'émission."
@@ -542,10 +543,10 @@ var data =
           "options" :
           [
             {
-              "id" : "trash/yes", "text" : "Oui et un plan d'actions de réduction et revalorisation a été mis en place", "score" : 2
+              "id" : "trash/yes", "text" : "Oui et un plan d'actions de réduction et revalorisation a été mis en place", "score" : 5
             },
             {
-              "id" : "trash/justabit", "text" : "Oui, un suivi est effectué", "score" : 1
+              "id" : "trash/justabit", "text" : "Oui, un suivi est effectué", "score" : 3
             },
             {
               "id" : "trash/no", "text" : "Non / Ne sait pas", "score" : 0
@@ -558,10 +559,10 @@ var data =
           "options" :
           [
             {
-              "id" : "mobility/yes", "text" : "Oui et un plan d'action a été mis en place", "score" : 2
+              "id" : "mobility/yes", "text" : "Oui et un plan d'action a été mis en place", "score" : 15
             },
             {
-              "id" : "mobility/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 1
+              "id" : "mobility/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 10
             },
             {
               "id" : "mobility/no", "text" : "Non / Ne sait pas", "score" : 0, "showFeedbackIf" : "activity/services", "feedback" : "Les déplacements professionnels peuvent représenter une partie importante des émissions de votre entreprise, surtout pour une entreprise de services."
@@ -574,10 +575,10 @@ var data =
           "options" :
           [
             {
-              "id" : "transport/yes", "text" : "Oui et un plan d'action a été mis en place", "score" : 2
+              "id" : "transport/yes", "text" : "Oui et un plan d'action a été mis en place", "score" : 20
             },
             {
-              "id" : "transport/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 1
+              "id" : "transport/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 15
             },
             {
               "id" : "transport/no", "text" : "Non / Ne sait pas", "score" : 0, "showFeedbackIf" : "activity/products", "feedback" : "Les émissions du transport font souvent partie des émissions dites significatives d'une entreprise commercialisant des produits."
@@ -590,26 +591,10 @@ var data =
           "options" :
           [
             {
-              "id" : "supply/yes", "text" : "Oui", "score" : 1
+              "id" : "supply/yes", "text" : "Oui", "score" : 15
             },
             {
               "id" : "supply/no", "text" : "Non", "score" : 0, "feedback" : "La dépendance à la chaine de valeur fait que le poste d'émissions des achats de produits ou services est très souvent un des postes d'émissions prépondérants d'une entreprise. La démarche d'acahts responsables sera déterminante dans la réussite de votre stratégie climat !"
-            }
-          ]
-        },
-        {
-          "type" : "radio",
-          "text" : "Est-ce que vous avez évalué l’impact du dérèglement climatique sur votre activité ? ",
-          "options" :
-          [
-            {
-              "id" : "assessImpact/yes", "text" : "Oui et une stratégie d'adaptation au dérèglement climatique a été mise en place", "score" : 2
-            },
-            {
-              "id" : "assessImpact/justabit", "text" : "Oui, une évaluation des risques a été effectuée", "score" : 1
-            },
-            {
-              "id" : "assessImpact/no", "text" : "Non / Ne sait pas", "score" : 0
             }
           ]
         },
@@ -619,10 +604,10 @@ var data =
           "options" :
           [
             {
-              "id" : "sinks/yes", "text" : "Oui, c'est réalisé", "score" : 2
+              "id" : "sinks/yes", "text" : "Oui, c'est réalisé", "score" : 10
             },
             {
-              "id" : "sinks/justabit", "text" : "Oui, c'est envisagé", "score" : 1
+              "id" : "sinks/justabit", "text" : "Oui, c'est envisagé", "score" : 5
             },
             {
               "id" : "sinks/no", "text" : "Non / Ne sait pas", "score" : 0
