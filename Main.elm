@@ -307,7 +307,7 @@ view model = case model.status of
 getScore : Form -> Set.Set String -> Html Msg
 getScore form answers =
   div [] 
-    ([ h1 [] [ text ( "Votre Sobriscore est de : " ++ (totalScore form answers) ++ "%" )] ]
+    ([ h1 [] [ text ( "Votre Sobriscore est de : " ++ (totalScore form answers) ++ "% " ), detailedTotalScore form answers ] ]
         ++ ( form |> List.map ( sectionScore answers ) ))
 
 totalScore : Form -> Set.Set String -> String
@@ -316,6 +316,13 @@ totalScore form answers =
     userScore = answers |> Set.toList |> List.filterMap (optionFromId form) |> List.foldl scoreAdder 0
   in
     Round.round 0 (100 * (toFloat userScore) / (toFloat (maxPoints form)))
+
+detailedTotalScore : Form -> Set.Set String -> Html Msg
+detailedTotalScore form answers =
+  let
+    userScore = answers |> Set.toList |> List.filterMap (optionFromId form) |> List.foldl scoreAdder 0
+  in
+    text ( "(" ++ ( userScore |> String.fromInt ) ++ " points sur " ++ ( maxPoints form |> String.fromInt ) ++ ")" )
 
 maxPoints : Form -> Int
 maxPoints form
@@ -328,8 +335,15 @@ sectionScore answers section =
   let
     userPoints = section.questions |> List.concatMap .options |> List.filter (\o -> Set.member o.id answers) |> List.map .score |> List.sum
     userScore = Round.round 0 (100 * (toFloat userPoints) / (toFloat (maxPointsForSection section)))
+    detailedSectionScore = "(" ++ ( userPoints |> String.fromInt ) ++ " points sur " ++ ( maxPointsForSection section |> String.fromInt ) ++ ")"
   in
-    h2 [] [ text ( section.name ++ " : " ++ userScore ++ "%" ), bar userScore ]
+    div []
+      [ h2 []
+        [ text ( section.name ++ " : " ++ userScore ++ "%" )
+        , bar userScore
+        ]
+      , text detailedSectionScore
+      ]
 
 bar : String -> Html Msg
 bar score = div [ style "width" "150px", style "height" "12px", style "background" "lightgrey" ] [ div [ style "background" "#3b91ec", style "height" "100%", style "width" (score++"%") ] []]
