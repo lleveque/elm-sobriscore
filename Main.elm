@@ -19,12 +19,23 @@ main = Browser.element { init = init, update = update, view = view, subscription
 -- MODEL
 
 type alias Model =
-  {
-    climateForm : Form,
-    rseForm : Form,
-    status : Status,
-    answers : Set.Set String,
-    currentScreen : Screen
+  { companyForm : Form
+  , climateForm : Form
+  , rseForm : Form
+  , status : Status
+  , answers : Set.Set String
+  , currentScreen : Screen
+  , hasDoneCompany : Bool
+  }
+
+defaultModel =
+  { companyForm = []
+  , climateForm = []
+  , rseForm = []
+  , answers = Set.empty
+  , currentScreen = Intro
+  , status = KO "Bienvenue sur l'outil Sobriscore !\nLe moteur de questionnaire est prêt, mais aucune n'a été chargée pour le moment."
+  , hasDoneCompany = False
   }
 
 type Screen = Intro | Step Form (Maybe Int) | Results Form
@@ -37,12 +48,11 @@ formDecoder : Json.Decode.Decoder Form
 formDecoder = Json.Decode.list sectionDecoder
 
 vForm : Form -> Set.Set String -> Html Msg
-vForm f answers = div [] ( List.map ( vSection answers ) f )
+vForm form answers = div [] ( List.map ( vSection form answers ) form )
 
 type alias Section =
-  {
-    name : String,
-    questions : List Question
+  { name : String
+  , questions : List Question
   }
 
 sectionDecoder : Json.Decode.Decoder Section
@@ -50,10 +60,10 @@ sectionDecoder = Json.Decode.map2 Section
   ( Json.Decode.field "text" Json.Decode.string )
   ( Json.Decode.field "questions" ( Json.Decode.list questionDecoder ))
 
-vSection : Set.Set String -> Section -> Html Msg
-vSection answers s = Html.Keyed.node "div" []
+vSection : Form -> Set.Set String -> Section -> Html Msg
+vSection form answers s = Html.Keyed.node "div" []
   (( "section-title", div [] [ h2 [] [ text s.name ]] )
-  :: ( List.map ( keyedVQuestion answers ) s.questions )
+  :: ( List.map ( keyedVQuestion form answers ) s.questions )
   )
 
 vSectionWithNumber : Form -> Int -> Set.Set String -> Html Msg
@@ -64,7 +74,7 @@ vSectionWithNumber form sectionNumber answers =
     case mSection of
       Just section ->
         div []
-        [ vSection answers section
+        [ vSection form answers section
         , div [ class "buttons"]
           [ button [ onClick ( LoadSection form ( sectionNumber - 1 ) ) ] [ text "Précédent"]
           , button [ onClick ( LoadSection form ( sectionNumber + 1 ) ) ] [ text "Suivant"]
@@ -73,11 +83,10 @@ vSectionWithNumber form sectionNumber answers =
       Nothing -> div [] [ text "Trop loin !" ]
 
 type alias Question =
-  {
-    type_ : QuestionType,
-    text : String,
-    options : List Option,
-    showIf : Maybe String
+  { type_ : QuestionType
+  , text : String
+  , options : List Option
+  , showIf : Maybe String
   }
 
 questionDecoder : Json.Decode.Decoder Question
@@ -87,14 +96,14 @@ questionDecoder = Json.Decode.map4 Question
   ( Json.Decode.field "options" ( Json.Decode.list optionDecoder ))
   ( Json.Decode.maybe ( Json.Decode.field "showIf" Json.Decode.string ))
 
-keyedVQuestion : Set.Set String -> Question -> (String, Html Msg)
-keyedVQuestion answers q = ( q.text, vQuestion answers q)
+keyedVQuestion : Form -> Set.Set String -> Question -> (String, Html Msg)
+keyedVQuestion form answers q = ( q.text, vQuestion form answers q)
 
-vQuestion : Set.Set String -> Question -> Html Msg
-vQuestion answers q =
+vQuestion : Form -> Set.Set String -> Question -> Html Msg
+vQuestion form answers q =
   let
-    enabled = div [] ([ renderMarkdown q.text ] ++ ( List.map ( vOption answers False q.type_ q.text ) q.options ))
-    disabled = div [ class "disabled" ] ([ renderMarkdown q.text ] ++ ( List.map ( vOption answers True q.type_ q.text ) q.options ))
+    enabled = div [] ([ renderMarkdown q.text ] ++ ( List.map ( vOption form answers False q.type_ q.text ) q.options ))
+    disabled = div [ class "disabled" ] ([ renderMarkdown q.text ] ++ ( List.map ( vOption form answers True q.type_ q.text ) q.options ))
   in
     case q.showIf of
       Nothing -> enabled
@@ -109,12 +118,11 @@ questionTypeDecoder qType = case qType of
   _ -> Json.Decode.succeed Unknown
 
 type alias Option =
-  {
-    id : String,
-    text : String,
-    score : Int,
-    feedback : Maybe String,
-    showFeedbackIf : Maybe String
+  { id : String
+  , text : String
+  , score : Int
+  , feedback : Maybe String
+  , showFeedbackIf : Maybe String
   }
 
 optionDecoder : Json.Decode.Decoder Option
@@ -125,8 +133,8 @@ optionDecoder = Json.Decode.map5 Option
   ( Json.Decode.maybe ( Json.Decode.field "feedback" Json.Decode.string ))
   ( Json.Decode.maybe ( Json.Decode.field "showFeedbackIf" Json.Decode.string ))
 
-vOption : Set.Set String -> Bool -> QuestionType -> String -> Option -> Html Msg
-vOption answers disable qType qName o =
+vOption : Form -> Set.Set String -> Bool -> QuestionType -> String -> Option -> Html Msg
+vOption form answers disable qType qName o =
   let
     isChecked = Set.member o.id answers
   in
@@ -137,7 +145,7 @@ vOption answers disable qType qName o =
           , id o.id
           , name qName
           , value o.text
-          , onCheck ( Select o.id )
+          , onCheck ( Select form o.id )
           , checked isChecked
           ] ++ ( if disable then [ disabled True ] else [] ))
           []
@@ -149,7 +157,7 @@ vOption answers disable qType qName o =
           , id o.id
           , name qName
           , value o.text
-          , onCheck ( Check o.id )
+          , onCheck ( Check form o.id )
           , checked isChecked
           ] ++ ( if disable then [ disabled True ] else [] ))
           []
@@ -159,10 +167,15 @@ vOption answers disable qType qName o =
 
 -- INIT
 
-type alias AllForms = { climateForm : Form, rseForm : Form }
+type alias AllForms =
+  { companyForm : Form
+  , climateForm : Form
+  , rseForm : Form
+  }
 
 formsDecoder : Json.Decode.Decoder AllForms
-formsDecoder = Json.Decode.map2 AllForms
+formsDecoder = Json.Decode.map3 AllForms
+  ( Json.Decode.field "companyForm" formDecoder )
   ( Json.Decode.field "climateForm" formDecoder )
   ( Json.Decode.field "rseForm" formDecoder )
 
@@ -171,16 +184,25 @@ init flags =
   case Json.Decode.decodeValue formsDecoder flags of
 
     Ok forms -> 
-      ( { climateForm = forms.climateForm, rseForm = forms.rseForm, answers = Set.empty, currentScreen = Intro, status = OK }, Cmd.none )
+      ( { defaultModel
+        | companyForm = forms.companyForm
+        , climateForm = forms.climateForm
+        , rseForm = forms.rseForm
+        , status = OK
+        }
+      , Cmd.none )
 
     Err e ->
-      ( { climateForm = [], rseForm = [], answers = Set.empty, currentScreen = Intro, status = KO (Json.Decode.errorToString e) }, Cmd.none )
+      ( { defaultModel
+        | status = KO (Json.Decode.errorToString e)
+        }
+      , Cmd.none )
 
 -- UPDATE
 
 type Msg
-  = Check String Bool
-  | Select String Bool
+  = Check Form String Bool
+  | Select Form String Bool
   | LoadSection Form Int
   | Reset
 
@@ -207,40 +229,42 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     
-    Check id checked ->
+    Check form id checked ->
       let
         updatedAnswers =
           if checked then
             Set.insert id model.answers
           else
             Set.remove id model.answers
-        answers = removeCascadingAnswers model.climateForm updatedAnswers id -- TODO remove dependency to climateForm
+        answers = removeCascadingAnswers form updatedAnswers id
       in
         ({ model | answers = answers }, Cmd.none )
     
-    Select id _ ->
+    Select form id _ ->
       let
         cleanedAnswers = Set.filter (notSameQuestion id) model.answers
-        superCleanedAnswers = removeCascadingAnswers model.climateForm cleanedAnswers id -- TODO remove dependency to climateForm
+        superCleanedAnswers = removeCascadingAnswers form cleanedAnswers id
         answers = Set.insert id superCleanedAnswers
       in
         ({ model | answers = answers }, Cmd.none )
     
     LoadSection form index ->
       let
-        nextScreen =
+        ( nextScreen, hasDoneCompany ) =
           if index < 0
           then
-            Intro
+            ( Intro, model.hasDoneCompany )
           else
             if index >= List.length form
             then
-              Results form
+              if form == model.companyForm
+              then ( Intro, True )
+              else ( Results form, model.hasDoneCompany )
             else
-              Step form ( Just index )
-      in ({ model | currentScreen = nextScreen }, Cmd.none )
+              ( Step form ( Just index ), model.hasDoneCompany )
+      in ({ model | currentScreen = nextScreen, hasDoneCompany = hasDoneCompany }, Cmd.none )
     
-    Reset -> ({ model | currentScreen = Intro, answers = Set.empty }, Cmd.none )
+    Reset -> ({ defaultModel | companyForm = model.companyForm, climateForm = model.climateForm, rseForm = model.rseForm, status = model.status }, Cmd.none )
 
 notSameQuestion: String -> String -> Bool
 notSameQuestion option1 option2 =
@@ -259,14 +283,14 @@ view model = case model.status of
   OK ->
     div []
       [ h1 [] [ text "Sobriscore" ]
-      --, vForm model.climateForm model.answers
       , case model.currentScreen of
 
           Intro ->
             div []
               [ div [] [ text "Bienvenue dans l'outil Sobriscore !" ]
-              , div [] [ button [ onClick ( LoadSection model.climateForm 0 ) ] [ text "Commencer le formulaire Climat"] ]
-              , div [] [ button [ onClick ( LoadSection model.rseForm 0 ) ] [ text "Commencer le formulaire RSE"] ]
+              , div [] [ button [ onClick ( LoadSection model.companyForm 0 ), class (if model.hasDoneCompany then "disabled" else "") ] [ text "Renseigner les données entreprise"] ]
+              , div [] [ button [ onClick ( LoadSection model.climateForm 0 ), class (if model.hasDoneCompany then "" else "disabled") ] [ text "Commencer le formulaire Climat"] ]
+              , div [] [ button [ onClick ( LoadSection model.rseForm 0 ), class (if model.hasDoneCompany then "" else "disabled")  ] [ text "Commencer le formulaire RSE"] ]
               ]
 
           Step form ( Just section ) -> vSectionWithNumber form section model.answers

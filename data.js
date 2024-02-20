@@ -1,5 +1,182 @@
 var data =
 {
+  "companyForm":
+  [
+    {
+      "text" : "Votre entreprise et vous",
+      "questions":
+      [
+        {
+          "type" : "radio",
+          "text" : "Quel est votre nom/prénom ?",
+          "options" :
+          [
+            {
+              "id" : "name/example", "text" : "Jean-Michel Jarre", "score" : 0
+            }
+          ]
+        },
+        {
+          "type" : "radio",
+          "text" : "Quel est votre adresse email ?",
+          "options" :
+          [
+            {
+              "id" : "email/example", "text" : "jean-michel@jarre.fr", "score" : 0
+            }
+          ]
+        },
+        {
+          "type" : "radio",
+          "text" : "Quel est le nom de votre entreprise ?",
+          "options" :
+          [
+            {
+              "id" : "company/example", "text" : "CHEF (Compagnie des harpes électroniques françaises)", "score" : 0
+            }
+          ]
+        },
+        {
+          "type" : "radio",
+          "text" : "Quel est votre intitulé de poste ?",
+          "options" :
+          [
+            {
+              "id" : "job/rse", "text" : "Responsable/chargé de développement durable/RSE", "score" : 0
+            },
+            {
+              "id" : "job/quality", "text" : "Responsable/chargé de Qualité/QSE", "score" : 0
+            },
+            {
+              "id" : "job/corporate", "text" : "Fonctions supports : RH, Comptabilité, Commercial,...", "score" : 0
+            },
+            {
+              "id" : "job/director", "text" : "Direction générale", "score" : 0
+            }
+          ]
+        },
+        {
+          "type" : "radio",
+          "text" : "Quelle est la taille de votre entreprise (nombre d’employés) ?",
+          "options" :
+          [
+            {
+              "id" : "size/tpe", "text" : "TPE : moins de 10 salariés", "score" : 0
+            },
+            {
+              "id" : "size/pme", "text" : "PME : entre 10 et 250 salariés", "score" : 0
+            },
+            {
+              "id" : "size/eti", "text" : "ETI : entre 250 et 5 000 salariés", "score" : 0
+            },
+            {
+              "id" : "size/large", "text" : "Grande entreprise : plus de 5 000 salariés", "score" : 0
+            }
+          ]
+        },
+        {
+          "type" : "radio",
+          "text" : "Êtes-vous soumis à la DPEF/ CSRD ?",
+          "options" :
+          [
+            {
+              "id" : "dpef/yes", "text" : "Oui", "score" : 0
+            },
+            {
+              "id" : "dpef/no", "text" : "Non", "score" : 0
+            },
+            {
+              "id" : "dpef/unknown", "text" : "Je ne sais pas", "score" : 0
+            }
+          ]
+        },
+        {
+          "type" : "checkbox",
+          "text" : "Comment est orienté votre business ?",
+          "options" :
+          [
+            {
+              "id" : "bizModel/b2b", "text" : "B2B : vos clients sont des professionnels", "score" : 0
+            },
+            {
+              "id" : "bizModel/b2c", "text" : "B2C : vos clients sont des particuliers", "score" : 0
+            }
+          ]
+        },
+        {
+          "type" : "checkbox",
+          "text" : "Où votre/vos site(s) sont-ils géographiquement implanté(s) ?",
+          "options" :
+          [
+            {
+              "id" : "location/france", "text" : "France", "score" : 0
+            },
+            {
+              "id" : "location/europe", "text" : "Europe", "score" : 0
+            },
+            {
+              "id" : "location/world", "text" : "Hors Europe", "score" : 0
+            }
+          ]
+        },
+        {
+          "type" : "radio",
+          "text" : "Quel est le secteur d'activité principal de votre entreprise ?",
+          "options" :
+          [
+            {
+              "id" : "sector/services", "text" : "Services (études, enseignement, administratif, etc)", "score" : 0
+            },
+            {
+              "id" : "sector/agriculture", "text" : "Agriculture, sylviculture, pêche", "score" : 0
+            },
+            {
+              "id" : "sector/food", "text" : "Agroalimentaire", "score" : 0
+            },
+            {
+              "id" : "sector/transport", "text" : "Transport, logistique", "score" : 0
+            },
+            {
+              "id" : "sector/energy", "text" : "Energie", "score" : 0
+            },
+            {
+              "id" : "sector/construction", "text" : "Construction", "score" : 0
+            },
+            {
+              "id" : "sector/banking", "text" : "Banque, assurance, fonds d'investissements", "score" : 0
+            },
+            {
+              "id" : "sector/tourism", "text" : "Hébergement, restauration, tourisme", "score" : 0
+            },
+            {
+              "id" : "sector/health", "text" : "Santé et social", "score" : 0
+            },
+            {
+              "id" : "sector/trading", "text" : "Commerce, négoce, distribution", "score" : 0
+            },
+            {
+              "id" : "sector/chemical", "text" : "Chimie, parachimie, pétrochimie, pharmaceutique", "score" : 0
+            },
+            {
+              "id" : "sector/software", "text" : "Informatique, télécoms", "score" : 0
+            },
+            {
+              "id" : "sector/clothing", "text" : "Textile, habillement, chaussure", "score" : 0
+            },
+            {
+              "id" : "sector/manufacture", "text" : "Industrie manufacturière (transformations de biens)", "score" : 0
+            },
+            {
+              "id" : "sector/arts", "text" : "Arts, spectacles, activités culturelles", "score" : 0
+            },
+            {
+              "id" : "sector/waste", "text" : "Gestion eau et déchet", "score" : 0
+            }
+          ]
+        }
+      ]
+    },
+  ],
   "climateForm":
   [
     {
