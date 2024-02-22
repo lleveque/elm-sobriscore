@@ -6,11 +6,11 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onCheck, onClick)
 import Html.Keyed
 import Json.Decode
-import Set
 import List.Extra
 import Round
 import Markdown.Parser as Markdown
 import Markdown.Renderer
+import OrderedSet
 
 -- MAIN
 
@@ -23,7 +23,7 @@ type alias Model =
   , climateForm : Form
   , rseForm : Form
   , status : Status
-  , answers : Set.Set String
+  , answers : Answers
   , currentScreen : Screen
   , hasDoneCompany : Bool
   , showScores : Bool
@@ -33,12 +33,14 @@ defaultModel =
   { companyForm = []
   , climateForm = []
   , rseForm = []
-  , answers = Set.empty
+  , answers = OrderedSet.empty
   , currentScreen = Intro
   , status = KO "Bienvenue sur l'outil Sobriscore !\nLe moteur de questionnaire est prêt, mais aucune n'a été chargée pour le moment."
   , hasDoneCompany = False
   , showScores = False
   }
+
+type alias Answers = OrderedSet.OrderedSet String
 
 type Screen = Intro | Step Form (Maybe Int) | Results Form
 
@@ -59,7 +61,7 @@ sectionDecoder = Json.Decode.map2 Section
   ( Json.Decode.field "text" Json.Decode.string )
   ( Json.Decode.field "questions" ( Json.Decode.list questionDecoder ))
 
-vSection : Bool -> Form -> Set.Set String -> Section -> Html Msg
+vSection : Bool -> Form -> Answers -> Section -> Html Msg
 vSection detailed form answers s =
   Html.Keyed.node "div" []
     (( "section-title"
@@ -71,7 +73,7 @@ vSection detailed form answers s =
         ]
     ) :: ( List.map ( keyedVQuestion detailed form answers ) s.questions ))
 
-vSectionWithNumber : Bool -> Form -> Int -> Set.Set String -> Html Msg
+vSectionWithNumber : Bool -> Form -> Int -> Answers -> Html Msg
 vSectionWithNumber detailed form sectionNumber answers =
   let
     mSection = List.Extra.getAt sectionNumber form
@@ -101,10 +103,10 @@ questionDecoder = Json.Decode.map4 Question
   ( Json.Decode.field "options" ( Json.Decode.list optionDecoder ))
   ( Json.Decode.maybe ( Json.Decode.field "showIf" Json.Decode.string ))
 
-keyedVQuestion : Bool -> Form -> Set.Set String -> Question -> (String, Html Msg)
+keyedVQuestion : Bool -> Form -> Answers -> Question -> (String, Html Msg)
 keyedVQuestion detailed form answers q = ( q.text, vQuestion detailed form answers q)
 
-vQuestion : Bool -> Form -> Set.Set String -> Question -> Html Msg
+vQuestion : Bool -> Form -> Answers -> Question -> Html Msg
 vQuestion detailed form answers q =
   let
     enabled = div [] ([ renderMarkdown q.text , span [ class "checkup" ] [ text ( if detailed then " - " ++ ( String.fromInt ( maxPointsForQuestion q ) ) ++ " points" else "" ) ]] ++ ( List.map ( vOption detailed form answers False q.type_ q.text ) q.options ))
@@ -112,7 +114,7 @@ vQuestion detailed form answers q =
   in
     case q.showIf of
       Nothing -> enabled
-      Just master -> if ( Set.member master answers ) then enabled else disabled
+      Just master -> if ( OrderedSet.member master answers ) then enabled else disabled
 
 type QuestionType = Radio | Checkbox | Unknown
 
@@ -138,10 +140,10 @@ optionDecoder = Json.Decode.map5 Option
   ( Json.Decode.maybe ( Json.Decode.field "feedback" Json.Decode.string ))
   ( Json.Decode.maybe ( Json.Decode.field "showFeedbackIf" Json.Decode.string ))
 
-vOption : Bool -> Form -> Set.Set String -> Bool -> QuestionType -> String -> Option -> Html Msg
+vOption : Bool -> Form -> Answers -> Bool -> QuestionType -> String -> Option -> Html Msg
 vOption detailed form answers disable qType qName o =
   let
-    isChecked = Set.member o.id answers
+    isChecked = OrderedSet.member o.id answers
   in
     case qType of
       Radio -> div ([ class "option" ] ++ ( if isChecked then [ class "checked" ] else [] ))
@@ -212,23 +214,23 @@ type Msg
   | ToggleScores
   | Reset
 
-removeCascadingAnswers : Form -> Set.Set String -> String -> Set.Set String
+removeCascadingAnswers : Form -> Answers -> String -> Answers
 removeCascadingAnswers form answers checkedOption =
   let
     cascadingQuestions = form |> List.concatMap .questions |> List.filter doCascade
     removableCascadingQuestions = cascadingQuestions |> List.filter ( parentUnchecked answers )
     removableOptions = removableCascadingQuestions |> List.concatMap .options |> List.map .id
   in
-    Set.filter ( \answer -> not ( List.member answer removableOptions )) answers
+    OrderedSet.filter ( \answer -> not ( List.member answer removableOptions )) answers
 
 doCascade : Question -> Bool
 doCascade q = case q.showIf of
   Just _ -> True
   Nothing -> False
 
-parentUnchecked : Set.Set String -> Question -> Bool
+parentUnchecked : Answers -> Question -> Bool
 parentUnchecked answers q = case q.showIf of
-  Just parent -> not ( Set.member parent answers )
+  Just parent -> not ( OrderedSet.member parent answers )
   Nothing -> False
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -239,18 +241,18 @@ update msg model =
       let
         updatedAnswers =
           if checked then
-            Set.insert id model.answers
+            OrderedSet.insert id model.answers
           else
-            Set.remove id model.answers
+            OrderedSet.remove id model.answers
         answers = removeCascadingAnswers form updatedAnswers id
       in
         ({ model | answers = answers }, Cmd.none )
     
     Select form id _ ->
       let
-        cleanedAnswers = Set.filter (notSameQuestion id) model.answers
+        cleanedAnswers = OrderedSet.filter (notSameQuestion id) model.answers
         superCleanedAnswers = removeCascadingAnswers form cleanedAnswers id
-        answers = Set.insert id superCleanedAnswers
+        answers = OrderedSet.insert id superCleanedAnswers
       in
         ({ model | answers = answers }, Cmd.none )
     
@@ -316,11 +318,12 @@ view model = case model.status of
           Results form -> div []
             [ getScore model.showScores form model.answers
             , getFeedback form model.answers
+            , vAnswers model.answers
             , button [ onClick Reset ] [ text "Recommencer" ]
             ]
       ]
 
-getScore : Bool -> Form -> Set.Set String -> Html Msg
+getScore : Bool -> Form -> Answers -> Html Msg
 getScore detailed form answers =
   div [] 
     (
@@ -336,17 +339,17 @@ getScore detailed form answers =
       ++ ( form |> List.map ( sectionScore detailed answers ) )
     )
 
-totalScore : Form -> Set.Set String -> String
+totalScore : Form -> Answers -> String
 totalScore form answers =
   let
-    userScore = answers |> Set.toList |> List.filterMap (optionFromId form) |> List.foldl scoreAdder 0
+    userScore = answers |> OrderedSet.toList |> List.filterMap (optionFromId form) |> List.foldl scoreAdder 0
   in
     Round.round 0 (100 * (toFloat userScore) / (toFloat (maxPoints form)))
 
-detailedTotalScore : Form -> Set.Set String -> Html Msg
+detailedTotalScore : Form -> Answers -> Html Msg
 detailedTotalScore form answers =
   let
-    userScore = answers |> Set.toList |> List.filterMap (optionFromId form) |> List.foldl scoreAdder 0
+    userScore = answers |> OrderedSet.toList |> List.filterMap (optionFromId form) |> List.foldl scoreAdder 0
   in
     span [ class "checkup" ] [ text ( "(" ++ ( userScore |> String.fromInt ) ++ " points sur " ++ ( maxPoints form |> String.fromInt ) ++ ")" ) ]
 
@@ -356,10 +359,10 @@ maxPoints form
   |> List.map maxPointsForSection
   |> List.sum
 
-sectionScore : Bool -> Set.Set String -> Section -> Html Msg
+sectionScore : Bool -> Answers -> Section -> Html Msg
 sectionScore detailed answers section =
   let
-    userPoints = section.questions |> List.concatMap .options |> List.filter (\o -> Set.member o.id answers) |> List.map .score |> List.sum
+    userPoints = section.questions |> List.concatMap .options |> List.filter (\o -> OrderedSet.member o.id answers) |> List.map .score |> List.sum
     userScore = Round.round 0 (100 * (toFloat userPoints) / (toFloat (maxPointsForSection section)))
     detailedSectionScore = "(" ++ ( userPoints |> String.fromInt ) ++ " points sur " ++ ( maxPointsForSection section |> String.fromInt ) ++ ")"
   in
@@ -398,7 +401,7 @@ optionFromId form id
   |> List.filter (\option -> option.id == id)
   |> List.head
 
-getFeedback : Form -> Set.Set String -> Html Msg
+getFeedback : Form -> Answers -> Html Msg
 getFeedback form answers =
   let
     feedback = form |> List.filterMap ( sectionFeedback answers )
@@ -409,7 +412,7 @@ getFeedback form answers =
     else
       div [] ( [ h1 [] [ text "Nos conseils" ] ] ++ ( form |> List.filterMap ( sectionFeedback answers )))
 
-sectionFeedback : Set.Set String -> Section -> Maybe ( Html Msg )
+sectionFeedback : Answers -> Section -> Maybe ( Html Msg )
 sectionFeedback answers section =
   let
     feedbacks = section.questions |> List.filterMap ( questionFeedback answers )
@@ -418,12 +421,12 @@ sectionFeedback answers section =
     then Nothing
     else Just ( div [] ([ h2 [] [ text section.name ] ] ++ feedbacks ) )
 
-questionFeedback : Set.Set String -> Question -> Maybe ( Html Msg )
+questionFeedback : Answers -> Question -> Maybe ( Html Msg )
 questionFeedback answers question =
   let
     feedbacks
       = question.options
-      |> List.filter (\o -> Set.member o.id answers )
+      |> List.filter (\o -> OrderedSet.member o.id answers )
       |> List.filter (\o -> shouldShowFeedback answers o.showFeedbackIf)
       |> List.filterMap .feedback
       |> List.map (\feedback -> li [] [ renderMarkdown feedback ])
@@ -432,10 +435,17 @@ questionFeedback answers question =
     then Nothing
     else Just ( div [] feedbacks )
 
-shouldShowFeedback : Set.Set String -> Maybe String -> Bool
+shouldShowFeedback : Answers -> Maybe String -> Bool
 shouldShowFeedback answers mParent = case mParent of
   Nothing -> True
-  Just parent -> if Set.member parent answers then True else False
+  Just parent -> if OrderedSet.member parent answers then True else False
+
+vAnswers : Answers -> Html Msg
+vAnswers answers =
+  div [ class "checkup" ]
+    [ h2 [] [ text "Vos réponses" ]
+    , div [] ( answers |> OrderedSet.toList |> List.map ( \a -> div [] [ text a ] ) )
+    ]
 
 renderMarkdown : String -> Html Msg
 renderMarkdown s =
