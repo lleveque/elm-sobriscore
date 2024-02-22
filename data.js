@@ -301,10 +301,10 @@ var data =
               "id" : "objTerm/short", "text" : "Court terme (1 - 3ans)", "score" : 5
             },
             {
-              "id" : "objTerm/medium", "text" : "Moyen terme  (3 - 10 ans)", "score" : 10
+              "id" : "objTerm/medium", "text" : "Moyen terme  (3 - 10 ans)", "score" : 5
             },
             {
-              "id" : "objTerm/long", "text" : "Long terme (10 - 30 ans)", "score" : 15
+              "id" : "objTerm/long", "text" : "Long terme (10 - 30 ans)", "score" : 5
             }
           ]
         },
@@ -344,7 +344,7 @@ var data =
               "id" : "investGreen/yes", "text" : "Oui, c'est un critère essentiel", "score" : 5
             },
             {
-              "id" : "investGreen/justabit", "text" : "Oui, à la marge", "score" : 3
+              "id" : "investGreen/justabit", "text" : "Oui, à la marge", "score" : 3, "feedback" : "Investir dans la TEE c’est contribuer à lutter contre le réchauffement climatique en orientant son épargne vers les fonds qui ont mis cet objectif au cœur de leur processus d'investissement."
             },
             {
               "id" : "investGreen/no", "text" : "Non / Ne sait pas", "score" : 0
@@ -372,15 +372,15 @@ var data =
         },
         {
           "showIf" : "anyoneInCharge/yes",
-          "type" : "checkbox",
+          "type" : "radio",
           "text" : "De qui s'agit-il ?",
           "options" :
           [
             {
-              "id" : "whoInCharge/looseteam", "text" : "Une équipe composée de représentants de différentes fonctions/métiers dans l'entreprise (ex: maintenance, achats, commercial,...)", "score" : 5
+              "id" : "whoInCharge/looseteam", "text" : "Une équipe composée de volontaires au sein de l'entreprise (mission non incluse dans leur fiche de poste)", "score" : 5
             },
             {
-              "id" : "whoInCharge/looseone", "text" : "La mission est une composante d'un poste d'une personne", "score" : 15
+              "id" : "whoInCharge/looseone", "text" : "La mission est une composante d'un poste d'une ou plusieurs personnes", "score" : 15
             },
             {
               "id" : "whoInCharge/fullone", "text" : "Un poste à temps plein est présent", "score" : 20
@@ -411,13 +411,13 @@ var data =
           "options" :
           [
             {
-              "id" : "planTerm/short", "text" : "Court terme (1 - 3ans)", "score" : 10
+              "id" : "planTerm/short", "text" : "Court terme (1 - 3ans)", "score" : 10, "feedback" : "Aller plus loin en s'incrivant dans une initiative comme les SBTi"
             },
             {
               "id" : "planTerm/medium", "text" : "Moyen terme  (3 - 10 ans)", "score" : 10
             },
             {
-              "id" : "planTerm/long", "text" : "Long terme (10 - 30 ans)", "score" : 10
+              "id" : "planTerm/long", "text" : "Long terme (10 - 30 ans)", "score" : 15
             }
           ]
         },
@@ -543,7 +543,7 @@ var data =
           "options" :
           [
             {
-              "id" : "trash/yes", "text" : "Oui et un plan d'actions de réduction et revalorisation a été mis en place", "score" : 5
+              "id" : "trash/yes", "text" : "Oui et un plan d'actions de réduction et revalorisation a été mis en place", "score" : 5, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier 5 types de déchets (papier/carton, métal, plastique, verre, et bois) dans des poubelles dédiées. C’est le tri 5 flux des déchets."
             },
             {
               "id" : "trash/justabit", "text" : "Oui, un suivi est effectué", "score" : 3
@@ -591,7 +591,7 @@ var data =
           "options" :
           [
             {
-              "id" : "supply/yes", "text" : "Oui", "score" : 15
+              "id" : "supply/yes", "text" : "Oui", "score" : 15, "feedback" : "Une politique d’achats responsables permet de réduire les risques et les impacts sociaux et environnementaux, réduire les coûts, notamment liés aux ruptures d’approvisionnement mais aussi de satisfaire la demande des clients, en se tournant vers des produits ou services durables."
             },
             {
               "id" : "supply/no", "text" : "Non", "score" : 0, "feedback" : "La dépendance à la chaine de valeur fait que le poste d'émissions des achats de produits ou services est très souvent un des postes d'émissions prépondérants d'une entreprise. La démarche d'acahts responsables sera déterminante dans la réussite de votre stratégie climat !"
