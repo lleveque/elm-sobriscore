@@ -180,7 +180,7 @@ var data =
   "climateForm":
   [
     {
-      "text" : "Maturité climat",
+      "text" : "Votre connaissance des enjeux",
       "questions":
       [
         {
@@ -354,7 +354,7 @@ var data =
       ]
     },
     {
-      "text" : "Pilotage climat",
+      "text" : "Votre pilotage de la démarche climat",
       "questions":
       [
         {
@@ -452,7 +452,7 @@ var data =
       ]
     },
     {
-      "text" : "Passage à l'action",
+      "text" : "Votre passage à l'action",
       "questions":
       [
         {
