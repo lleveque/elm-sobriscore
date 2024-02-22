@@ -41,3 +41,7 @@
 .option.checked > label {
     font-weight: bold;
 }
+
+.checkup {
+    color: #40A3BB;
+}

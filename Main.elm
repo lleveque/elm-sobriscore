@@ -64,16 +64,11 @@ vSection detailed form answers s =
   Html.Keyed.node "div" []
     (( "section-title"
       , div []
-        (
-          [ h2 []
-            [ text (
-              s.name ++ (
-                if detailed
-                then ( " - " ++ ( String.fromInt ( maxPointsForSection s )) ++ " points" )
-                else "" ) )
-            ]
+        [ h2 []
+          [ text s.name
+          , span [ class "checkup" ] [ text ( if detailed then ( " - " ++ ( String.fromInt ( maxPointsForSection s )) ++ " points" ) else "" ) ]
           ]
-        )
+        ]
     ) :: ( List.map ( keyedVQuestion detailed form answers ) s.questions ))
 
 vSectionWithNumber : Bool -> Form -> Int -> Set.Set String -> Html Msg
@@ -112,8 +107,8 @@ keyedVQuestion detailed form answers q = ( q.text, vQuestion detailed form answe
 vQuestion : Bool -> Form -> Set.Set String -> Question -> Html Msg
 vQuestion detailed form answers q =
   let
-    enabled = div [] ([ renderMarkdown ( q.text ++ if detailed then " - " ++ ( String.fromInt ( maxPointsForQuestion q ) ) ++ " points" else "" ) ] ++ ( List.map ( vOption detailed form answers False q.type_ q.text ) q.options ))
-    disabled = div [ class "disabled" ] ([ renderMarkdown ( q.text ++ if detailed then " - " ++ ( String.fromInt ( maxPointsForQuestion q ) ) ++ " points" else "" ) ] ++ ( List.map ( vOption detailed form answers True q.type_ q.text ) q.options ))
+    enabled = div [] ([ renderMarkdown q.text , span [ class "checkup" ] [ text ( if detailed then " - " ++ ( String.fromInt ( maxPointsForQuestion q ) ) ++ " points" else "" ) ]] ++ ( List.map ( vOption detailed form answers False q.type_ q.text ) q.options ))
+    disabled = div [ class "disabled" ] ([ renderMarkdown q.text, span [ class "checkup" ] [ text ( if detailed then " - " ++ ( String.fromInt ( maxPointsForQuestion q ) ) ++ " points" else "" ) ]] ++ ( List.map ( vOption detailed form answers True q.type_ q.text ) q.options ))
   in
     case q.showIf of
       Nothing -> enabled
@@ -159,7 +154,7 @@ vOption detailed form answers disable qType qName o =
           , checked isChecked
           ] ++ ( if disable then [ disabled True ] else [] ))
           []
-        , label [ for o.id ] [ renderMarkdown ( o.text ++ (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )) ]
+        , label [ for o.id ] [ renderMarkdown o.text, span [ class "checkup" ] [ text (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )] ]
         ]
       Checkbox -> div ([ class "option" ] ++ ( if isChecked then [ class "checked" ] else [] ))
         [ input
@@ -171,9 +166,9 @@ vOption detailed form answers disable qType qName o =
           , checked isChecked
           ] ++ ( if disable then [ disabled True ] else [] ))
           []
-        , label [ for o.id ] [ renderMarkdown ( o.text ++ (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )) ]
+        , label [ for o.id ] [ renderMarkdown o.text, span [ class "checkup" ] [ text (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )] ]
         ]
-      Unknown -> div [] [ renderMarkdown ( o.text ++ (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )) ]
+      Unknown -> div [] [ renderMarkdown o.text, span [ class "checkup" ] [ text (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )] ]
 
 -- INIT
 
@@ -303,7 +298,7 @@ view model = case model.status of
   KO error -> article [] [ aside [ style "display" "block" ] [ div [] [ h1 [] [ text "Error" ] ], p [] [ text error ]] ]
   OK ->
     div []
-      [ h1 [ onClick ToggleScores ] [ text "Sobriscore" ]
+      [ h1 [ onClick ToggleScores, class ( if model.showScores then "checkup" else "" ) ] [ text "Sobriscore" ]
       , case model.currentScreen of
 
           Intro ->
@@ -353,7 +348,7 @@ detailedTotalScore form answers =
   let
     userScore = answers |> Set.toList |> List.filterMap (optionFromId form) |> List.foldl scoreAdder 0
   in
-    text ( "(" ++ ( userScore |> String.fromInt ) ++ " points sur " ++ ( maxPoints form |> String.fromInt ) ++ ")" )
+    span [ class "checkup" ] [ text ( "(" ++ ( userScore |> String.fromInt ) ++ " points sur " ++ ( maxPoints form |> String.fromInt ) ++ ")" ) ]
 
 maxPoints : Form -> Int
 maxPoints form
@@ -370,15 +365,17 @@ sectionScore detailed answers section =
   in
     div []
       (
-        [ h2 []
-          [ text ( section.name ++ " : " ++ userScore ++ "%" ++ if detailed then detailedSectionScore else "" )
+        [ h2 [ style "display" "flex", style "align-items" "center", style "gap" "1em"]
+          [ span [ style "width" "500px", style "text-align" "end" ] [ text ( section.name ++ " : ") ]
           , bar userScore
+          , span [] [ text  ( userScore ++ "%" ) ]
+          , span [ class "checkup" ] [ text ( if detailed then detailedSectionScore else "" ) ]
           ]
         ]
       )
 
 bar : String -> Html Msg
-bar score = div [ style "width" "150px", style "height" "12px", style "background" "lightgrey" ] [ div [ style "background" "#3b91ec", style "height" "100%", style "width" (score++"%") ] []]
+bar score = div [ style "display" "inline-block", style "width" "150px", style "height" "12px", style "background" "lightgrey" ] [ div [ style "background" "#3b91ec", style "height" "100%", style "width" (score++"%") ] []]
 
 maxPointsForSection : Section -> Int
 maxPointsForSection section = section.questions |> List.map maxPointsForQuestion |> List.sum
@@ -447,5 +444,5 @@ renderMarkdown s =
         |> Result.mapError (\_ -> "Erreur de décodage du markdown")
         |> Result.andThen (\ast -> Markdown.Renderer.render Markdown.Renderer.defaultHtmlRenderer ast)
       of
-        Ok rendered -> div [] rendered
-        Err errors -> div [] [ text s ]
+        Ok rendered -> div [ style "display" "inline-block" ] rendered
+        Err errors -> div [ style "display" "inline-block" ] [ text s ]
