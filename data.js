@@ -231,6 +231,9 @@ var data =
               "id" : "didAssess/yes", "text" : "Oui", "score" : 10
             },
             {
+              "id" : "didAssess/noButWillDo", "text" : "Non, mais il est prévu d'en faire un cette année", "score" : 5, "feedback" : "La réalisation d'un BEGES est simplifiée par le passage via un prestataire extérieur. Eco CO2 peut vous accompagner."
+            },
+            {
               "id" : "didAssess/no", "text" : "Non", "score" : 0, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
             }
           ]
@@ -265,26 +268,12 @@ var data =
           ]
         },
         {
-          "showIf" : "didAssess/no",
-          "type" : "radio",
-          "text" : "Est-ce que vous prévoyez de faire un bilan cette année ?",
-          "options" :
-          [
-            {
-              "id" : "willAssess/yes", "text" : "Oui", "score" : 5, "feedback" : "La réalisation d'un BEGES est simplifiée par le passage via un prestataire extérieur. Eco CO2 peut vous accompagner."
-            },
-            {
-              "id" : "willAssess/no", "text" : "Non", "score" : 0
-            }
-          ]
-        },
-        {
           "type" : "radio",
           "text" : "Votre entreprise a-t-elle fixé des objectifs de décarbonation ?",
           "options" :
           [
             {
-              "id" : "hasObj/yes", "text" : "Oui", "score" : 5
+              "id" : "hasObj/yes", "text" : "Oui", "score" : 0
             },
             {
               "id" : "hasObj/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, se fixer des objectifs de réduction des émissions à court, moyen et long terme est nécessaire."
