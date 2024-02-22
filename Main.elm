@@ -26,6 +26,7 @@ type alias Model =
   , answers : Set.Set String
   , currentScreen : Screen
   , hasDoneCompany : Bool
+  , showScores : Bool
   }
 
 defaultModel =
@@ -36,6 +37,7 @@ defaultModel =
   , currentScreen = Intro
   , status = KO "Bienvenue sur l'outil Sobriscore !\nLe moteur de questionnaire est prêt, mais aucune n'a été chargée pour le moment."
   , hasDoneCompany = False
+  , showScores = False
   }
 
 type Screen = Intro | Step Form (Maybe Int) | Results Form
@@ -47,9 +49,6 @@ type alias Form = List Section
 formDecoder : Json.Decode.Decoder Form
 formDecoder = Json.Decode.list sectionDecoder
 
-vForm : Form -> Set.Set String -> Html Msg
-vForm form answers = div [] ( List.map ( vSection form answers ) form )
-
 type alias Section =
   { name : String
   , questions : List Question
@@ -60,21 +59,32 @@ sectionDecoder = Json.Decode.map2 Section
   ( Json.Decode.field "text" Json.Decode.string )
   ( Json.Decode.field "questions" ( Json.Decode.list questionDecoder ))
 
-vSection : Form -> Set.Set String -> Section -> Html Msg
-vSection form answers s = Html.Keyed.node "div" []
-  (( "section-title", div [] [ h2 [] [ text s.name ]] )
-  :: ( List.map ( keyedVQuestion form answers ) s.questions )
-  )
+vSection : Bool -> Form -> Set.Set String -> Section -> Html Msg
+vSection detailed form answers s =
+  Html.Keyed.node "div" []
+    (( "section-title"
+      , div []
+        (
+          [ h2 []
+            [ text (
+              s.name ++ (
+                if detailed
+                then ( " - " ++ ( String.fromInt ( maxPointsForSection s )) ++ " points" )
+                else "" ) )
+            ]
+          ]
+        )
+    ) :: ( List.map ( keyedVQuestion detailed form answers ) s.questions ))
 
-vSectionWithNumber : Form -> Int -> Set.Set String -> Html Msg
-vSectionWithNumber form sectionNumber answers =
+vSectionWithNumber : Bool -> Form -> Int -> Set.Set String -> Html Msg
+vSectionWithNumber detailed form sectionNumber answers =
   let
     mSection = List.Extra.getAt sectionNumber form
   in
     case mSection of
       Just section ->
         div []
-        [ vSection form answers section
+        [ vSection detailed form answers section
         , div [ class "buttons"]
           [ button [ onClick ( LoadSection form ( sectionNumber - 1 ) ) ] [ text "Précédent"]
           , button [ onClick ( LoadSection form ( sectionNumber + 1 ) ) ] [ text "Suivant"]
@@ -96,14 +106,14 @@ questionDecoder = Json.Decode.map4 Question
   ( Json.Decode.field "options" ( Json.Decode.list optionDecoder ))
   ( Json.Decode.maybe ( Json.Decode.field "showIf" Json.Decode.string ))
 
-keyedVQuestion : Form -> Set.Set String -> Question -> (String, Html Msg)
-keyedVQuestion form answers q = ( q.text, vQuestion form answers q)
+keyedVQuestion : Bool -> Form -> Set.Set String -> Question -> (String, Html Msg)
+keyedVQuestion detailed form answers q = ( q.text, vQuestion detailed form answers q)
 
-vQuestion : Form -> Set.Set String -> Question -> Html Msg
-vQuestion form answers q =
+vQuestion : Bool -> Form -> Set.Set String -> Question -> Html Msg
+vQuestion detailed form answers q =
   let
-    enabled = div [] ([ renderMarkdown q.text ] ++ ( List.map ( vOption form answers False q.type_ q.text ) q.options ))
-    disabled = div [ class "disabled" ] ([ renderMarkdown q.text ] ++ ( List.map ( vOption form answers True q.type_ q.text ) q.options ))
+    enabled = div [] ([ renderMarkdown ( q.text ++ if detailed then " - " ++ ( String.fromInt ( maxPointsForQuestion q ) ) ++ " points" else "" ) ] ++ ( List.map ( vOption detailed form answers False q.type_ q.text ) q.options ))
+    disabled = div [ class "disabled" ] ([ renderMarkdown ( q.text ++ if detailed then " - " ++ ( String.fromInt ( maxPointsForQuestion q ) ) ++ " points" else "" ) ] ++ ( List.map ( vOption detailed form answers True q.type_ q.text ) q.options ))
   in
     case q.showIf of
       Nothing -> enabled
@@ -133,8 +143,8 @@ optionDecoder = Json.Decode.map5 Option
   ( Json.Decode.maybe ( Json.Decode.field "feedback" Json.Decode.string ))
   ( Json.Decode.maybe ( Json.Decode.field "showFeedbackIf" Json.Decode.string ))
 
-vOption : Form -> Set.Set String -> Bool -> QuestionType -> String -> Option -> Html Msg
-vOption form answers disable qType qName o =
+vOption : Bool -> Form -> Set.Set String -> Bool -> QuestionType -> String -> Option -> Html Msg
+vOption detailed form answers disable qType qName o =
   let
     isChecked = Set.member o.id answers
   in
@@ -149,7 +159,7 @@ vOption form answers disable qType qName o =
           , checked isChecked
           ] ++ ( if disable then [ disabled True ] else [] ))
           []
-        , label [ for o.id ] [ renderMarkdown o.text ]
+        , label [ for o.id ] [ renderMarkdown ( o.text ++ (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )) ]
         ]
       Checkbox -> div ([ class "option" ] ++ ( if isChecked then [ class "checked" ] else [] ))
         [ input
@@ -161,9 +171,9 @@ vOption form answers disable qType qName o =
           , checked isChecked
           ] ++ ( if disable then [ disabled True ] else [] ))
           []
-        , label [ for o.id ] [ renderMarkdown o.text ]
+        , label [ for o.id ] [ renderMarkdown ( o.text ++ (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )) ]
         ]
-      Unknown -> div [] [ renderMarkdown o.text ]
+      Unknown -> div [] [ renderMarkdown ( o.text ++ (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )) ]
 
 -- INIT
 
@@ -204,6 +214,7 @@ type Msg
   = Check Form String Bool
   | Select Form String Bool
   | LoadSection Form Int
+  | ToggleScores
   | Reset
 
 removeCascadingAnswers : Form -> Set.Set String -> String -> Set.Set String
@@ -263,8 +274,18 @@ update msg model =
             else
               ( Step form ( Just index ), model.hasDoneCompany )
       in ({ model | currentScreen = nextScreen, hasDoneCompany = hasDoneCompany }, Cmd.none )
+
+    ToggleScores -> ( { model | showScores = not model.showScores }, Cmd.none )
     
-    Reset -> ({ defaultModel | companyForm = model.companyForm, climateForm = model.climateForm, rseForm = model.rseForm, status = model.status }, Cmd.none )
+    Reset ->
+      ( { defaultModel
+          | companyForm = model.companyForm
+          , climateForm = model.climateForm
+          , rseForm = model.rseForm
+          , status = model.status
+          , showScores = model.showScores
+        }
+      , Cmd.none )
 
 notSameQuestion: String -> String -> Bool
 notSameQuestion option1 option2 =
@@ -282,7 +303,7 @@ view model = case model.status of
   KO error -> article [] [ aside [ style "display" "block" ] [ div [] [ h1 [] [ text "Error" ] ], p [] [ text error ]] ]
   OK ->
     div []
-      [ h1 [] [ text "Sobriscore" ]
+      [ h1 [ onClick ToggleScores ] [ text "Sobriscore" ]
       , case model.currentScreen of
 
           Intro ->
@@ -293,22 +314,32 @@ view model = case model.status of
               , div [] [ button [ onClick ( LoadSection model.rseForm 0 ), class (if model.hasDoneCompany then "" else "disabled")  ] [ text "Commencer le formulaire RSE"] ]
               ]
 
-          Step form ( Just section ) -> vSectionWithNumber form section model.answers
+          Step form ( Just section ) -> vSectionWithNumber model.showScores form section model.answers
 
           Step form Nothing -> div [] [ text "Pas de section sélectionnée" ]
 
           Results form -> div []
-            [ getScore form model.answers
+            [ getScore model.showScores form model.answers
             , getFeedback form model.answers
             , button [ onClick Reset ] [ text "Recommencer" ]
             ]
       ]
 
-getScore : Form -> Set.Set String -> Html Msg
-getScore form answers =
+getScore : Bool -> Form -> Set.Set String -> Html Msg
+getScore detailed form answers =
   div [] 
-    ([ h1 [] [ text ( "Votre Sobriscore est de : " ++ (totalScore form answers) ++ "% " ), detailedTotalScore form answers ] ]
-        ++ ( form |> List.map ( sectionScore answers ) ))
+    (
+      [
+        h1
+          []
+          (
+            [ text
+              ( "Votre Sobriscore est de : " ++ (totalScore form answers) ++ "% " )
+            ] ++ ( if detailed then [ detailedTotalScore form answers ] else [] )
+          )
+      ]
+      ++ ( form |> List.map ( sectionScore detailed answers ) )
+    )
 
 totalScore : Form -> Set.Set String -> String
 totalScore form answers =
@@ -330,20 +361,21 @@ maxPoints form
   |> List.map maxPointsForSection
   |> List.sum
 
-sectionScore : Set.Set String -> Section -> Html Msg
-sectionScore answers section =
+sectionScore : Bool -> Set.Set String -> Section -> Html Msg
+sectionScore detailed answers section =
   let
     userPoints = section.questions |> List.concatMap .options |> List.filter (\o -> Set.member o.id answers) |> List.map .score |> List.sum
     userScore = Round.round 0 (100 * (toFloat userPoints) / (toFloat (maxPointsForSection section)))
     detailedSectionScore = "(" ++ ( userPoints |> String.fromInt ) ++ " points sur " ++ ( maxPointsForSection section |> String.fromInt ) ++ ")"
   in
     div []
-      [ h2 []
-        [ text ( section.name ++ " : " ++ userScore ++ "%" )
-        , bar userScore
+      (
+        [ h2 []
+          [ text ( section.name ++ " : " ++ userScore ++ "%" ++ if detailed then detailedSectionScore else "" )
+          , bar userScore
+          ]
         ]
-      , text detailedSectionScore
-      ]
+      )
 
 bar : String -> Html Msg
 bar score = div [ style "width" "150px", style "height" "12px", style "background" "lightgrey" ] [ div [ style "background" "#3b91ec", style "height" "100%", style "width" (score++"%") ] []]
