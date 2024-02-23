@@ -318,7 +318,7 @@ view model = case model.status of
           Results form -> div []
             [ getScore model.showScores form model.answers
             , getFeedback form model.answers
-            , vAnswers model.answers
+            , vAnswers form model.answers
             , button [ onClick Reset ] [ text "Recommencer" ]
             ]
       ]
@@ -440,12 +440,15 @@ shouldShowFeedback answers mParent = case mParent of
   Nothing -> True
   Just parent -> if OrderedSet.member parent answers then True else False
 
-vAnswers : Answers -> Html Msg
-vAnswers answers =
-  div [ class "checkup" ]
-    [ h2 [] [ text "Vos réponses" ]
-    , div [] ( answers |> OrderedSet.toList |> List.map ( \a -> div [] [ text a ] ) )
-    ]
+vAnswers : Form -> Answers -> Html Msg
+vAnswers form answers =
+  let
+    orderedFormAnswers = form |> List.concatMap .questions |> List.concatMap .options |> List.filter (\o -> OrderedSet.member o.id answers)
+  in
+    div [ class "checkup" ]
+      [ h2 [] [ text "Vos réponses" ]
+      , div [] ( if ( not ( List.isEmpty orderedFormAnswers )) then ( orderedFormAnswers |> List.map ( \a -> div [] [ text a.id ] ) ) else [ text "Aucune réponse donnée" ])
+      ]
 
 renderMarkdown : String -> Html Msg
 renderMarkdown s =
