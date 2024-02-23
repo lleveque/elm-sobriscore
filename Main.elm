@@ -316,11 +316,12 @@ view model = case model.status of
           Step form Nothing -> div [] [ text "Pas de section sélectionnée" ]
 
           Results form -> div []
-            [ getScore model.showScores form model.answers
-            , getFeedback form model.answers
-            , vAnswers form model.answers
-            , button [ onClick Reset ] [ text "Recommencer" ]
-            ]
+            (
+              [ getScore model.showScores form model.answers
+              , getFeedback form model.answers ]
+              ++ if model.showScores then [ vAnswers form model.answers ] else []
+              ++ [ button [ onClick Reset ] [ text "Recommencer" ] ]
+            )
       ]
 
 getScore : Bool -> Form -> Answers -> Html Msg
