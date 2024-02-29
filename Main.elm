@@ -144,32 +144,32 @@ vOption : Bool -> Form -> Answers -> Bool -> QuestionType -> String -> Option ->
 vOption detailed form answers disable qType qName o =
   let
     isChecked = OrderedSet.member o.id answers
+    renderOption = \optionType message ->
+      div ([ class "option" ] ++ ( if isChecked then [ class "checked" ] else [] ))
+        ([ div [ class "option-input" ]
+          [ input
+            ([ type_ optionType
+            , id o.id
+            , name qName
+            , value o.text
+            , onCheck ( message form o.id )
+            , checked isChecked
+            ] ++ ( if disable then [ disabled True ] else [] ))
+            []
+          , label [ for o.id ]
+            [ renderMarkdown o.text
+            , span [ class "checkup" ] [ text (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )]
+            ]
+          ]
+        ] ++
+          case (detailed, o.feedback) of
+            (True, Just feedback) -> [ div [ class "checkup" ] [ text ("Feedback : " ++ feedback) ] ]
+            _ -> []
+        )
   in
     case qType of
-      Radio -> div ([ class "option" ] ++ ( if isChecked then [ class "checked" ] else [] ))
-        [ input
-          ([ type_ "radio"
-          , id o.id
-          , name qName
-          , value o.text
-          , onCheck ( Select form o.id )
-          , checked isChecked
-          ] ++ ( if disable then [ disabled True ] else [] ))
-          []
-        , label [ for o.id ] [ renderMarkdown o.text, span [ class "checkup" ] [ text (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )] ]
-        ]
-      Checkbox -> div ([ class "option" ] ++ ( if isChecked then [ class "checked" ] else [] ))
-        [ input
-          ([ type_ "checkbox"
-          , id o.id
-          , name qName
-          , value o.text
-          , onCheck ( Check form o.id )
-          , checked isChecked
-          ] ++ ( if disable then [ disabled True ] else [] ))
-          []
-        , label [ for o.id ] [ renderMarkdown o.text, span [ class "checkup" ] [ text (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )] ]
-        ]
+      Radio -> renderOption "radio" Select
+      Checkbox -> renderOption "checkbox" Check
       Unknown -> div [] [ renderMarkdown o.text, span [ class "checkup" ] [ text (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )] ]
 
 -- INIT
