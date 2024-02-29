@@ -27,6 +27,16 @@ var data =
           ]
         },
         {
+          "type" : "checkbox",
+          "text" : "Lire notre [politique de confidentialité](https://www.ecoco2.com/politique-de-confidentialite/)",
+          "options" :
+          [
+            {
+              "id" : "privacy/agreed", "text" : "J'ai pris connaissance de la politique de confidentialité et j'autorise Eco CO2 à m'envoyer des informations.", "score" : 0
+            }
+          ]
+        },
+        {
           "type" : "radio",
           "text" : "Quel est le nom de votre entreprise ?",
           "options" :
@@ -51,7 +61,21 @@ var data =
               "id" : "job/corporate", "text" : "Fonctions supports : RH, Comptabilité, Commercial,...", "score" : 0
             },
             {
-              "id" : "job/director", "text" : "Direction générale", "score" : 0
+              "id" : "job/director", "text" : "Président/Directeur général", "score" : 0
+            },
+            {
+              "id" : "job/other", "text" : "Autre", "score" : 0
+            }
+          ]
+        },
+        {
+          "showIf" : "job/other",
+          "type" : "radio",
+          "text" : "Votre intitulé de poste :",
+          "options" :
+          [
+            {
+              "id" : "otherJob/title", "text" : "Product designer", "score" : 0
             }
           ]
         },
@@ -218,7 +242,10 @@ var data =
               "id" : "knowrisksandoppo/yes", "text" : "Oui", "score" : 10
             },
             {
-              "id" : "knowrisksandoppo/no", "text" : "Non/Ne sait pas", "score" : 0, "feedback" : "Vous n'avez pas encore identifé les risques et opportunités liés au changement climatique L'identification des risques et opportunités liés au changement climatique fait partie intégrante de la mise en place d'une stratégie climat."
+              "id" : "knowrisksandoppo/no", "text" : "Non", "score" : 0, "feedback" : "Vous n'avez pas encore identifé les risques et opportunités liés au changement climatique. L'identification des risques et opportunités liés au changement climatique fait partie intégrante de la mise en place d'une stratégie climat."
+            },
+            {
+              "id" : "knowrisksandoppo/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Vous n'avez pas encore identifé les risques et opportunités liés au changement climatique. L'identification des risques et opportunités liés au changement climatique fait partie intégrante de la mise en place d'une stratégie climat."
             }
           ]
         },
@@ -235,6 +262,9 @@ var data =
             },
             {
               "id" : "didAssess/no", "text" : "Non", "score" : 0, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+            },
+            {
+              "id" : "didAssess/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
             }
           ]
         },
@@ -245,7 +275,7 @@ var data =
           "options" :
           [
             {
-              "id" : "dateAssess/between13y", "text" : "Entre 1 et 3 ans", "score" : 10, "feedback" : "Mettre à jour votre Bilan GES est important pour s'assurer des évolutions de votre stratégie climat dans le temps."
+              "id" : "dateAssess/between13y", "text" : "Entre 1 et 3 ans", "score" : 10, "feedback" : "Votre dernier Bilan GES est récent, c'est bien ! Assurez-vous de le mettre régulièrement à jour pour faire évoluer votre stratégie climat dans le temps."
             },
             {
               "id" : "dateAssess/more3y", "text" : "Il y a plus de 3 ans", "score" : 5, "feedback" : "Mettre à jour votre Bilan GES est important pour s'assurer des évolutions de votre stratégie climat dans le temps."
@@ -259,10 +289,14 @@ var data =
           "options" :
           [
             {
-              "id" : "assessScopes/oneTwo", "text" : "**Scopes 1 et 2**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n\n ⇨ Les **consommations d'énergie** de votre entreprise et **autres émissions directes**", "score" : 5, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+              "id" : "assessScopes/oneTwo", "text" : "**Scopes 1 et 2**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n\n ⇨ Les **consommations d'énergie** de votre entreprise et **autres émissions directes**", "score" : 5, "feedback" : "Limiter l'évaluation des vos émissions de gaz à effet de serre de votre entreprise isolément de votre chaine de valeur n'est pas suffisant pour agir sur l'ensemble de votre impact sur le climat."
             },
             {
-              "id" : "assessScopes/oneTwoThree", "text" : "**Scopes 1, 2 et 3**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n* Émissions indirectes de votre chaîne de valeur (fournisseurs, clients, salariés)\n\n ⇨ Les **consommations d'énergie** de votre entreprise, les **autres émissions directes** et **les achats, le fret, les déplacements, les immobilisations matérielles et immatérielles**, etc...", "score" : 15, "feedback" : "Limiter l'évaluation des vos émissions de gaz à effet de serre de votre entreprise isolément de votre chaine de valeur n'est pas suffisant pour agir sur l'ensemble de votre impact sur le climat."
+              "id" : "assessScopes/oneTwoThree", "text" : "**Scopes 1, 2 et 3**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n* Émissions indirectes de votre chaîne de valeur (fournisseurs, clients, salariés)\n\n ⇨ Les **consommations d'énergie** de votre entreprise, les **autres émissions directes** et **les achats, le fret, les déplacements, les immobilisations matérielles et immatérielles**, etc...", "score" : 15, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+           
+            },
+            {
+              "id" : "assessScopes/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
            
             }
           ]
@@ -276,7 +310,10 @@ var data =
               "id" : "hasObj/yes", "text" : "Oui", "score" : 0
             },
             {
-              "id" : "hasObj/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, se fixer des objectifs de réduction des émissions à court, moyen et long terme est nécessaire."
+              "id" : "hasObj/no", "text" : "Non", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, se fixer des objectifs de réduction des émissions à court, moyen et long terme est nécessaire."
+            },
+            {
+              "id" : "hasObj/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, se fixer des objectifs de réduction des émissions à court, moyen et long terme est nécessaire."
             }
           ]
         },
@@ -307,7 +344,10 @@ var data =
               "id" : "parisCompat/yes", "text" : "Oui", "score" : 10
             },
             {
-              "id" : "parisCompat/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Les accord internationaux et leur déclinaison politique française (SNBC) sont ambitieux et peuvent constituer un cadre intéressant à suivre pour vos objectifs."
+              "id" : "parisCompat/no", "text" : "Non", "score" : 0, "feedback" : "Les accord internationaux et leur déclinaison politique française (SNBC) sont ambitieux et peuvent constituer un cadre intéressant à suivre pour vos objectifs."
+            },
+            {
+              "id" : "parisCompat/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Les accord internationaux et leur déclinaison politique française (SNBC) sont ambitieux et peuvent constituer un cadre intéressant à suivre pour vos objectifs."
             }
           ]
         },
@@ -320,7 +360,10 @@ var data =
               "id" : "goodThinking/yes", "text" : "Oui", "score" : 10
             },
             {
-              "id" : "goodThinking/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone ont un avantage commercial intéressant."
+              "id" : "goodThinking/no", "text" : "Non", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone ont un avantage commercial intéressant."
+            },
+            {
+              "id" : "goodThinking/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone ont un avantage commercial intéressant."
             }
           ]
         },
@@ -336,7 +379,10 @@ var data =
               "id" : "investGreen/justabit", "text" : "Oui, à la marge", "score" : 3, "feedback" : "Investir dans la TEE c’est contribuer à lutter contre le réchauffement climatique en orientant son épargne vers les fonds qui ont mis cet objectif au cœur de leur processus d'investissement."
             },
             {
-              "id" : "investGreen/no", "text" : "Non / Ne sait pas", "score" : 0
+              "id" : "investGreen/no", "text" : "Non", "score" : 0
+            },
+            {
+              "id" : "investGreen/unknown", "text" : "Je ne sais pas", "score" : 0
             }
           ]
         }
@@ -355,7 +401,10 @@ var data =
               "id" : "anyoneInCharge/yes", "text" : "Oui", "score" : 0
             },
             {
-              "id" : "anyoneInCharge/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Responsabiliser dans les fonctions d'une ou plusieurs personnes permet de stabiliser dans le temps les progrès et le suivi dans le temps de la stratégie climat."
+              "id" : "anyoneInCharge/no", "text" : "Non", "score" : 0, "feedback" : "Responsabiliser dans les fonctions d'une ou plusieurs personnes permet de stabiliser dans le temps les progrès et le suivi dans le temps de la stratégie climat."
+            },
+            {
+              "id" : "anyoneInCharge/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Responsabiliser dans les fonctions d'une ou plusieurs personnes permet de stabiliser dans le temps les progrès et le suivi dans le temps de la stratégie climat."
             }
           ]
         },
@@ -389,7 +438,10 @@ var data =
               "id" : "hasPlan/yes", "text" : "Oui", "score" : 0
             },
             {
-              "id" : "hasPlan/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, que se fixer des objectifs est nécessire, l'étape cruciale est la mise en place d'un plan de transition."
+              "id" : "hasPlan/no", "text" : "Non", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, que se fixer des objectifs est nécessaire, l'étape cruciale est la mise en place d'un plan de transition."
+            },
+            {
+              "id" : "hasPlan/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, que se fixer des objectifs est nécessaire, l'étape cruciale est la mise en place d'un plan de transition."
             }
           ]
         },
@@ -420,7 +472,10 @@ var data =
               "id" : "gainEval/yes", "text" : "Oui", "score" : 20
             },
             {
-              "id" : "gainEval/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Aller au-delà de l'établissement d'une liste d'actions en quantifiant les gains potentiels permet à l'organisation de pouvoir prioriser les actions à fort gain potentiel, et de comparer ce gain au coût économique de mise en place de l'action"
+              "id" : "gainEval/no", "text" : "Non", "score" : 0, "feedback" : "Aller au-delà de l'établissement d'une liste d'actions en quantifiant les gains potentiels permet à l'organisation de pouvoir prioriser les actions à fort gain potentiel, et de comparer ce gain au coût économique de mise en place de l'action"
+            },
+            {
+              "id" : "gainEval/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Aller au-delà de l'établissement d'une liste d'actions en quantifiant les gains potentiels permet à l'organisation de pouvoir prioriser les actions à fort gain potentiel, et de comparer ce gain au coût économique de mise en place de l'action"
             }
           ]
         },
@@ -434,7 +489,10 @@ var data =
               "id" : "committee/yes", "text" : "Oui", "score" : 20
             },
             {
-              "id" : "committee/no", "text" : "Non / Ne sait pas", "score" : 0
+              "id" : "committee/no", "text" : "Non", "score" : 0
+            },
+            {
+              "id" : "committee/unknown", "text" : "Je ne sais pas", "score" : 0
             }
           ]
         }
@@ -453,7 +511,10 @@ var data =
               "id" : "workshops/yes", "text" : "Oui", "score" : 10, "feedback" : "Concernant la sensibilisation, n'hésitez pas à aller plus loin en effectuant des formations ciblées aux types de profilss/métiers."
             },
             {
-              "id" : "workshops/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Mettre en place des formations ou sensibilisations permet une compréhension accrue des enjeux climatiques et un passage à l'action facilitée."
+              "id" : "workshops/no", "text" : "Non", "score" : 0, "feedback" : "Mettre en place des formations ou sensibilisations permet une compréhension accrue des enjeux climatiques et un passage à l'action facilitée."
+            },
+            {
+              "id" : "workshops/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Mettre en place des formations ou sensibilisations permet une compréhension accrue des enjeux climatiques et un passage à l'action facilitée."
             }
           ]
         },
@@ -506,7 +567,10 @@ var data =
               "id" : "ecodesign/justabit", "text" : "Oui, en partie", "score" : 3
             },
             {
-              "id" : "ecodesign/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "La réflexion amont dans la conception d'un produit ou service permet la réduction à la source des émissions de l'activité de l'entreprise."
+              "id" : "ecodesign/no", "text" : "Non", "score" : 0, "feedback" : "La réflexion amont dans la conception d'un produit ou service permet la réduction à la source des émissions de l'activité de l'entreprise."
+            },
+            {
+              "id" : "ecodesign/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "La réflexion amont dans la conception d'un produit ou service permet la réduction à la source des émissions de l'activité de l'entreprise."
             }
           ]
         },
@@ -522,7 +586,10 @@ var data =
               "id" : "energy/justabit", "text" : "Oui, un suivi est effectué", "score" : 15, "feedback" : "Associer votre suivi des consommations énergétiques à un plan d'actions vous permettra de mesurer les progrès réalisés."
             },
             {
-              "id" : "energy/no", "text" : "Non / Ne sait pas", "score" : 0, "feedback" : "Le suivi des factures en données financières globales n'est pas suffisante pour s'assurer de traiter de ce poste d'émission."
+              "id" : "energy/no", "text" : "Non", "score" : 0, "feedback" : "Le suivi des factures en données financières globales n'est pas suffisante pour s'assurer de traiter de ce poste d'émission."
+            },
+            {
+              "id" : "energy/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Le suivi des factures en données financières globales n'est pas suffisante pour s'assurer de traiter de ce poste d'émission."
             }
           ]
         },
@@ -535,10 +602,13 @@ var data =
               "id" : "trash/yes", "text" : "Oui et un plan d'actions de réduction et revalorisation a été mis en place", "score" : 5, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier 5 types de déchets (papier/carton, métal, plastique, verre, et bois) dans des poubelles dédiées. C’est le tri 5 flux des déchets."
             },
             {
-              "id" : "trash/justabit", "text" : "Oui, un suivi est effectué", "score" : 3
+              "id" : "trash/justabit", "text" : "Oui, un suivi est effectué", "score" : 3, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier 5 types de déchets (papier/carton, métal, plastique, verre, et bois) dans des poubelles dédiées. C’est le tri 5 flux des déchets."
             },
             {
-              "id" : "trash/no", "text" : "Non / Ne sait pas", "score" : 0
+              "id" : "trash/no", "text" : "Non", "score" : 0, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier 5 types de déchets (papier/carton, métal, plastique, verre, et bois) dans des poubelles dédiées. C’est le tri 5 flux des déchets."
+            },
+            {
+              "id" : "trash/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier 5 types de déchets (papier/carton, métal, plastique, verre, et bois) dans des poubelles dédiées. C’est le tri 5 flux des déchets."
             }
           ]
         },
@@ -554,7 +624,10 @@ var data =
               "id" : "mobility/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 10
             },
             {
-              "id" : "mobility/no", "text" : "Non / Ne sait pas", "score" : 0, "showFeedbackIf" : "activity/services", "feedback" : "Les déplacements professionnels peuvent représenter une partie importante des émissions de votre entreprise, surtout pour une entreprise de services."
+              "id" : "mobility/no", "text" : "Non", "score" : 0, "showFeedbackIf" : "activity/services", "feedback" : "Les déplacements professionnels peuvent représenter une partie importante des émissions de votre entreprise, surtout pour une entreprise de services."
+            },
+            {
+              "id" : "mobility/unknown", "text" : "Je ne sais pas", "score" : 0, "showFeedbackIf" : "activity/services", "feedback" : "Les déplacements professionnels peuvent représenter une partie importante des émissions de votre entreprise, surtout pour une entreprise de services."
             }
           ]
         },
@@ -570,7 +643,10 @@ var data =
               "id" : "transport/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 15
             },
             {
-              "id" : "transport/no", "text" : "Non / Ne sait pas", "score" : 0, "showFeedbackIf" : "activity/products", "feedback" : "Les émissions du transport font souvent partie des émissions dites significatives d'une entreprise commercialisant des produits."
+              "id" : "transport/no", "text" : "Non", "score" : 0, "showFeedbackIf" : "activity/products", "feedback" : "Les émissions du transport font souvent partie des émissions dites significatives d'une entreprise commercialisant des produits."
+            },
+            {
+              "id" : "transport/unknown", "text" : "Je ne sais pas", "score" : 0, "showFeedbackIf" : "activity/products", "feedback" : "Les émissions du transport font souvent partie des émissions dites significatives d'une entreprise commercialisant des produits."
             }
           ]
         },
@@ -584,6 +660,9 @@ var data =
             },
             {
               "id" : "supply/no", "text" : "Non", "score" : 0, "feedback" : "La dépendance à la chaine de valeur fait que le poste d'émissions des achats de produits ou services est très souvent un des postes d'émissions prépondérants d'une entreprise. La démarche d'acahts responsables sera déterminante dans la réussite de votre stratégie climat !"
+            },
+            {
+              "id" : "supply/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "La dépendance à la chaine de valeur fait que le poste d'émissions des achats de produits ou services est très souvent un des postes d'émissions prépondérants d'une entreprise. La démarche d'acahts responsables sera déterminante dans la réussite de votre stratégie climat !"
             }
           ]
         },
@@ -599,7 +678,10 @@ var data =
               "id" : "sinks/justabit", "text" : "Oui, c'est envisagé", "score" : 5
             },
             {
-              "id" : "sinks/no", "text" : "Non / Ne sait pas", "score" : 0
+              "id" : "sinks/no", "text" : "Non", "score" : 0
+            },
+            {
+              "id" : "sinks/unknown", "text" : "Je ne sais pas", "score" : 0
             }
           ]
         }
@@ -618,7 +700,7 @@ var data =
           "options" :
           [
             {
-              "id": "mission/no", "score": 0, "text" : "Non ", "feedback" : "Définir sa raison d'être est un premier pas vers une stratégie RSE. La raison d’être d’une entreprise est un outil stratégique, un levier de performance et un élément différenciant pour votre marque employeur."
+              "id": "mission/no", "score": 0, "text" : "Non", "feedback" : "Définir sa raison d'être est un premier pas vers une stratégie RSE. La raison d’être d’une entreprise est un outil stratégique, un levier de performance et un élément différenciant pour votre marque employeur."
             },
             {
               "id": "mission/inprogress", "score": 1, "text" : "En cours ", "feedback" : "Il est important de formaliser votre démarche et de définir des indicateurs pertinents pour aligner vos efforts vers des objectifs clairs et d'évaluer  vos progrès "
@@ -637,7 +719,7 @@ var data =
           "options" :
           [
             {
-              "id": "strategy/no", "score": 0, "text" : "Non ", "feedback" : "La mise en place d'une démarche RSE vise à introduire dans les prises de décisions la prise en compte des enjeux sociaux et environnementaux. Il est important que cela se traduise concrétement. "
+              "id": "strategy/no", "score": 0, "text" : "Non", "feedback" : "La mise en place d'une démarche RSE vise à introduire dans les prises de décisions la prise en compte des enjeux sociaux et environnementaux. Il est important que cela se traduise concrétement. "
             },
             {
               "id": "strategy/inprogress", "score": 1, "text" : "En cours "
@@ -656,7 +738,7 @@ var data =
           "options" :
           [
             {
-              "id": "policy/no", "score": 0, "text" : "Non ", "feedback" : "La mise en place d'une politique RSE (Responsabilité Sociétale des Entreprises) est essentielle pour intégrer des pratiques durables et éthiques, répondant aux enjeux sociaux, environnementaux et éthiques, tout en renforçant la réputation et la pérennité de l'entreprise."
+              "id": "policy/no", "score": 0, "text" : "Non", "feedback" : "La mise en place d'une politique RSE (Responsabilité Sociétale des Entreprises) est essentielle pour intégrer des pratiques durables et éthiques, répondant aux enjeux sociaux, environnementaux et éthiques, tout en renforçant la réputation et la pérennité de l'entreprise."
             },
             {
               "id": "policy/inprogress", "score": 1, "text" : "En cours "
@@ -675,7 +757,7 @@ var data =
           "options" :
           [
             {
-              "id": "anyoneforRSE/no", "score": 0, "text" : "Non ", "feedback" : "Il est important de nommer un.e /des personnes en charge de la politique RSE pour porter le sujet et assurer sa mise en œuvre et s'assurer une intégration réussie des pratiques responsables au sein de l'entreprise."
+              "id": "anyoneforRSE/no", "score": 0, "text" : "Non", "feedback" : "Il est important de nommer un.e /des personnes en charge de la politique RSE pour porter le sujet et assurer sa mise en œuvre et s'assurer une intégration réussie des pratiques responsables au sein de l'entreprise."
             },
             {
               "id": "anyoneforRSE/notAMission", "score": 1, "text" : "Oui mais en dehors de sa/ leurs fiches de postes ", "feedback" : "Intégrer cette mission à la fiche de poste permet de garantir que le porteur peut avoir du temps et des ressources à sa disposition pour mener à bien sa mission et qu'il s'agit effectivement d'une priorité de l'entreprise"
@@ -694,7 +776,7 @@ var data =
           "options" :
           [
             {
-              "id": "followRSElaw/no", "score": 0, "text" : "Non / ne sait pas ", "feedback" : "La connaissance des obligations réglementaires est absolument nécessaire. Il vous faut mettre en place une veille pour identifier vos obligations en terme de réglementation sociale (droit du travail, convention collective), envrionnementale et économique. "
+              "id": "followRSElaw/no", "score": 0, "text" : "Non", "feedback" : "La connaissance des obligations réglementaires est absolument nécessaire. Il vous faut mettre en place une veille pour identifier vos obligations en terme de réglementation sociale (droit du travail, convention collective), envrionnementale et économique. "
             },
             {
               "id": "followRSElaw/notApplied", "score": 1, "text" : "Les réglementations sont connues mais pas toutes appliquées ", "feedback" : "Le respect des réglementations est le premier principe de la RSE. Ne pas les appliquer vous expose à des risques importants. Il vous faut mettre en place un plan de mise en conformité. "
@@ -713,7 +795,7 @@ var data =
           "options" :
           [
             {
-              "id": "knowStakeholders/no", "score": 0, "text" : "Non ", "feedback" : "Connaître vos parties prenantes vous permet d'anticiper et de répondre de manière proactive aux attentes, besoins et préoccupations de ces acteurs, renforçant ainsi la confiance, la légitimité et la durabilité de vos activités. Commencez par mettre en place cette cartographie. "
+              "id": "knowStakeholders/no", "score": 0, "text" : "Non", "feedback" : "Connaître vos parties prenantes vous permet d'anticiper et de répondre de manière proactive aux attentes, besoins et préoccupations de ces acteurs, renforçant ainsi la confiance, la légitimité et la durabilité de vos activités. Commencez par mettre en place cette cartographie. "
             },
             {
               "id": "knowStakeholders/mainlyIdentified", "score": 1, "text" : "Oui les parties prenantes principales sont identifiées ", "feedback" : "Une fois les parties prenantes identifiées, il est important de définir quel type d'influence vous exercez/ pouvez exercer sur elle. Cela définit votre sphère d'influence, c'est-à dire votre capacité à influer sur les décision ou  les activités d'autres opganisations et donc votre périmètre étendu de responsabilité."
@@ -732,7 +814,7 @@ var data =
           "options" :
           [
             {
-              "id": "allInformed/no", "score": 0, "text" : "Non ", "feedback" : "L'implication des salariés dans la RSE est non seulement nécessaire à sa bonne mise en œuvre mais également une oportunité de créer un projet d'entreprise motivant et porteur de sens qui fidèlise et attire de nouveaux talents. "
+              "id": "allInformed/no", "score": 0, "text" : "Non", "feedback" : "L'implication des salariés dans la RSE est non seulement nécessaire à sa bonne mise en œuvre mais également une oportunité de créer un projet d'entreprise motivant et porteur de sens qui fidèlise et attire de nouveaux talents. "
             },
             {
               "id": "allInformed/later", "score": 1, "text" : "une sensibilisation sur au moins un sujet est envisagée ", "feedback" : "L'implication des salariés dans la RSE est non seulement nécessaire à sa bonne mise en œuvre mais également une oportunité de créer un projet d'entreprise motivant et porteur de sens qui fidèlise et attire de nouveaux talents. DE nombreux ateleirs de sensibilisation sur les suejts sociétauxe et environnementaux existent ! "
@@ -751,7 +833,7 @@ var data =
           "options" :
           [
             {
-              "id": "employeesHeard/no", "score": 0, "text" : "Non "
+              "id": "employeesHeard/no", "score": 0, "text" : "Non"
             },
             {
               "id": "employeesHeard/sometimes", "score": 1, "text" : "Oui des consultations sont ponctuellement réalisées "
@@ -770,7 +852,7 @@ var data =
           "options" :
           [
             {
-              "id": "corpComms/no", "score": 0, "text" : "Non / ne sait pas ", "feedback" : "Il est important de communiquer pour mettre en valeur vos actions et inspirer votre chaine de valeur. Les obligations en la matière se renforce avec l'entrée en vigueur de la CSRD (voir notre article)"
+              "id": "corpComms/no", "score": 0, "text" : "Non", "feedback" : "Il est important de communiquer pour mettre en valeur vos actions et inspirer votre chaine de valeur. Les obligations en la matière se renforce avec l'entrée en vigueur de la CSRD (voir notre article)"
             },
             {
               "id": "corpComms/later", "score": 1, "text" : "Non mais envisagé ", "feedback" : "Il est important de communiquer pour mettre en valeur vos actions et inspirer votre chaine de valeur. Les obligations en la matière se renforce avec l'entrée en vigueur de la CSRD (voir notre article)"
@@ -795,7 +877,7 @@ var data =
           "options" :
           [
             {
-              "id": "responsibleProducts/no", "score": 0, "text" : "Non ", "feedback" : "L'une des façons de contribuer à la durabilité est de proposer à vos clients des services et produits qui leurs permettent d'agir sur un des pilliers du développement durable. Une reflexion peut etre menée pour adapter vos produits et services en ce sens en lien avec votre raison d'être"
+              "id": "responsibleProducts/no", "score": 0, "text" : "Non", "feedback" : "L'une des façons de contribuer à la durabilité est de proposer à vos clients des services et produits qui leurs permettent d'agir sur un des pilliers du développement durable. Une reflexion peut etre menée pour adapter vos produits et services en ce sens en lien avec votre raison d'être"
             },
             {
               "id": "responsibleProducts/one", "score": 1, "text" : "Oui au moins un produit ou un service "
@@ -814,7 +896,7 @@ var data =
           "options" :
           [
             {
-              "id": "responsibleDesign/no", "score": 0, "text" : "Non ", "feedback" : "l'écoconception permet de réduire la dépendance aux matières premières et aux énergies et donc de faire des écnomies. Pensez-y ! "
+              "id": "responsibleDesign/no", "score": 0, "text" : "Non", "feedback" : "l'écoconception permet de réduire la dépendance aux matières premières et aux énergies et donc de faire des écnomies. Pensez-y ! "
             },
             {
               "id": "responsibleDesign/later", "score": 1, "text" : "Non mais envisagé ", "feedback" : "La BPI aide les entreprises de moins de 250 salariés dans cette voie via le diagnostic Ecoconception"
@@ -833,7 +915,7 @@ var data =
           "options" :
           [
             {
-              "id": "certif/no", "score": 0, "text" : "Non ", "feedback" : "Les démarches de certifications vous permettent de rejoindre une communauité d'entreprises engagées, de progresser et de valoriser ses actions. Une démarche volontaire peut être un bon point de départ"
+              "id": "certif/no", "score": 0, "text" : "Non", "feedback" : "Les démarches de certifications vous permettent de rejoindre une communauité d'entreprises engagées, de progresser et de valoriser ses actions. Une démarche volontaire peut être un bon point de départ"
             },
             {
               "id": "certif/one", "score": 1, "text" : "Oui, une démarche "
@@ -852,7 +934,7 @@ var data =
           "options" :
           [
             {
-              "id": "support/no", "score": 0, "text" : "Non "
+              "id": "support/no", "score": 0, "text" : "Non"
             },
             {
               "id": "support/later", "score": 1, "text" : "Non mais envisagé "
@@ -871,7 +953,7 @@ var data =
           "options" :
           [
             {
-              "id": "teachClients/no", "score": 0, "text" : "Non ", "feedback" : "Sensibiliser vos parties prenantes aux enjeux de durabilité leur permet de mieux comprendre vos engagements et de les embarquer dans votre démarche "
+              "id": "teachClients/no", "score": 0, "text" : "Non", "feedback" : "Sensibiliser vos parties prenantes aux enjeux de durabilité leur permet de mieux comprendre vos engagements et de les embarquer dans votre démarche "
             },
             {
               "id": "teachClients/later", "score": 1, "text" : "Non mais envisagé "
@@ -896,7 +978,7 @@ var data =
           "options" :
           [
             {
-              "id": "osha/no", "score": 0, "text" : "Non "
+              "id": "osha/no", "score": 0, "text" : "Non"
             },
             {
               "id": "osha/partly", "score": 1, "text" : "Oui partiellement "
@@ -912,7 +994,7 @@ var data =
           "options" :
           [
             {
-              "id": "qualityOfLife/no", "score": 0, "text" : "Non ", "feedback" : "Améliorer les conditions de travail des employés permet d'améliorer la résilience et la productivité de l'entreprise"
+              "id": "qualityOfLife/no", "score": 0, "text" : "Non", "feedback" : "Améliorer les conditions de travail des employés permet d'améliorer la résilience et la productivité de l'entreprise"
             },
             {
               "id": "qualityOfLife/partly", "score": 1, "text" : "Oui partiellement "
@@ -928,7 +1010,7 @@ var data =
           "options" :
           [
             {
-              "id": "dialog/no", "score": 0, "text" : "Non "
+              "id": "dialog/no", "score": 0, "text" : "Non"
             },
             {
               "id": "dialog/partly", "score": 1, "text" : "Oui partiellement "
@@ -947,7 +1029,7 @@ var data =
           "options" :
           [
             {
-              "id": "training/no", "score": 0, "text" : "Non ", "feedback" : "La formation continue permet de  favoriser l'adaptabilité, la croissance des compétences et l'innovation des employés, renforçant ainsi votre compétitivité"
+              "id": "training/no", "score": 0, "text" : "Non", "feedback" : "La formation continue permet de  favoriser l'adaptabilité, la croissance des compétences et l'innovation des employés, renforçant ainsi votre compétitivité"
             },
             {
               "id": "training/minimal", "score": 1, "text" : "Oui dans la limite des obligations légales "
@@ -963,7 +1045,7 @@ var data =
           "options" :
           [
             {
-              "id": "inclusive/no", "score": 0, "text" : "Non "
+              "id": "inclusive/no", "score": 0, "text" : "Non"
             },
             {
               "id": "inclusive/minimal", "score": 1, "text" : "Oui dans la limite des obligations légales "
@@ -1007,7 +1089,7 @@ var data =
           "options" :
           [
             {
-              "id": "ethicalRisks/no", "score": 0, "text" : "Non ", "feedback" : "Faire preuve de responsabilité sociétale c’est appliquer une conduite éthique à ses transactions avec ses parties prenantes (bonnes pratiques des affaires). La loyauté des pratiques inclut la concurrence loyale, la promotion de la RS, l’obligation de vigilance, la prévention de la complicité et la lutte contre la corruption. Ne pas respecter ces principes c'est s'exposer à des risques qu'il faut bien identifier"
+              "id": "ethicalRisks/no", "score": 0, "text" : "Non", "feedback" : "Faire preuve de responsabilité sociétale c’est appliquer une conduite éthique à ses transactions avec ses parties prenantes (bonnes pratiques des affaires). La loyauté des pratiques inclut la concurrence loyale, la promotion de la RS, l’obligation de vigilance, la prévention de la complicité et la lutte contre la corruption. Ne pas respecter ces principes c'est s'exposer à des risques qu'il faut bien identifier"
             },
             {
               "id": "ethicalRisks/later", "score": 1, "text" : "Non mais envisagé "
@@ -1026,7 +1108,7 @@ var data =
           "options" :
           [
             {
-              "id": "ethicsTraining/no", "score": 0, "text" : "Non ", "feedback" : "Pour plus d'efficacité dans la réduction des risques, il est important que les salariés soient formés à repérer les situations à risque et à utiliser les moyens de prévention à dipsoisiton "
+              "id": "ethicsTraining/no", "score": 0, "text" : "Non", "feedback" : "Pour plus d'efficacité dans la réduction des risques, il est important que les salariés soient formés à repérer les situations à risque et à utiliser les moyens de prévention à dipsoisiton "
             },
             {
               "id": "ethicsTraining/later", "score": 1, "text" : "Non mais envisagé "
@@ -1045,7 +1127,7 @@ var data =
           "options" :
           [
             {
-              "id": "humanRights/no", "score": 0, "text" : "Non ", "feedback" : "L'entreprise est responsable du respect des droits Humains sur toute sa chaien de valeur, il est impoprtant de se donner les moyens de vérifier que ces droits sont respectés "
+              "id": "humanRights/no", "score": 0, "text" : "Non", "feedback" : "L'entreprise est responsable du respect des droits Humains sur toute sa chaien de valeur, il est impoprtant de se donner les moyens de vérifier que ces droits sont respectés "
             },
             {
               "id": "humanRights/later", "score": 1, "text" : "Non mais envisagé "
@@ -1064,7 +1146,7 @@ var data =
           "options" :
           [
             {
-              "id": "suppliersEthics/no", "score": 0, "text" : "Non "
+              "id": "suppliersEthics/no", "score": 0, "text" : "Non"
             },
             {
               "id": "suppliersEthics/later", "score": 1, "text" : "Non mais envisagé "
@@ -1083,7 +1165,7 @@ var data =
           "options" :
           [
             {
-              "id": "responsibleSuppliers/no", "score": 0, "text" : "Non ", "feedback" : "Afin de vous assurez de l'implication de votre chaine de valeur, la mise en place de critères de choix de fournisseurs est un outils indispensable"
+              "id": "responsibleSuppliers/no", "score": 0, "text" : "Non", "feedback" : "Afin de vous assurez de l'implication de votre chaine de valeur, la mise en place de critères de choix de fournisseurs est un outils indispensable"
             },
             {
               "id": "responsibleSuppliers/partly", "score": 1, "text" : "Oui partiellement "
@@ -1108,7 +1190,7 @@ var data =
           "options" :
           [
             {
-              "id": "localSuppliers/no", "score": 0, "text" : "Non "
+              "id": "localSuppliers/no", "score": 0, "text" : "Non"
             },
             {
               "id": "localSuppliers/partly", "score": 1, "text" : "Oui sur certains sujets "
@@ -1127,7 +1209,7 @@ var data =
           "options" :
           [
             {
-              "id": "localDialog/no", "score": 0, "text" : "Non ", "feedback" : "Évaluez la pertinence de mener un partenariat actif avec un centre de formation ou un acteur de l'emploi local"
+              "id": "localDialog/no", "score": 0, "text" : "Non", "feedback" : "Évaluez la pertinence de mener un partenariat actif avec un centre de formation ou un acteur de l'emploi local"
             },
             {
               "id": "localDialog/sometimes", "score": 1, "text" : "Oui il existe des échanges ponctuels "
@@ -1146,7 +1228,7 @@ var data =
           "options" :
           [
             {
-              "id": "localNonProfits/no", "score": 0, "text" : "Non ", "feedback" : "Évaluer la pertinence de participer à un réseau d'organisations publiques de l'ESS ou associatif "
+              "id": "localNonProfits/no", "score": 0, "text" : "Non", "feedback" : "Évaluer la pertinence de participer à un réseau d'organisations publiques de l'ESS ou associatif "
             },
             {
               "id": "localNonProfits/sometimes", "score": 1, "text" : "Oui il existe des échanges ponctuels "
@@ -1171,7 +1253,7 @@ var data =
           "options" :
           [
             {
-              "id": "environmentalImpact/no", "score": 0, "text" : "Non ", "feedback" : "Mesurer ses impacts est le première étape pour pouvoir les réduire et les maitriser."
+              "id": "environmentalImpact/no", "score": 0, "text" : "Non", "feedback" : "Mesurer ses impacts est le première étape pour pouvoir les réduire et les maitriser."
             },
             {
               "id": "environmentalImpact/measured", "score": 1, "text" : "Non mais elle mesure ses impacts "
@@ -1190,7 +1272,7 @@ var data =
           "options" :
           [
             {
-              "id": "measuresEmissions/no", "score": 0, "text" : "Non ", "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+              "id": "measuresEmissions/no", "score": 0, "text" : "Non", "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
             },
             {
               "id": "measuresEmissions/later", "score": 1, "text" : "Non mais envisagé ", "feedback" : "La réalisation d'un BEGES est simplifiée par le passage via un prestataire extérieur. Eco CO2 peut vous accompagner."
@@ -1209,7 +1291,7 @@ var data =
           "options" :
           [
             {
-              "id": "reducesEmissions/no", "score": 0, "text" : "Non ", "feedback" : "Il est urgent de réduire nos émissions de GES pour limiter le réchauffement climatique en dessous des 2°C. Cela passe également par la réduction des émissions des entreprises"
+              "id": "reducesEmissions/no", "score": 0, "text" : "Non", "feedback" : "Il est urgent de réduire nos émissions de GES pour limiter le réchauffement climatique en dessous des 2°C. Cela passe également par la réduction des émissions des entreprises"
             },
             {
               "id": "reducesEmissions/partly", "score": 1, "text" : "Oui partiellement "
@@ -1228,7 +1310,7 @@ var data =
           "options" :
           [
             {
-              "id": "showImpact/no", "score": 0, "text" : "Non "
+              "id": "showImpact/no", "score": 0, "text" : "Non"
             },
             {
               "id": "showImpact/partly", "score": 1, "text" : "Oui partiellement "
