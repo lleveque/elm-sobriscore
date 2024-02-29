@@ -163,7 +163,7 @@ vOption detailed form answers disable qType qName o =
           ]
         ] ++
           case (detailed, o.feedback) of
-            (True, Just feedback) -> [ div [ class "checkup" ] [ text ("Feedback : " ++ feedback) ] ]
+            (True, Just feedback) -> [ div [ class "checkup" ] [ renderMarkdown ("→ " ++ feedback) ] ]
             _ -> []
         )
   in
