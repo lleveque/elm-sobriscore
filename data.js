@@ -360,10 +360,10 @@ var data =
               "id" : "goodThinking/yes", "text" : "Oui", "score" : 10
             },
             {
-              "id" : "goodThinking/no", "text" : "Non", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone ont un avantage commercial intéressant."
+              "id" : "goodThinking/no", "text" : "Non", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone est un avantage commercial intéressant."
             },
             {
-              "id" : "goodThinking/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone ont un avantage commercial intéressant."
+              "id" : "goodThinking/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone est un avantage commercial intéressant."
             }
           ]
         },
@@ -435,7 +435,7 @@ var data =
           "options" :
           [
             {
-              "id" : "hasPlan/yes", "text" : "Oui", "score" : 0
+              "id" : "hasPlan/yes", "text" : "Oui", "score" : 0, "feedback" : "Aller plus loin en s'incrivant dans une initiative comme les SBTi"
             },
             {
               "id" : "hasPlan/no", "text" : "Non", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, que se fixer des objectifs est nécessaire, l'étape cruciale est la mise en place d'un plan de transition."
@@ -452,7 +452,7 @@ var data =
           "options" :
           [
             {
-              "id" : "planTerm/short", "text" : "Court terme (1 - 3ans)", "score" : 10, "feedback" : "Aller plus loin en s'incrivant dans une initiative comme les SBTi"
+              "id" : "planTerm/short", "text" : "Court terme (1 - 3ans)", "score" : 10
             },
             {
               "id" : "planTerm/medium", "text" : "Moyen terme  (3 - 10 ans)", "score" : 10
@@ -538,19 +538,22 @@ var data =
           "options" :
           [
             {
-              "id" : "materials/plastics", "text" : "Plastique", "score" : 0
+              "id" : "materials/plastics", "text" : "Plastique", "score" : 0, "feedback" : "Outre le fait que le plastique est dérivé des combustibles fossiles, son élimination incorrecte a conduit à une quantité sans précédent de plastique dans notre environnement. La pression sociétale augmente et de plus en plus d'entreprises se tournent vers des alternatives à base de bioéthanol/dérivés de plantes, qui absorbe du CO2 pendant leur croissance, et se décomposent plus facilement en matériaux inoffensifs. Il est nécessaire de rechercher des solutions alternatives ou en plastique recyclés et recylables pour minimiser l'utilisation de plastique dans votre entreprise."
             },
             {
-              "id" : "materials/metals", "text" : "Métal (aluminium, fer, or, argent, etc...)", "score" : 0
+              "id" : "materials/metals", "text" : "Métal (aluminium, fer, or, argent, etc...)", "score" : 0, "feedback" : "L'extraction de minerai métallique et leur transformation consomment beaucoup d'énergie et de ressources (eau). Ces processus, s'ils ne sont pas reglementé, peuvent poser une menace pour l'environnement : dégradation et contaminiation des habitats notamment. Les prix du fer et de l'aluminium augmentent et des problèmes soci-économiques (tel que les guerres) peuvent fortement impacter votre chaine de valeur."
             },
             {
-              "id" : "materials/organic", "text" : "Animal/végétal (alimentation, textile, etc...)", "score" : 0
+              "id" : "materials/wood", "text" : "Papier/carton/bois", "score" : 0, "feedback" : "Bien que le bois (et ses dérivés) soit un matériau renouvelable et facilement disponible, la gestion irresponsable des forêts peut entraîner une perte d'habitat et de biodiversité. Il est important de veiller à ce que les chaînes d'approvisionnement soient responsables et certifiées afin de garantir des sources durables. Bien que le papier et carton recyclables soient présentés comme des alternatives plus durable, ils impliquent des processus à forte intensité énergétique. Il est donc important de garder la sobriété comme premier levier dans la fabrication de vos produits."
             },
             {
-              "id" : "materials/mineral", "text" : "Minéral (sable, gravier, argile, etc...)", "score" : 0
+              "id" : "materials/organic", "text" : "Animal/végétal (alimentation, textile, etc...)", "score" : 0, "feedback" : "L'élévage des animaux consomment beaucoup de ressources en terme d'eau et de nourriture (la principale cause de dégradation des forêts dans le monde est l'agriculture). L'agriculture est la deuxième source des émissions de GES en France.\n\nLes sécheresses vont probablement augmenter dans les années à venir et vont fortement impacter la répartition des zones où les plantes peuvent pousser en Europe, ce qui entraînera des problèmes dans les chaînes d'approvisionnement.\n\nLes dérivés des plantes et animaux sont utilisés dans de nombreuses industries (alimentaire, cosmétique, automobile, textile...) et la recherche d'alternatives plus durables (cuir végétal, plats végétaliens/végétariens...) sera nécessaire pour diminuer notre impact environnemental. "
             },
             {
-              "id" : "materials/chemical", "text" : "Chimiques", "score" : 0
+              "id" : "materials/mineral", "text" : "Minéral (sable, gravier, argile, etc...)", "score" : 0, "feedback" : "Comme pour les métaux et les autres industries extractives, l'extraction des minéraux, bien qu'essentielle pour fournir les éléments constitutifs de nos sociétés modernes, nécessite beaucoup de ressources (eau et énergies fossiles). La destruction de l'habitat et la pollution de l'environnement sont les principales préoccupations liées à l'utilisation des minéraux. Le changement d'affectation des terres entraîne d'importantes émissions de gaz à effet de serre également."
+            },
+            {
+              "id" : "materials/chemical", "text" : "Chimiques", "score" : 0, "feedback" : "De nombreux produits chimiques (peintures, lubrifiants industriels, solvants, produits de nettoyage...) que nous utilisons aujourd'hui sont des dérivés du pétrole et nécessitent des processus à forte intensité énergétique (chauffage et refroidissement). D'origine synthétique, ils sont souvent toxiques pour l'environnement et une grande attention doit être portée au contrôle de l'utilisation et de l'élimination de ces produits chimiques. Dans la mesure du possible, des alternatives d'origine naturelle doivent être étudiées pour limiter l'impact environnemental des produits manufacturés et diminuer les émissions de GES conséquentes."
             }
           ]
         },
