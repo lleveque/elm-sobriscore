@@ -28,7 +28,6 @@ type alias Model =
   , status : Status
   , answers : Answers
   , currentScreen : Screen
-  , hasDoneCompany : Bool
   , showScores : Bool
   }
 
@@ -42,13 +41,12 @@ defaultModel =
   , answers = OrderedSet.empty
   , currentScreen = Intro
   , status = KO "Le moteur de questionnaire est prêt, mais aucune donnée n'a été chargée pour le moment."
-  , hasDoneCompany = False
   , showScores = False
   }
 
 type alias Answers = OrderedSet.OrderedSet String
 
-type Screen = Intro | Step Form (Maybe Int) | Results Form
+type Screen = Intro | Step Form (Maybe Int) | CompanyStep Form (Maybe Int) | Results Form
 
 type Status = OK | KO String
 
@@ -86,6 +84,22 @@ vSection detailed form answers s =
         ]
     ) :: ( List.map ( keyedVQuestion detailed form answers ) s.questions ))
 
+vCompanySectionWithNumber : Bool -> Form -> Form -> Int -> Answers -> Html Msg
+vCompanySectionWithNumber detailed nextForm form sectionNumber answers =
+  let
+    mSection = List.Extra.getAt sectionNumber form.sections
+  in
+    case mSection of
+      Just section ->
+        div []
+        [ vSection detailed form answers section
+        , div [ class "buttons"]
+          [ button [ onClick ( StepCompany nextForm ( sectionNumber - 1 ) ) ] [ text "Précédent"]
+          , button [ onClick ( StepCompany nextForm ( sectionNumber + 1 ) ) ] [ text "Suivant"]
+          ]
+        ]
+      Nothing -> div [] [ text "Trop loin !" ]
+
 vSectionWithNumber : Bool -> Form -> Int -> Answers -> Html Msg
 vSectionWithNumber detailed form sectionNumber answers =
   let
@@ -96,8 +110,8 @@ vSectionWithNumber detailed form sectionNumber answers =
         div []
         [ vSection detailed form answers section
         , div [ class "buttons"]
-          [ button [ onClick ( LoadSection form ( sectionNumber - 1 ) ) ] [ text "Précédent"]
-          , button [ onClick ( LoadSection form ( sectionNumber + 1 ) ) ] [ text "Suivant"]
+          [ button [ onClick ( StepForm form ( sectionNumber - 1 ) ) ] [ text "Précédent"]
+          , button [ onClick ( StepForm form ( sectionNumber + 1 ) ) ] [ text "Suivant"]
           ]
         ]
       Nothing -> div [] [ text "Trop loin !" ]
@@ -232,7 +246,9 @@ init flags =
 type Msg
   = Check Form String Bool
   | Select Form String Bool
-  | LoadSection Form Int
+  | StartForm Form
+  | StepCompany Form Int
+  | StepForm Form Int
   | ToggleScores
   | Reset
 
@@ -277,22 +293,33 @@ update msg model =
         answers = OrderedSet.insert id superCleanedAnswers
       in
         ({ model | answers = answers }, Cmd.none )
+
+    StartForm form ->
+      if (hasFinished model.companyForm model.answers)
+      then update (StepForm form 0) model
+      else update (StepCompany form 0) model
     
-    LoadSection form index ->
-      let
-        ( nextScreen, hasDoneCompany ) =
-          if index < 0
-          then
-            ( Intro, model.hasDoneCompany )
-          else
-            if index >= List.length form.sections
-            then
-              if form == model.companyForm
-              then ( Intro, True )
-              else ( Results form, model.hasDoneCompany )
-            else
-              ( Step form ( Just index ), model.hasDoneCompany )
-      in ({ model | currentScreen = nextScreen, hasDoneCompany = hasDoneCompany }, Cmd.none )
+    StepCompany form index ->
+      if index < 0
+      then
+        ({ model | currentScreen = Intro }, Cmd.none )
+      else
+        if index < List.length model.companyForm.sections
+        then
+          ({ model | currentScreen = CompanyStep form ( Just index ) }, Cmd.none )
+        else
+          update ( StartForm form ) model
+    
+    StepForm form index ->
+      if index < 0
+      then
+        ({ model | currentScreen = Intro }, Cmd.none )
+      else
+        if index < List.length form.sections
+        then
+          ({ model | currentScreen = Step form ( Just index ) }, Cmd.none )
+        else
+          ({ model | currentScreen = Results form }, Cmd.none )
 
     ToggleScores -> ( { model | showScores = not model.showScores }, Cmd.none )
     
@@ -308,12 +335,12 @@ update msg model =
 
 notSameQuestion: String -> String -> Bool
 notSameQuestion option1 option2 =
-  case questionFromOption option1 of
+  case questionFromOptionID option1 of
     Just question -> not <| String.startsWith question option2
     Nothing -> True
 
-questionFromOption: String -> Maybe String
-questionFromOption oid = String.split "/" oid |> List.head
+questionFromOptionID: String -> Maybe String
+questionFromOptionID oid = String.split "/" oid |> List.head
 
 -- VIEW
 
@@ -323,29 +350,46 @@ view model = case model.status of
   OK ->
     div []
       [ h1 [ onClick ToggleScores, class ( if model.showScores then "checkup" else "" ) ] [ text model.title ]
+      , div [] ( List.map ( formStatus model.answers ) [ model.companyForm, model.climateForm, model.rseForm ] )
       , case model.currentScreen of
 
           Intro ->
             div []
               [ h2 [] [ text model.subtitle ]
               , div [] [ renderMarkdown model.intro ]
-              , div [] [ button [ onClick ( LoadSection model.companyForm 0 ), class (if model.hasDoneCompany then "disabled" else "") ] [ text "Renseigner les données entreprise"] ]
-              , div [] [ button [ onClick ( LoadSection model.climateForm 0 ), class (if model.hasDoneCompany then "" else "disabled") ] [ text "Commencer le formulaire Climat"] ]
-              , div [] [ button [ onClick ( LoadSection model.rseForm 0 ), class (if model.hasDoneCompany then "" else "disabled")  ] [ text "Commencer le formulaire RSE"] ]
+              , div [] [ button [ onClick ( StartForm model.climateForm ) ] [ text "Commencer le formulaire Climat"] ]
+              , div [] [ button [ onClick ( StartForm model.rseForm ) ] [ text "Commencer le formulaire RSE"] ]
               ]
 
           Step form ( Just section ) -> vSectionWithNumber model.showScores form section model.answers
 
           Step form Nothing -> div [] [ text "Pas de section sélectionnée" ]
 
+          CompanyStep form ( Just section ) -> vCompanySectionWithNumber model.showScores form model.companyForm section model.answers
+
+          CompanyStep form Nothing -> div [] [ text "Pas de section sélectionnée" ]
+
           Results form -> div []
             (
               [ getScore model.showScores form model.answers
               , getFeedback form model.answers ]
               ++ if model.showScores then [ vAnswers form model.answers ] else []
-              ++ [ button [ onClick Reset ] [ text "Recommencer" ] ]
+              ++ getResultsCTA model.climateForm model.rseForm model.answers
             )
       ]
+
+getResultsCTA : Form -> Form -> Answers -> List (Html Msg)
+getResultsCTA climateForm rseForm answers =
+  case (hasFinished climateForm answers, hasFinished rseForm answers) of
+    (True, False) ->
+      [ button [ onClick Reset ] [ text "Recommencer depuis le début" ]
+      , button [ onClick ( StartForm rseForm ) ] [ text "Continuer avec le formulaire RSE" ]
+      ]
+    (False, True) ->
+      [ button [ onClick Reset ] [ text "Recommencer depuis le début" ]
+      , button [ onClick ( StartForm climateForm ) ] [ text "Continuer avec le formulaire Climat" ]
+      ]
+    _ -> [ button [ onClick Reset ] [ text "Recommencer depuis le début" ] ]
 
 getScore : Bool -> Form -> Answers -> Html Msg
 getScore detailed form answers =
@@ -494,3 +538,39 @@ renderMarkdown s =
       of
         Ok rendered -> div [ style "display" "inline-block" ] rendered
         Err errors -> div [ style "display" "inline-block" ] [ text s ]
+
+hasStarted : Form -> Answers -> Bool
+hasStarted form answers =
+  form.sections
+  |> List.concatMap .questions
+  |> List.concatMap .options
+  |> List.filter ( isInAnswers answers )
+  |> List.isEmpty
+  |> not
+
+isInAnswers : Answers -> Option -> Bool
+isInAnswers answers option = OrderedSet.member option.id answers
+
+hasFinished : Form -> Answers -> Bool
+hasFinished form answers =
+  let
+    formQuestionsID =
+      form.sections
+      |> List.concatMap .questions
+      |> List.concatMap .options
+      |> List.map .id
+      |> List.filterMap questionFromOptionID
+    answeredQuestionsID =
+      answers
+      |> OrderedSet.toList
+      |> List.filterMap questionFromOptionID
+  in
+    formQuestionsID |> List.all (\q -> List.member q answeredQuestionsID)
+
+formStatus : Answers -> Form -> Html Msg
+formStatus answers form =
+  case ( hasStarted form answers, hasFinished form answers ) of
+    (False, False) -> text "❎"
+    (True, False) -> text "⏺"
+    (True, True) -> text "✅"
+    (False, True) -> text "⁉"
