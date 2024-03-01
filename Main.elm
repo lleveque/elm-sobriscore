@@ -374,6 +374,7 @@ view model = case model.status of
           Results form -> div []
             (
               [ getScore model.showScores form model.answers
+              , getFeedback model.companyForm model.answers
               , getFeedback form model.answers ]
               ++ if model.showScores then [ vAnswers form model.answers ] else []
               ++ getResultsCTA model.climateForm model.rseForm model.answers
