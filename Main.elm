@@ -325,7 +325,10 @@ update msg model =
     
     Reset ->
       ( { defaultModel
-          | companyForm = model.companyForm
+          | title = model.title
+          , subtitle = model.subtitle
+          , intro = model.intro
+          , companyForm = model.companyForm
           , climateForm = model.climateForm
           , rseForm = model.rseForm
           , status = model.status
