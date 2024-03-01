@@ -556,9 +556,12 @@ isInAnswers answers option = OrderedSet.member option.id answers
 hasFinished : Form -> Answers -> Bool
 hasFinished form answers =
   let
-    formQuestionsID =
+    relevantQuestions =
       form.sections
       |> List.concatMap .questions
+      |> List.filter (shouldBeAnswered answers)
+    formQuestionsID =
+      relevantQuestions
       |> List.concatMap .options
       |> List.map .id
       |> List.filterMap questionFromOptionID
@@ -568,6 +571,12 @@ hasFinished form answers =
       |> List.filterMap questionFromOptionID
   in
     formQuestionsID |> List.all (\q -> List.member q answeredQuestionsID)
+
+shouldBeAnswered : Answers -> Question -> Bool
+shouldBeAnswered answers question =
+  case question.showIf of
+    Nothing -> True
+    Just condition -> if ( OrderedSet.member condition answers ) then True else False
 
 formStatus : Answers -> Form -> Html Msg
 formStatus answers form =
