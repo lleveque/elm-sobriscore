@@ -12,39 +12,47 @@
   },
   "$defs": {
     "form": {
-      "type": "array",
-      "items" : {
-        "type": "object",
-        "properties" : {
-          "text": { "type": "string" },
-          "questions": {
-            "type": "array",
-            "items": {
-              "type" : "object",
-              "properties": {
-                "showIf": {"type": "string"},
-                "type": {"type": "string"},
-                "text": {"type": "string"},
-                "options": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {"type": "string"},
-                      "text": {"type": "string"},
-                      "score": {"type": "integer"},
-                      "showFeedbackIf": {"type": "string"},
-                      "feedback": {"type": "string"}
-                    },
-                    "required": [ "id", "text", "score" ]
-                  }
+      "type": "object",
+      "properties": {
+        "title": {"type": "string"},
+        "subtitle": {"type": "string"},
+        "intro": {"type": "string"},
+        "sections" : {
+          "type": "array",
+          "items" : {
+            "type": "object",
+            "properties" : {
+              "text": { "type": "string" },
+              "questions": {
+                "type": "array",
+                "items": {
+                  "type" : "object",
+                  "properties": {
+                    "showIf": {"type": "string"},
+                    "type": {"type": "string"},
+                    "text": {"type": "string"},
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {"type": "string"},
+                          "text": {"type": "string"},
+                          "score": {"type": "integer"},
+                          "showFeedbackIf": {"type": "string"},
+                          "feedback": {"type": "string"}
+                        },
+                        "required": [ "id", "text", "score" ]
+                      }
+                    }
+                  },
+                  "required": [ "type", "text", "options" ]
                 }
-              },
-              "required": [ "type", "text", "options" ]
-            }
+              }
+            },
+            "required": [ "text", "questions" ]
           }
-        },
-        "required": [ "text", "questions" ]
+        }
       }
     }
   }

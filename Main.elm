@@ -19,7 +19,10 @@ main = Browser.element { init = init, update = update, view = view, subscription
 -- MODEL
 
 type alias Model =
-  { companyForm : Form
+  { title : String
+  , subtitle : String
+  , intro : String
+  , companyForm : Form
   , climateForm : Form
   , rseForm : Form
   , status : Status
@@ -30,12 +33,15 @@ type alias Model =
   }
 
 defaultModel =
-  { companyForm = []
-  , climateForm = []
-  , rseForm = []
+  { title = "Titre !"
+  , subtitle = "Un sous-titre incroyable"
+  , intro = "Tous ces textes doivent être définis dans le fichier `data.js`."
+  , companyForm = defaultForm
+  , climateForm = defaultForm
+  , rseForm = defaultForm
   , answers = OrderedSet.empty
   , currentScreen = Intro
-  , status = KO "Bienvenue sur l'outil Sobriscore !\nLe moteur de questionnaire est prêt, mais aucune n'a été chargée pour le moment."
+  , status = KO "Le moteur de questionnaire est prêt, mais aucune donnée n'a été chargée pour le moment."
   , hasDoneCompany = False
   , showScores = False
   }
@@ -46,10 +52,17 @@ type Screen = Intro | Step Form (Maybe Int) | Results Form
 
 type Status = OK | KO String
 
-type alias Form = List Section
+type alias Form =
+  { sections : List Section
+  , commonOpportunities : Maybe String
+  }
+
+defaultForm = { sections = [], commonOpportunities = Nothing }
 
 formDecoder : Json.Decode.Decoder Form
-formDecoder = Json.Decode.list sectionDecoder
+formDecoder = Json.Decode.map2 Form
+  ( Json.Decode.field "sections" ( Json.Decode.list sectionDecoder ) )
+  ( Json.Decode.maybe ( Json.Decode.field "commonOpportunities" Json.Decode.string ) )
 
 type alias Section =
   { name : String
@@ -76,7 +89,7 @@ vSection detailed form answers s =
 vSectionWithNumber : Bool -> Form -> Int -> Answers -> Html Msg
 vSectionWithNumber detailed form sectionNumber answers =
   let
-    mSection = List.Extra.getAt sectionNumber form
+    mSection = List.Extra.getAt sectionNumber form.sections
   in
     case mSection of
       Just section ->
@@ -174,27 +187,36 @@ vOption detailed form answers disable qType qName o =
 
 -- INIT
 
-type alias AllForms =
-  { companyForm : Form
+type alias ImportedData =
+  { title : String
+  , subtitle : String
+  , intro : String
+  , companyForm : Form
   , climateForm : Form
   , rseForm : Form
   }
 
-formsDecoder : Json.Decode.Decoder AllForms
-formsDecoder = Json.Decode.map3 AllForms
+importedDataDecoder : Json.Decode.Decoder ImportedData
+importedDataDecoder = Json.Decode.map6 ImportedData
+  ( Json.Decode.field "title" Json.Decode.string )
+  ( Json.Decode.field "subtitle" Json.Decode.string )
+  ( Json.Decode.field "intro" Json.Decode.string )
   ( Json.Decode.field "companyForm" formDecoder )
   ( Json.Decode.field "climateForm" formDecoder )
   ( Json.Decode.field "rseForm" formDecoder )
 
 init: Json.Decode.Value -> (Model, Cmd Msg)
 init flags =
-  case Json.Decode.decodeValue formsDecoder flags of
+  case Json.Decode.decodeValue importedDataDecoder flags of
 
-    Ok forms -> 
+    Ok data -> 
       ( { defaultModel
-        | companyForm = forms.companyForm
-        , climateForm = forms.climateForm
-        , rseForm = forms.rseForm
+        | title = data.title
+        , subtitle = data.subtitle
+        , intro = data.intro
+        , companyForm = data.companyForm
+        , climateForm = data.climateForm
+        , rseForm = data.rseForm
         , status = OK
         }
       , Cmd.none )
@@ -217,7 +239,7 @@ type Msg
 removeCascadingAnswers : Form -> Answers -> String -> Answers
 removeCascadingAnswers form answers checkedOption =
   let
-    cascadingQuestions = form |> List.concatMap .questions |> List.filter doCascade
+    cascadingQuestions = form.sections |> List.concatMap .questions |> List.filter doCascade
     removableCascadingQuestions = cascadingQuestions |> List.filter ( parentUnchecked answers )
     removableOptions = removableCascadingQuestions |> List.concatMap .options |> List.map .id
   in
@@ -263,7 +285,7 @@ update msg model =
           then
             ( Intro, model.hasDoneCompany )
           else
-            if index >= List.length form
+            if index >= List.length form.sections
             then
               if form == model.companyForm
               then ( Intro, True )
@@ -300,13 +322,13 @@ view model = case model.status of
   KO error -> article [] [ aside [ style "display" "block" ] [ div [] [ h1 [] [ text "Error" ] ], p [] [ text error ]] ]
   OK ->
     div []
-      [ h1 [ onClick ToggleScores, class ( if model.showScores then "checkup" else "" ) ] [ text "Sobriscore" ]
+      [ h1 [ onClick ToggleScores, class ( if model.showScores then "checkup" else "" ) ] [ text model.title ]
       , case model.currentScreen of
 
           Intro ->
             div []
-              [ h2 [] [ text "Évaluez votre maturité Climat et RSE" ]
-              , div [] [ renderMarkdown "La transition écologique est un enjeu majeur pour les entreprises.\n\nIl peut être difficile de se positionner face à la règlementation et les étapes nécessaires à assurer une transition durable de son entreprise. Si vous vous sentez perdu face à ce défi, alors vous êtes au bon endroit : **évaluez votre Sobriscore** !\n\nEco CO2 a développé l’outil Sobriscore pour mesurer la maturité de votre entreprise sur la question de la sobriété environnementale – en 5 minutes chrono !\n# Pourquoi le Sobriscore ?\nSimple et rapide, le questionnaire met en lumière :\n* Votre **niveau de maturité** sur le changement climatique et votre démarche RSE\n* Des **pistes prioritaires** pour agir en faveur de la transition écologique dans votre structure\n* Les enjeux de l’action pour votre secteur d’activité, sous la forme de **risques et opportunités**\nVotre synthèse Sobriscore est un véritable outil de travail au service de votre politique de sobriété pour accélérer la transition écologique." ]
+              [ h2 [] [ text model.subtitle ]
+              , div [] [ renderMarkdown model.intro ]
               , div [] [ button [ onClick ( LoadSection model.companyForm 0 ), class (if model.hasDoneCompany then "disabled" else "") ] [ text "Renseigner les données entreprise"] ]
               , div [] [ button [ onClick ( LoadSection model.climateForm 0 ), class (if model.hasDoneCompany then "" else "disabled") ] [ text "Commencer le formulaire Climat"] ]
               , div [] [ button [ onClick ( LoadSection model.rseForm 0 ), class (if model.hasDoneCompany then "" else "disabled")  ] [ text "Commencer le formulaire RSE"] ]
@@ -338,7 +360,7 @@ getScore detailed form answers =
             ] ++ ( if detailed then [ detailedTotalScore form answers ] else [] )
           )
       ]
-      ++ ( form |> List.map ( sectionScore detailed answers ) )
+      ++ ( form.sections |> List.map ( sectionScore detailed answers ) )
     )
 
 totalScore : Form -> Answers -> String
@@ -357,7 +379,7 @@ detailedTotalScore form answers =
 
 maxPoints : Form -> Int
 maxPoints form
-  = form
+  = form.sections
   |> List.map maxPointsForSection
   |> List.sum
 
@@ -397,7 +419,7 @@ scoreAdder option total = total + option.score
 
 optionFromId : Form -> String -> Maybe Option
 optionFromId form id
-  = form
+  = form.sections
   |> List.concatMap .questions
   |> List.concatMap .options
   |> List.filter (\option -> option.id == id)
@@ -406,13 +428,24 @@ optionFromId form id
 getFeedback : Form -> Answers -> Html Msg
 getFeedback form answers =
   let
-    feedback = form |> List.filterMap ( sectionFeedback answers )
+    feedback = form.sections |> List.filterMap ( sectionFeedback answers )
   in
     if ( List.isEmpty feedback )
     then
       div [] ( [ h1 [] [ text "Nos conseils" ], p [] [ text "Nous n'avons pas de recommandation particulière." ] ] )
     else
-      div [] ( [ h1 [] [ text "Nos conseils" ] ] ++ ( form |> List.filterMap ( sectionFeedback answers )))
+      div []
+        (
+          [ mRender renderMarkdown form.commonOpportunities
+          , h1 [] [ text "Nos conseils" ]
+          ]
+          ++ ( form.sections |> List.filterMap ( sectionFeedback answers ))
+        )
+
+mRender : (a -> Html Msg) -> Maybe a -> Html Msg
+mRender render mData = case mData of
+  Just data -> render data
+  Nothing -> div [] []
 
 sectionFeedback : Answers -> Section -> Maybe ( Html Msg )
 sectionFeedback answers section =
@@ -431,7 +464,7 @@ questionFeedback answers question =
       |> List.filter (\o -> OrderedSet.member o.id answers )
       |> List.filter (\o -> shouldShowFeedback answers o.showFeedbackIf)
       |> List.filterMap .feedback
-      |> List.map (\feedback -> li [] [ renderMarkdown feedback ])
+      |> List.map (\feedback -> div [] [ renderMarkdown ( "- " ++ feedback ) ])
   in
     if ( List.isEmpty feedbacks )
     then Nothing
@@ -445,7 +478,7 @@ shouldShowFeedback answers mParent = case mParent of
 vAnswers : Form -> Answers -> Html Msg
 vAnswers form answers =
   let
-    orderedFormAnswers = form |> List.concatMap .questions |> List.concatMap .options |> List.filter (\o -> OrderedSet.member o.id answers)
+    orderedFormAnswers = form.sections |> List.concatMap .questions |> List.concatMap .options |> List.filter (\o -> OrderedSet.member o.id answers)
   in
     div [ class "checkup" ]
       [ h2 [] [ text "Vos réponses" ]
