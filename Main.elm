@@ -3,7 +3,7 @@ module Main exposing (main)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onCheck, onClick)
+import Html.Events exposing (onCheck, onClick, onInput)
 import Html.Keyed
 import Json.Decode
 import List.Extra
@@ -26,6 +26,10 @@ type alias Model =
   , climateForm : Form
   , rseForm : Form
   , status : Status
+  , name : String
+  , email : String
+  , company : String
+  , role : String
   , answers : Answers
   , currentScreen : Screen
   , showScores : Bool
@@ -38,9 +42,13 @@ defaultModel =
   , companyForm = defaultForm
   , climateForm = defaultForm
   , rseForm = defaultForm
+  , status = KO "Le moteur de questionnaire est prêt, mais aucune donnée n'a été chargée pour le moment."
+  , name = "Jean-Michel Jarre"
+  , email = "jean-michel@jarre.com"
+  , company = "LaserHarps SARL"
+  , role = "Technicien harpe laser"
   , answers = OrderedSet.empty
   , currentScreen = Intro
-  , status = KO "Le moteur de questionnaire est prêt, mais aucune donnée n'a été chargée pour le moment."
   , showScores = False
   }
 
@@ -143,12 +151,13 @@ vQuestion detailed form answers q =
       Nothing -> enabled
       Just master -> if ( OrderedSet.member master answers ) then enabled else disabled
 
-type QuestionType = Radio | Checkbox | Unknown
+type QuestionType = Radio | Checkbox | Text | Unknown
 
 questionTypeDecoder : String -> Json.Decode.Decoder QuestionType
 questionTypeDecoder qType = case qType of
   "radio" -> Json.Decode.succeed Radio
   "checkbox" -> Json.Decode.succeed Checkbox
+  "text" -> Json.Decode.succeed Text
   _ -> Json.Decode.succeed Unknown
 
 type alias Option =
@@ -197,6 +206,8 @@ vOption detailed form answers disable qType qName o =
     case qType of
       Radio -> renderOption "radio" Select
       Checkbox -> renderOption "checkbox" Check
+      Text -> div ([ class "option" ] ++ ( if isChecked then [ class "checked" ] else [] ))
+        [ div [ class "option-input" ] [ input ([ type_ "text", id o.id, name o.id, onInput (UpdateTextField o.id) ] ++ ( if disable then [ disabled True ] else [] )) [] ] ]
       Unknown -> div [] [ renderMarkdown o.text, span [ class "checkup" ] [ text (if detailed then " - " ++ ( String.fromInt o.score ) ++ " points" else "" )] ]
 
 -- INIT
@@ -246,6 +257,7 @@ init flags =
 type Msg
   = Check Form String Bool
   | Select Form String Bool
+  | UpdateTextField String String
   | StartForm Form
   | StepCompany Form Int
   | StepForm Form Int
@@ -293,6 +305,14 @@ update msg model =
         answers = OrderedSet.insert id superCleanedAnswers
       in
         ({ model | answers = answers }, Cmd.none )
+
+    UpdateTextField field value ->
+      case field of
+        "name/example" -> ({ model | name = value, answers = ( OrderedSet.insert field model.answers ) }, Cmd.none )
+        "company/example" -> ({ model | company = value, answers = ( OrderedSet.insert field model.answers ) }, Cmd.none )
+        "email/example" -> ({ model | email = value, answers = ( OrderedSet.insert field model.answers ) }, Cmd.none )
+        "otherJob/title" -> ({ model | role = value, answers = ( OrderedSet.insert field model.answers ) }, Cmd.none )
+        _ -> ( model, Cmd.none )
 
     StartForm form ->
       if (hasFinished model.companyForm model.answers)
@@ -373,7 +393,8 @@ view model = case model.status of
 
           Results form -> div []
             (
-              [ getScore model.showScores form model.answers
+              [ div [] ( List.map ( \s -> div [] [ text s ]) [ model.name, model.email, model.company ] )
+              , getScore model.showScores form model.answers
               , getFeedback model.companyForm model.answers
               , getFeedback form model.answers ]
               ++ if model.showScores then [ vAnswers form model.answers ] else []

@@ -11,7 +11,7 @@ var data =
         "questions":
         [
           {
-            "type" : "radio",
+            "type" : "text",
             "text" : "Quel est votre nom/prénom ?",
             "options" :
             [
@@ -21,7 +21,7 @@ var data =
             ]
           },
           {
-            "type" : "radio",
+            "type" : "text",
             "text" : "Quel est votre adresse email ?",
             "options" :
             [
@@ -41,7 +41,7 @@ var data =
             ]
           },
           {
-            "type" : "radio",
+            "type" : "text",
             "text" : "Quel est le nom de votre entreprise ?",
             "options" :
             [
@@ -74,7 +74,7 @@ var data =
           },
           {
             "showIf" : "job/other",
-            "type" : "radio",
+            "type" : "text",
             "text" : "Votre intitulé de poste :",
             "options" :
             [
