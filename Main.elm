@@ -353,7 +353,6 @@ view model = case model.status of
   OK ->
     div []
       [ h1 [ onClick ToggleScores, class ( if model.showScores then "checkup" else "" ) ] [ text model.title ]
-      , div [] ( List.map ( formStatus model.answers ) [ model.companyForm, model.climateForm, model.rseForm ] )
       , case model.currentScreen of
 
           Intro ->
