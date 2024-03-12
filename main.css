@@ -1,3 +1,14 @@
+:root {
+    --color-bg: #FFFAF4;
+    --color-text: #3B4C59;
+    --color-link: #40A3BB;
+}
+
+button {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
 .buttons {
     display: flex;
     justify-content: space-between;
@@ -8,12 +19,13 @@
 }
 
 .option {
-    background: aliceblue;
+    background: white;
     margin: 4px;
     padding-top: 8px;
     padding-left: 16px;
     padding-right: 16px;
     padding-bottom: 8px;
+    border: solid 1px lightgray;
     border-radius: 16px;
 }
 
@@ -31,6 +43,7 @@
 .option-input > label {
     flex-grow: 1;
     margin-bottom: 0;
+    max-width: none;
 }
 
 .option.checked {
@@ -47,4 +60,156 @@
 
 .checkup {
     color: #40A3BB;
+}
+
+nav {
+    margin-bottom: 1rem;
+}
+
+nav ul p {
+    display: flex;
+    justify-content: end;
+    margin: 0;
+}
+
+.sobriscore {
+    background: var(--color-link);
+    padding: 1rem 2rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    border-radius: 12px;
+    width: 80%;
+}
+
+.results {
+    background: white;
+    padding: 1rem 3rem;
+    border: solid lightgray 2px;
+    border-radius: 16px;
+}
+
+.digest {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#start-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.section-scores {
+    padding: 1rem;
+}
+
+.section-scores h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.section-score {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.section-score-label {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: end;
+    width: 380px;
+}
+
+#web-credit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+}
+
+#print-credit {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+}
+
+.logo {
+    display: block;
+    width: 12rem;
+}
+
+#risks {
+    padding: 1rem 2rem;
+    width: 80%;
+    color: var(--color-link);
+    background: white;
+    border: solid 1px var(--color-link);
+    border-radius: 12px;
+}
+
+.bar-back {
+    display: inline-block;
+    width: 150px;
+    height: 12px;
+    background: lightgrey;
+}
+
+.bar-front {
+    height: 100%;
+    background: var(--color-link);
+}
+
+@media print {
+    :root {
+        --color-bg: empty;
+    }
+
+    #start-buttons {
+        display: none;
+    }
+
+    section {
+        break-before: page;
+    }
+
+    .results {
+        border: none;
+        padding: 0px;
+    }
+
+    #brief {
+        padding: 1rem 3rem;
+        border: solid lightgray 2px;
+        border-radius: 16px;
+    }
+
+    nav {
+        margin-bottom: 4rem;
+    }
+
+    .section-scores {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    #answers {
+        display : none;
+    }
+
+    h2 {
+        margin-top: 0rem;
+        margin-bottom: 0rem;
+    }
+
+    #web-credit {
+        display: none;
+    }
+
+    #print-credit {
+        display: flex;
+    }
 }

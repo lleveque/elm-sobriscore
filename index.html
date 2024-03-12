@@ -9,11 +9,7 @@
 </head>
 
 <body>
-<main>
-
-  <pre id="elm"></pre>
-
-</main>
+<div id="elm"></div>
 
 <script src="./data.js"></script>
 
@@ -25,6 +21,17 @@
       node: document.getElementById('elm'),
       flags: data
   });
+
+  var scrollToY = function(position) {
+    console.log("scrolling")
+    window.scroll({
+        top: position,
+        left: 0,
+        behavior: 'smooth'
+    });
+  };
+
+  app.ports.resetScroll.subscribe(scrollToY);
 
 </script>
 

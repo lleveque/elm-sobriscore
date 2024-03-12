@@ -2,7 +2,7 @@ var data =
 {
   "title" : "Sobriscore",
   "subtitle" : "Évaluez votre maturité Climat et RSE",
-  "intro" : "La transition écologique est un enjeu majeur pour les entreprises.\n\nIl peut être difficile de se positionner face à la règlementation et les étapes nécessaires à assurer une transition durable de son entreprise. Si vous vous sentez perdu face à ce défi, alors vous êtes au bon endroit : **évaluez votre Sobriscore** !\n\nEco CO2 a développé l’outil Sobriscore pour mesurer la maturité de votre entreprise sur la question de la sobriété environnementale – en 5 minutes chrono !\n# Pourquoi le Sobriscore ?\nSimple et rapide, le questionnaire met en lumière :\n* Votre **niveau de maturité** sur le changement climatique et votre démarche RSE\n* Des **pistes prioritaires** pour agir en faveur de la transition écologique dans votre structure\n* Les enjeux de l’action pour votre secteur d’activité, sous la forme de **risques et opportunités**\nVotre synthèse Sobriscore est un véritable outil de travail au service de votre politique de sobriété pour accélérer la transition écologique.",
+  "intro" : "# Évaluez votre maturité Climat et RSE\nLa transition écologique est un enjeu majeur pour les entreprises. Face à la réglementation et aux étapes nécessaires pour réaliser sa transition, il est parfois difficile de s'y retrouver. Si vous vous sentez perdu face à ce défi, alors vous êtes au bon endroit : **évaluez votre Sobriscore** !\n\nEco CO2 a développé l’outil Sobriscore pour mesurer la maturité climat de votre entreprise, en 5 minutes chrono !\n# Pourquoi le Sobriscore ?\nSimple et rapide, le questionnaire met en lumière :\n* Votre **niveau de maturité** sur le changement climatique et votre démarche RSE\n* Des **pistes prioritaires** pour agir en faveur de la transition écologique dans votre structure\n* Les enjeux de l’action pour votre secteur d’activité, sous la forme de **risques et opportunités**\nVotre synthèse Sobriscore est un véritable outil de travail au service de votre démarche de sobriété pour accélérer votre transition écologique.\n\nLe Sobriscore est un outil développé par Eco CO2, société de conseil et de formation en transition écologique.",
   "companyForm":
   { "sections" :
     [
@@ -89,16 +89,16 @@ var data =
             "options" :
             [
               {
-                "id" : "size/tpe", "text" : "TPE : moins de 10 salariés", "score" : 0, "feedback" : "Vous êtes pour le moment pas concernés par l'obligation de réaliser un bilan carbone ou de présenter des objectifs de décarbonation. Cependant, il est à noter que cette réglementation évolue rapidement. De plus, il est probable que vos fournisseurs ainsi que vos parties prenantes viennent à vous demander d'adopter une stratégie climat pour des raisons d'attractivité, d'image ou encore de gestion de risques."
+                "id" : "size/tpe", "text" : "TPE : moins de 10 salariés", "score" : 0
               },
               {
-                "id" : "size/pme", "text" : "PME : entre 10 et 250 salariés", "score" : 0, "feedback" : "Vous êtes pour le moment pas concernés par l'obligation de réaliser un bilan carbone ou de présenter des objectifs de décarbonation. Cependant, il est à noter que cette réglementation évolue rapidement. De plus, il est probable que vos fournisseurs ainsi que vos parties prenantes viennent à vous demander d'adopter une stratégie climat pour des raisons d'attractivité, d'image ou encore de gestion de risques."
+                "id" : "size/pme", "text" : "PME : entre 10 et 250 salariés", "score" : 0
               },
               {
-                "id" : "size/eti", "text" : "ETI : entre 250 et 5 000 salariés", "score" : 0, "feedback" : "Si votre entre a plus de 500 salariés, vous êtes tenus de réaliser un bilan carbone tous les 4 ans, et de publier un plan de transition pour réduire les émissions de GES présentant les objectifs, actions et moyens envisagés à cette fin."
+                "id" : "size/eti", "text" : "ETI : entre 250 et 5 000 salariés", "score" : 0
               },
               {
-                "id" : "size/large", "text" : "Grande entreprise : plus de 5 000 salariés", "score" : 0, "feedback" : "Si votre entre a plus de 500 salariés, vous êtes tenus de réaliser un bilan carbone tous les 4 ans, et de publier un plan de transition pour réduire les émissions de GES présentant les objectifs, actions et moyens envisagés à cette fin."
+                "id" : "size/large", "text" : "Grande entreprise : plus de 5 000 salariés", "score" : 0
               }
             ]
           },
@@ -111,10 +111,10 @@ var data =
                 "id" : "dpef/yes", "text" : "Oui", "score" : 0
               },
               {
-                "id" : "dpef/no", "text" : "Non", "score" : 0, "feedback" : "Même si vous êtes pour le moment pas concerné par ces réglementations, il est tout de même très probable que vous soyez  interrogé/challengé par votre client sur ce sujet pour poursuivre une collaboration, car ce dernier se doit également de décarboner sa chaîne de valeur."
+                "id" : "dpef/no", "text" : "Non", "score" : 0
               },
               {
-                "id" : "dpef/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Les PME cotées en bourse et celles qui comptent plus de 250 salariés réalisant plus de 50 M€ et/ou affichent plus de 25 M€ de bilan de CA doivent se mettre en conformité avec la CSRD. Sont également concernées les entreprises non Européennes avec un CA supérieur ou égal à 150 M€ sur le marché de l'UE."
+                "id" : "dpef/unknown", "text" : "Je ne sais pas", "score" : 0
               }
             ]
           },
@@ -124,10 +124,10 @@ var data =
             "options" :
             [
               {
-                "id" : "bizModel/b2b", "text" : "B2B : vos clients sont des professionnels", "score" : 0, "feedback" : "attentes de consommateurs de plus en plus attentifs à l'impact environnemental des produits qu'ils consomment"
+                "id" : "bizModel/b2b", "text" : "B2B : vos clients sont des professionnels", "score" : 0
               },
               {
-                "id" : "bizModel/b2c", "text" : "B2C : vos clients sont des particuliers", "score" : 0, "feedback" : "Vos clients et parties prenantes sont de plus en plus exigeants, voire eux-mêmes soumis à la réglementation."
+                "id" : "bizModel/b2c", "text" : "B2C : vos clients sont des particuliers", "score" : 0
               }
             ]
           },
@@ -153,52 +153,52 @@ var data =
             "options" :
             [
               {
-                "id" : "sector/services", "text" : "Services (études, enseignement, administratif, etc)", "score" : 0, "feedback" : "- Développement de services durables\n- Conseil en gestion et adaptation aux risques climatiques\n- Demande d'expertises des clients sur ces nouveaux sujets : être en avance de phase"
+                "id" : "sector/services", "text" : "Services (études, enseignement, administratif, etc)", "score" : 0
               },
               {
-                "id" : "sector/agriculture", "text" : "Agriculture, sylviculture, pêche", "score" : 0, "feedback" : "- Adoption de pratiques agricoles durables et résilientes\n- Développement de cultures et de variétés adaptées au climat changeant\n- Emergence de nouvelles zones de pêche à mesure que les habitats marins se déplacent\n- Promotion de la gestion durable des ressources aquatiques."
+                "id" : "sector/agriculture", "text" : "Agriculture, sylviculture, pêche", "score" : 0
               },
               {
-                "id" : "sector/food", "text" : "Agroalimentaire", "score" : 0, "feedback" : "- Changements dans la demande alimentaire : les préférences des consommateurs peuvent évoluer en réponse aux changements climatiques:  demande croissante pour des produits alimentaires durables, locaux et faiblement carbonnée\n- Innovation alimentaire et technologique : création de nouveaux produits alimentaires adaptés aux préférences des consommateurs conscients de l'impact climatique"
+                "id" : "sector/food", "text" : "Agroalimentaire", "score" : 0
               },
               {
-                "id" : "sector/transport", "text" : "Transport, logistique", "score" : 0, "feedback" : "- Adoption de modes de transport plus durables pour répondre aux exigences environnementales\n- Investissements dans des technologies écoénergétiques et des infrastructures résilientes\n- Développement de solutions logistiques innovantes pour atténuer les risques climatiques\n- Accroissement de la demande pour des services de transport respectueux de l'environnement"
+                "id" : "sector/transport", "text" : "Transport, logistique", "score" : 0
               },
               {
-                "id" : "sector/energy", "text" : "Energie", "score" : 0, "feedback" : "- Croissance potentielle des énergies renouvelables et des technologies liées\n- Possibilité de développer des solutions énergétiques innovantes et durables"
+                "id" : "sector/energy", "text" : "Energie", "score" : 0
               },
               {
-                "id" : "sector/construction", "text" : "Construction", "score" : 0, "feedback" : "- Essor de la demande pour des bâtiments durables et écoénergétiques\n- Opportunités d'innovation dans les matériaux de construction plus résilients et respectueux de l'environnement et développement de l'économie circulaire\n- Développement de technologies de construction vertes\n- Augmentation de la demande pour la rénovation énergétique des bâtiments existants."
+                "id" : "sector/construction", "text" : "Construction", "score" : 0
               },
               {
-                "id" : "sector/banking", "text" : "Banque, assurance, fonds d'investissements", "score" : 0, "feedback" : "- Développement de produits d'assurance innovants pour couvrir les risques climatiques\n- Investissements dans des projets durables et résilients\n- Création de produits financiers liés à la transition vers une économie bas-carbone\n- Renforcement de la gestion des risques climatiques pour assurer la stabilité financière à long terme\n- Rôle central dans la décarbonation de la vie économique et des infrastructures"
+                "id" : "sector/banking", "text" : "Banque, assurance, fonds d'investissements", "score" : 0
               },
               {
-                "id" : "sector/tourism", "text" : "Hébergement, restauration, tourisme", "score" : 0, "feedback" : "- Croissance de la demande pour des options alimentaires durables et expériences touristiques éco-responsables\n- Développement d'infrastructures résilientes face aux changements climatiques\n- Adaptation des offres touristiques pour répondre à la sensibilité environnementale des voyageurs\n- Possibilité de leadership en matière de durabilité pour renforcer la réputation de la marque"
+                "id" : "sector/tourism", "text" : "Hébergement, restauration, tourisme", "score" : 0
               },
               {
-                "id" : "sector/health", "text" : "Santé et social", "score" : 0, "feedback" : "- Développement de technologies médicales et de pratiques de santé adaptées au changement climatique."
+                "id" : "sector/health", "text" : "Santé et social", "score" : 0
               },
               {
-                "id" : "sector/trading", "text" : "Commerce, négoce, distribution", "score" : 0, "feedback" : "- Réponse à la demande croissante des consommateurs pour des produits durables\n- Adoption de pratiques éco-responsables pour améliorer l'image de marque\n- Investissements dans des technologies de chaîne d'approvisionnement verte\n- Développement de modèles d'affaires axés sur la circularité et la location pour réduire les déchets et les achats."
+                "id" : "sector/trading", "text" : "Commerce, négoce, distribution", "score" : 0
               },
               {
-                "id" : "sector/chemical", "text" : "Chimie, parachimie, pétrochimie, pharmaceutique", "score" : 0, "feedback" : "- Diversification des produits pour répondre à la demande croissante de solutions durables\n- R&D sur les solutions plus durables de substitutions pour un marché porteur"
+                "id" : "sector/chemical", "text" : "Chimie, parachimie, pétrochimie, pharmaceutique", "score" : 0
               },
               {
-                "id" : "sector/software", "text" : "Informatique, télécoms", "score" : 0, "feedback" : "-Développement de technologies plus économes en énergie, dont sont demandeuses clients particuliers & professionnels, ainsi que les entités étatiques\n- Opportunités pour les technologies de surveillance et d'atténuation des impacts climatiques"
+                "id" : "sector/software", "text" : "Informatique, télécoms", "score" : 0
               },
               {
-                "id" : "sector/clothing", "text" : "Textile, habillement, chaussure", "score" : 0, "feedback" : "- se différencier en adoptant des matériaux durables et recyclables\n- Opportunités de développer une offre de mode durable et locale"
+                "id" : "sector/clothing", "text" : "Textile, habillement, chaussure", "score" : 0
               },
               {
-                "id" : "sector/manufacture", "text" : "Industrie manufacturière (transformations de biens)", "score" : 0, "feedback" : "- Adoption de pratiques de production plus durables pour répondre à la demande croissante des consommateurs (reformatage)\n- Investissements dans des technologies vertes pour réduire l'empreinte carbone\n- Développement de produits innovants axés sur la durabilité\n- Opportunités de croissance grâce à la fourniture de solutions climatiques et éco-responsables\n- Eco-conception des produits permettant une réduciton des coûts de matière première et valorisation de métières issues de l'conomie circulaire (recylcage, upcycling)"
+                "id" : "sector/manufacture", "text" : "Industrie manufacturière (transformations de biens)", "score" : 0
               },
               {
-                "id" : "sector/arts", "text" : "Arts, spectacles, activités culturelles", "score" : 0, "feedback" : "- Sensibilisation accrue aux enjeux climatiques par le biais de l'art et de la culture."
+                "id" : "sector/arts", "text" : "Arts, spectacles, activités culturelles", "score" : 0
               },
               {
-                "id" : "sector/waste", "text" : "Gestion eau et déchet", "score" : 0, "feedback" : "- Investissements dans des infrastructures résilientes pour faire face aux changements climatiques,\n- Adoption de technologies vertes pour améliorer l'efficacité de la gestion de l'eau et des déchets\n- Développement de solutions innovantes pour la récupération des ressources à partir des déchets\n- Opportunités de croissance grâce à la demande croissante pour des services de gestion durable de l'eau et des déchets."
+                "id" : "sector/waste", "text" : "Gestion eau et déchet", "score" : 0
               }
             ]
           }
