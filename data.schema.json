@@ -2,13 +2,29 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.com/example.schema.json",
   "title": "Sobriscore",
-  "description": "Two quizzes sharing some questions",
+  "description": "A three-parts quizz with feedback and a way to record answers",
   "type": "object",
   "required": [ "companyForm", "climateForm", "rseForm" ],
   "properties": {
     "companyForm": { "$ref": "#/$defs/form" },
     "climateForm": { "$ref": "#/$defs/form" },
-    "rseForm":  { "$ref": "#/$defs/form" }
+    "rseForm":  { "$ref": "#/$defs/form" },
+    "recordedAnswers" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "required" : [ "name", "company", "role", "answers" ],
+        "properties": {
+          "name": {"type": "string"},
+          "company": {"type": "string"},
+          "role": {"type": "string"},
+          "answers": {
+            "type": "array",
+            "items": { "type" : "string" }
+          }
+        }
+      }
+    }
   },
   "$defs": {
     "form": {

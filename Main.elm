@@ -36,6 +36,7 @@ type alias Model =
   , answers : Answers
   , currentScreen : Screen
   , showScores : Bool
+  , recordedAnswers : List AnswerRecording
   }
 
 defaultModel =
@@ -53,6 +54,7 @@ defaultModel =
   , answers = OrderedSet.empty
   , currentScreen = Intro
   , showScores = False
+  , recordedAnswers = []
   }
 
 type alias Answers = OrderedSet.OrderedSet String
@@ -218,16 +220,34 @@ type alias ImportedData =
   , companyForm : Form
   , climateForm : Form
   , rseForm : Form
+  , recordedAnswers : List AnswerRecording
   }
 
+type alias AnswerRecording =
+  { name : String
+  , company : String
+  , role : String
+  , answers : Answers }
+
+answerRecordingDecoder : Json.Decode.Decoder AnswerRecording
+answerRecordingDecoder = Json.Decode.map4 AnswerRecording
+  ( Json.Decode.field "name" Json.Decode.string )
+  ( Json.Decode.field "company" Json.Decode.string )
+  ( Json.Decode.field "role" Json.Decode.string )
+  ( Json.Decode.field "answers" ((Json.Decode.list Json.Decode.string) |> Json.Decode.andThen answersDecoder) )
+
+answersDecoder : List String -> Json.Decode.Decoder Answers
+answersDecoder answers = Json.Decode.succeed (OrderedSet.fromList answers)
+
 importedDataDecoder : Json.Decode.Decoder ImportedData
-importedDataDecoder = Json.Decode.map6 ImportedData
+importedDataDecoder = Json.Decode.map7 ImportedData
   ( Json.Decode.field "title" Json.Decode.string )
   ( Json.Decode.field "subtitle" Json.Decode.string )
   ( Json.Decode.field "intro" Json.Decode.string )
   ( Json.Decode.field "companyForm" formDecoder )
   ( Json.Decode.field "climateForm" formDecoder )
   ( Json.Decode.field "rseForm" formDecoder )
+  ( Json.Decode.field "recordedAnswers" (Json.Decode.list answerRecordingDecoder) )
 
 init: Json.Decode.Value -> (Model, Cmd Msg)
 init flags =
@@ -242,6 +262,7 @@ init flags =
         , climateForm = data.climateForm
         , rseForm = data.rseForm
         , status = OK
+        , recordedAnswers = data.recordedAnswers
         }
       , Cmd.none )
 
@@ -261,6 +282,7 @@ type Msg
   | StepCompany Form Int
   | StepForm Form Int
   | ToggleScores
+  | ShowResults AnswerRecording
   | Reset
 
 removeCascadingAnswers : Form -> Answers -> String -> Answers
@@ -341,6 +363,21 @@ update msg model =
           ({ model | currentScreen = Results form }, resetScroll 0 )
 
     ToggleScores -> ( { model | showScores = not model.showScores }, Cmd.none )
+
+    ShowResults recording ->
+      let
+        recordedModel =
+          { model
+          | name = recording.name
+          , company = recording.company
+          , role = recording.role
+          , email = "anonymous@example.org"
+          , answers = recording.answers
+          , currentScreen = Results model.climateForm -- TODO adapt to any form
+          }
+      in
+        ( recordedModel, resetScroll 0 )
+
     
     Reset ->
       ( { defaultModel
@@ -352,6 +389,7 @@ update msg model =
           , rseForm = model.rseForm
           , status = model.status
           , showScores = model.showScores
+          , recordedAnswers = model.recordedAnswers
         }
       , resetScroll 0 )
 
@@ -394,6 +432,9 @@ view model = case model.status of
                 [ button [ onClick ( StartForm model.climateForm ) ] [ text "Commencer le formulaire Climat"]
                 , button [ onClick ( StartForm model.rseForm ) ] [ text "Commencer le formulaire RSE"]
                 ]
+              , h2 [ id "recordings-title"] [ text "Exemples de Sobriscores réalisés"]
+              , p [ id "recordings-buttons" ] ( List.map (\recording -> button [ onClick ( ShowResults recording ) ] [ text ( recording.company ++ " (Climat : " ++ ( totalScore model.climateForm recording.answers ) ++ "%)" ) ]) model.recordedAnswers )
+              , div [ id "web-credit" ] [ img [ class "logo", src "./logo_ecoco2_transparent.svg" ] [], span [] [ text "Le Sobriscore est un outil développé par Eco CO2,"], span [] [ text "société de conseil et de formation en transition écologique." ]]
               ]
 
           Step form ( Just section ) -> vSectionWithNumber model.showScores form section model.answers
