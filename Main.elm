@@ -503,7 +503,7 @@ getOpportunities answers =
       ] ++ opportunities
   in
     section []
-      [ h1 [] [ text "Pourquoi agir maintenant ?" ]
+      [ h1 [] [ text "Les opportunités pour vous" ]
       , ul [] (List.map (\o -> li [] [ text o ]) allOpportunities)
       , getRisks answers
       ]
@@ -660,6 +660,14 @@ sectionScore detailed answers section =
 bar : String -> Html Msg
 bar score = div [ class "bar-back" ] [ div [ class "bar-front", style "width" (score++"%") ] []]
 
+sectionBar : Answers -> Section -> Html Msg
+sectionBar answers section =
+  let
+    userPoints = section.questions |> List.concatMap .options |> List.filter (\o -> OrderedSet.member o.id answers) |> List.map .score |> List.sum
+    userScore = Round.round 0 (100 * (toFloat userPoints) / (toFloat (maxPointsForSection section)))
+  in
+    div [] [ bar userScore, span [] [ text  ( userScore ++ "%" ) ] ]
+
 maxPointsForSection : Section -> Int
 maxPointsForSection section = section.questions |> List.map maxPointsForQuestion |> List.sum
 
@@ -708,7 +716,12 @@ sectionFeedback answers section =
   in
     if ( List.isEmpty feedbacks )
     then Nothing
-    else Just ( div [] ([ h2 [] [ text section.name ], ul [] feedbacks ] ) )
+    else
+      Just ( div []
+        [ div [ class "section-feedback-title" ] [ h2 [] [ text section.name ], sectionBar answers section ]
+        , ul [] feedbacks
+        ]
+      )
 
 questionFeedback : Answers -> Question -> Maybe ( List ( Html Msg ) )
 questionFeedback answers question =

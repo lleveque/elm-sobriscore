@@ -181,6 +181,16 @@ nav ul p {
     background: var(--color-link);
 }
 
+.section-feedback-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.section-feedback-title > div > span {
+  padding: 0.5rem;
+}
+
 @media print {
     :root {
         --color-bg: empty;
