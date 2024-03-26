@@ -191,6 +191,14 @@ nav ul p {
   padding: 0.5rem;
 }
 
+section > ul {
+    width: 100%;
+}
+
+section > div {
+    width: 100%;
+}
+
 @media print {
     :root {
         --color-bg: empty;
