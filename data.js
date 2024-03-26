@@ -268,10 +268,10 @@ var data =
                 "id" : "didAssess/noButWillDo", "text" : "Non, mais il est prévu d'en faire un cette année", "score" : 5, "feedback" : "La réalisation d'un BEGES est simplifiée par le passage via un prestataire extérieur. Eco CO2 peut vous accompagner."
               },
               {
-                "id" : "didAssess/no", "text" : "Non", "score" : 0, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+                "id" : "didAssess/no", "text" : "Non", "score" : 0, "feedback" : "Connaître les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
               },
               {
-                "id" : "didAssess/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+                "id" : "didAssess/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Connaître les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
               }
             ]
           },
@@ -285,7 +285,7 @@ var data =
                 "id" : "dateAssess/between13y", "text" : "Entre 1 et 3 ans", "score" : 10, "feedback" : "Votre dernier Bilan GES est récent, c'est bien ! Assurez-vous de le mettre régulièrement à jour pour faire évoluer votre stratégie climat dans le temps."
               },
               {
-                "id" : "dateAssess/more3y", "text" : "Il y a plus de 3 ans", "score" : 5, "feedback" : "Mettre à jour votre Bilan GES est important pour s'assurer des évolutions de votre stratégie climat dans le temps."
+                "id" : "dateAssess/more3y", "text" : "Il y a plus de 3 ans", "score" : 5, "feedback" : "Mettre à jour votre Bilan GES est important pour vous assurer des évolutions de votre stratégie climat dans le temps."
               }
             ]
           },
@@ -296,14 +296,14 @@ var data =
             "options" :
             [
               {
-                "id" : "assessScopes/oneTwo", "text" : "**Scopes 1 et 2**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n\n ⇨ Les **consommations d'énergie** de votre entreprise et **autres émissions directes**", "score" : 5, "feedback" : "Limiter l'évaluation des vos émissions de gaz à effet de serre de votre entreprise isolément de votre chaine de valeur n'est pas suffisant pour agir sur l'ensemble de votre impact sur le climat."
+                "id" : "assessScopes/oneTwo", "text" : "**Scopes 1 et 2**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n\n ⇨ Les **consommations d'énergie** de votre entreprise et **autres émissions directes**", "score" : 5, "feedback" : "Limiter l'évaluation de vos émissions de gaz à effet de serre de votre entreprise sans tenir compte de votre chaine de valeur n'est pas suffisant pour agir sur l'ensemble de votre impact sur le climat."
               },
               {
-                "id" : "assessScopes/oneTwoThree", "text" : "**Scopes 1, 2 et 3**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n* Émissions indirectes de votre chaîne de valeur (fournisseurs, clients, salariés)\n\n ⇨ Les **consommations d'énergie** de votre entreprise, les **autres émissions directes** et **les achats, le fret, les déplacements, les immobilisations matérielles et immatérielles**, etc...", "score" : 15, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+                "id" : "assessScopes/oneTwoThree", "text" : "**Scopes 1, 2 et 3**\n* Émissions directes\n* Émissions indirectes liées à l'électricité\n* Émissions indirectes de votre chaîne de valeur (fournisseurs, clients, salariés)\n\n ⇨ Les **consommations d'énergie** de votre entreprise, les **autres émissions directes** et **les achats, le fret, les déplacements, les immobilisations matérielles et immatérielles**, etc...", "score" : 15, "feedback" : "Connaître les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
              
               },
               {
-                "id" : "assessScopes/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Connaitre les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
+                "id" : "assessScopes/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Connaître les principaux postes d'émissions de GES de votre entreprise est le premier pas d'une stratégie climat efficace."
              
               }
             ]
@@ -367,7 +367,7 @@ var data =
                 "id" : "goodThinking/yes", "text" : "Oui", "score" : 10
               },
               {
-                "id" : "goodThinking/no", "text" : "Non", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone est un avantage commercial intéressant."
+                "id" : "goodThinking/no", "text" : "Non", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas-carbone est un avantage commercial intéressant."
               },
               {
                 "id" : "goodThinking/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Aujourd'hui, avoir des offres bas carbone est un avantage commercial intéressant."
@@ -408,10 +408,10 @@ var data =
                 "id" : "anyoneInCharge/yes", "text" : "Oui", "score" : 0
               },
               {
-                "id" : "anyoneInCharge/no", "text" : "Non", "score" : 0, "feedback" : "Responsabiliser dans les fonctions d'une ou plusieurs personnes permet de stabiliser dans le temps les progrès et le suivi dans le temps de la stratégie climat."
+                "id" : "anyoneInCharge/no", "text" : "Non", "score" : 0, "feedback" : "Inscrire la mission climat/carbone dans les fonctions d'une ou plusieurs personnes permet d'assurer le suivi dans le temps et les progrès de la stratégie climat."
               },
               {
-                "id" : "anyoneInCharge/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Responsabiliser dans les fonctions d'une ou plusieurs personnes permet de stabiliser dans le temps les progrès et le suivi dans le temps de la stratégie climat."
+                "id" : "anyoneInCharge/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Inscrire la mission climat/carbone dans les fonctions d'une ou plusieurs personnes permet d'assurer le suivi dans le temps et les progrès de la stratégie climat."
               }
             ]
           },
@@ -442,13 +442,13 @@ var data =
             "options" :
             [
               {
-                "id" : "hasPlan/yes", "text" : "Oui", "score" : 0, "feedback" : "Aller plus loin en s'incrivant dans une initiative comme les SBTi"
+                "id" : "hasPlan/yes", "text" : "Oui", "score" : 0, "feedback" : "Aller plus loin en s'incrivant dans une initiative comme les SBTi (Science Based Targets)"
               },
               {
-                "id" : "hasPlan/no", "text" : "Non", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, que se fixer des objectifs est nécessaire, l'étape cruciale est la mise en place d'un plan de transition."
+                "id" : "hasPlan/no", "text" : "Non", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas et que se fixer des objectifs soit nécessaire, l'étape cruciale est la mise en place d'un plan de transition."
               },
               {
-                "id" : "hasPlan/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas, que se fixer des objectifs est nécessaire, l'étape cruciale est la mise en place d'un plan de transition."
+                "id" : "hasPlan/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Bien que calculer ses émissions de GES soit un premier pas et que se fixer des objectifs soit nécessaire, l'étape cruciale est la mise en place d'un plan de transition."
               }
             ]
           },
@@ -479,10 +479,10 @@ var data =
                 "id" : "gainEval/yes", "text" : "Oui", "score" : 20
               },
               {
-                "id" : "gainEval/no", "text" : "Non", "score" : 0, "feedback" : "Aller au-delà de l'établissement d'une liste d'actions en quantifiant les gains potentiels permet à l'organisation de pouvoir prioriser les actions à fort gain potentiel, et de comparer ce gain au coût économique de mise en place de l'action"
+                "id" : "gainEval/no", "text" : "Non", "score" : 0, "feedback" : "Aller au-delà de l'établissement d'une liste d'actions en quantifiant les gains potentiels permet à l'organisation de prioriser les actions à fort gain potentiel, et de comparer ce gain au coût économique de mise en place de l'action"
               },
               {
-                "id" : "gainEval/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Aller au-delà de l'établissement d'une liste d'actions en quantifiant les gains potentiels permet à l'organisation de pouvoir prioriser les actions à fort gain potentiel, et de comparer ce gain au coût économique de mise en place de l'action"
+                "id" : "gainEval/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Aller au-delà de l'établissement d'une liste d'actions en quantifiant les gains potentiels permet à l'organisation de prioriser les actions à fort gain potentiel, et de comparer ce gain au coût économique de mise en place de l'action"
               }
             ]
           },
@@ -515,13 +515,13 @@ var data =
             "options" :
             [
               {
-                "id" : "workshops/yes", "text" : "Oui", "score" : 10, "feedback" : "Concernant la sensibilisation, n'hésitez pas à aller plus loin en effectuant des formations ciblées aux types de profilss/métiers."
+                "id" : "workshops/yes", "text" : "Oui", "score" : 10, "feedback" : "Concernant la sensibilisation, n'hésitez pas à aller plus loin en effectuant des formations ciblées aux types de profils/métiers."
               },
               {
-                "id" : "workshops/no", "text" : "Non", "score" : 0, "feedback" : "Mettre en place des formations ou sensibilisations permet une compréhension accrue des enjeux climatiques et un passage à l'action facilitée."
+                "id" : "workshops/no", "text" : "Non", "score" : 0, "feedback" : "Mettre en place des formations ou de la sensibilisation permet une compréhension accrue des enjeux climatiques et facilite le passage à l'action."
               },
               {
-                "id" : "workshops/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Mettre en place des formations ou sensibilisations permet une compréhension accrue des enjeux climatiques et un passage à l'action facilitée."
+                "id" : "workshops/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Mettre en place des formations ou de la sensibilisation permet une compréhension accrue des enjeux climatiques et facilite le passage à l'action."
               }
             ]
           },
@@ -545,22 +545,22 @@ var data =
             "options" :
             [
               {
-                "id" : "materials/plastics", "text" : "Plastique", "score" : 0, "feedback" : "Outre le fait que le plastique est dérivé des combustibles fossiles, son élimination incorrecte a conduit à une quantité sans précédent de plastique dans notre environnement. La pression sociétale augmente et de plus en plus d'entreprises se tournent vers des alternatives à base de bioéthanol/dérivés de plantes, qui absorbe du CO2 pendant leur croissance, et se décomposent plus facilement en matériaux inoffensifs. Il est nécessaire de rechercher des solutions alternatives ou en plastique recyclés et recylables pour minimiser l'utilisation de plastique dans votre entreprise."
+                "id" : "materials/plastics", "text" : "Plastique", "score" : 0, "feedback" : "Outre le fait que le plastique est dérivé des combustibles fossiles, son élimination incorrecte a conduit à une quantité sans précédent de plastique dans notre environnement. La pression sociétale augmente et de plus en plus d'entreprises se tournent vers des alternatives à base de bioéthanol/dérivés de plantes, qui absorbent du CO2 pendant leur croissance, et se décomposent plus facilement en matériaux inoffensifs. Pour minimiser l'utilisation de plastique dans votre entreprise, il est nécessaire de rechercher des solutions alternatives ou en plastiques recyclés et recylables."
               },
               {
-                "id" : "materials/metals", "text" : "Métal (aluminium, fer, or, argent, etc...)", "score" : 0, "feedback" : "L'extraction de minerai métallique et leur transformation consomment beaucoup d'énergie et de ressources (eau). Ces processus, s'ils ne sont pas reglementé, peuvent poser une menace pour l'environnement : dégradation et contaminiation des habitats notamment. Les prix du fer et de l'aluminium augmentent et des problèmes soci-économiques (tel que les guerres) peuvent fortement impacter votre chaine de valeur."
+                "id" : "materials/metals", "text" : "Métal (aluminium, fer, or, argent, etc...)", "score" : 0, "feedback" : "L'extraction de minerai métallique et leur transformation consomment beaucoup d'énergie et de ressources (eau). Ces processus, s'ils ne sont pas règlementés, peuvent poser une menace pour l'environnement, notamment la dégradation et la contamination des habitats. Les prix du fer et de l'aluminium augmentent et des problèmes socio-économiques (ex.: guerres) peuvent fortement impacter votre chaine de valeur."
               },
               {
-                "id" : "materials/wood", "text" : "Papier/carton/bois", "score" : 0, "feedback" : "Bien que le bois (et ses dérivés) soit un matériau renouvelable et facilement disponible, la gestion irresponsable des forêts peut entraîner une perte d'habitat et de biodiversité. Il est important de veiller à ce que les chaînes d'approvisionnement soient responsables et certifiées afin de garantir des sources durables. Bien que le papier et carton recyclables soient présentés comme des alternatives plus durable, ils impliquent des processus à forte intensité énergétique. Il est donc important de garder la sobriété comme premier levier dans la fabrication de vos produits."
+                "id" : "materials/wood", "text" : "Papier/carton/bois", "score" : 0, "feedback" : "Bien que le bois (et ses dérivés) soit un matériau renouvelable et facilement disponible, la gestion irresponsable des forêts peut entraîner une perte d'habitat et de biodiversité. Il est important de veiller à ce que les chaînes d'approvisionnement soient responsables et certifiées afin de garantir des sources durables. Bien que le papier et le carton recyclables soient présentés comme des alternatives plus durables, ils impliquent des processus à forte intensité énergétique. Il est donc important de garder la sobriété comme premier levier dans la fabrication de vos produits."
               },
               {
-                "id" : "materials/organic", "text" : "Animal/végétal (alimentation, textile, etc...)", "score" : 0, "feedback" : "L'élévage des animaux consomment beaucoup de ressources en terme d'eau et de nourriture (la principale cause de dégradation des forêts dans le monde est l'agriculture). L'agriculture est la deuxième source des émissions de GES en France.\n\nLes sécheresses vont probablement augmenter dans les années à venir et vont fortement impacter la répartition des zones où les plantes peuvent pousser en Europe, ce qui entraînera des problèmes dans les chaînes d'approvisionnement.\n\nLes dérivés des plantes et animaux sont utilisés dans de nombreuses industries (alimentaire, cosmétique, automobile, textile...) et la recherche d'alternatives plus durables (cuir végétal, plats végétaliens/végétariens...) sera nécessaire pour diminuer notre impact environnemental. "
+                "id" : "materials/organic", "text" : "Animal/végétal (alimentation, textile, etc...)", "score" : 0, "feedback" : "L'élevage des animaux consomme beaucoup de ressources en termes d'eau et de nourriture (la principale cause de dégradation des forêts dans le monde est l'agriculture). L'agriculture est la deuxième source des émissions de GES en France.\n\nLes sécheresses vont probablement augmenter dans les années à venir et vont fortement impacter la répartition des zones où les plantes peuvent pousser en Europe, ce qui entraînera des problèmes dans les chaînes d'approvisionnement.\n\nLes dérivés des plantes et animaux sont utilisés dans de nombreuses industries (alimentaire, cosmétique, automobile, textile...) et la recherche d'alternatives plus durables (cuir végétal, plats végétaliens/végétariens...) sera nécessaire pour diminuer notre impact environnemental. "
               },
               {
-                "id" : "materials/mineral", "text" : "Minéral (sable, gravier, argile, etc...)", "score" : 0, "feedback" : "Comme pour les métaux et les autres industries extractives, l'extraction des minéraux, bien qu'essentielle pour fournir les éléments constitutifs de nos sociétés modernes, nécessite beaucoup de ressources (eau et énergies fossiles). La destruction de l'habitat et la pollution de l'environnement sont les principales préoccupations liées à l'utilisation des minéraux. Le changement d'affectation des terres entraîne d'importantes émissions de gaz à effet de serre également."
+                "id" : "materials/mineral", "text" : "Minéral (sable, gravier, argile, etc...)", "score" : 0, "feedback" : "Comme pour les métaux et les autres industries extractives, l'extraction des minéraux, bien qu'essentielle pour fournir les éléments constitutifs de nos sociétés modernes, nécessite beaucoup de ressources (eau et énergies fossiles). La destruction de l'habitat et la pollution de l'environnement sont les principales préoccupations liées à l'utilisation des minéraux. Le changement d'affectation des terres entraîne également d'importantes émissions de gaz à effet de serre."
               },
               {
-                "id" : "materials/chemical", "text" : "Chimiques", "score" : 0, "feedback" : "De nombreux produits chimiques (peintures, lubrifiants industriels, solvants, produits de nettoyage...) que nous utilisons aujourd'hui sont des dérivés du pétrole et nécessitent des processus à forte intensité énergétique (chauffage et refroidissement). D'origine synthétique, ils sont souvent toxiques pour l'environnement et une grande attention doit être portée au contrôle de l'utilisation et de l'élimination de ces produits chimiques. Dans la mesure du possible, des alternatives d'origine naturelle doivent être étudiées pour limiter l'impact environnemental des produits manufacturés et diminuer les émissions de GES conséquentes."
+                "id" : "materials/chemical", "text" : "Chimiques", "score" : 0, "feedback" : "De nombreux produits chimiques (peintures, lubrifiants industriels, solvants, produits de nettoyage...) que nous utilisons aujourd'hui sont des dérivés du pétrole et nécessitent des processus à forte intensité énergétique (chauffage et refroidissement). D'origine synthétique, ils sont souvent toxiques pour l'environnement et une grande attention doit être portée au contrôle de leur utilisation et de leur élimination. Dans la mesure du possible, des alternatives d'origine naturelle doivent être étudiées pour limiter l'impact environnemental des produits manufacturés et diminuer les émissions de GES conséquentes."
               }
             ]
           },
@@ -577,10 +577,10 @@ var data =
                 "id" : "ecodesign/justabit", "text" : "Oui, en partie", "score" : 3
               },
               {
-                "id" : "ecodesign/no", "text" : "Non", "score" : 0, "feedback" : "La réflexion amont dans la conception d'un produit ou service permet la réduction à la source des émissions de l'activité de l'entreprise."
+                "id" : "ecodesign/no", "text" : "Non", "score" : 0, "feedback" : "Dans la conception d'un produit ou service, la réflexion en amont permet de réduire à la source certaines émissions de l'activité de l'entreprise."
               },
               {
-                "id" : "ecodesign/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "La réflexion amont dans la conception d'un produit ou service permet la réduction à la source des émissions de l'activité de l'entreprise."
+                "id" : "ecodesign/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Dans la conception d'un produit ou service, la réflexion en amont permet de réduire à la source certaines émissions de l'activité de l'entreprise."
               }
             ]
           },
@@ -593,13 +593,13 @@ var data =
                 "id" : "energy/yes", "text" : "Oui et un plan d'action a été mis en place", "score" : 20
               },
               {
-                "id" : "energy/justabit", "text" : "Oui, un suivi est effectué", "score" : 15, "feedback" : "Associer votre suivi des consommations énergétiques à un plan d'actions vous permettra de mesurer les progrès réalisés."
+                "id" : "energy/justabit", "text" : "Oui, un suivi est effectué", "score" : 15, "feedback" : "Associer votre suivi des consommations énergétiques à un plan d'action vous permettra de mesurer les progrès réalisés."
               },
               {
-                "id" : "energy/no", "text" : "Non", "score" : 0, "feedback" : "Le suivi des factures en données financières globales n'est pas suffisante pour s'assurer de traiter de ce poste d'émission."
+                "id" : "energy/no", "text" : "Non", "score" : 0, "feedback" : "Pour traiter les émissions liées à votre consommation d'énergie, le suivi des factures en données financières globales n'est pas suffisant."
               },
               {
-                "id" : "energy/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Le suivi des factures en données financières globales n'est pas suffisante pour s'assurer de traiter de ce poste d'émission."
+                "id" : "energy/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Pour traiter les émissions liées à votre consommation d'énergie, le suivi des factures en données financières globales n'est pas suffisant."
               }
             ]
           },
@@ -609,16 +609,16 @@ var data =
             "options" :
             [
               {
-                "id" : "trash/yes", "text" : "Oui et un plan d'actions de réduction et revalorisation a été mis en place", "score" : 5, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier 5 types de déchets (papier/carton, métal, plastique, verre, et bois) dans des poubelles dédiées. C’est le tri 5 flux des déchets."
+                "id" : "trash/yes", "text" : "Oui et un plan d'actions de réduction et revalorisation a été mis en place", "score" : 5, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier le papier/carton, métal, plastique, verre, et bois dans des poubelles dédiées. C’est le tri 5 flux des déchets."
               },
               {
-                "id" : "trash/justabit", "text" : "Oui, un suivi est effectué", "score" : 3, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier 5 types de déchets (papier/carton, métal, plastique, verre, et bois) dans des poubelles dédiées. C’est le tri 5 flux des déchets."
+                "id" : "trash/justabit", "text" : "Oui, un suivi est effectué", "score" : 3, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier le papier/carton, métal, plastique, verre, et bois dans des poubelles dédiées. C’est le tri 5 flux des déchets."
               },
               {
-                "id" : "trash/no", "text" : "Non", "score" : 0, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier 5 types de déchets (papier/carton, métal, plastique, verre, et bois) dans des poubelles dédiées. C’est le tri 5 flux des déchets."
+                "id" : "trash/no", "text" : "Non", "score" : 0, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier le papier/carton, métal, plastique, verre, et bois dans des poubelles dédiées. C’est le tri 5 flux des déchets."
               },
               {
-                "id" : "trash/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier 5 types de déchets (papier/carton, métal, plastique, verre, et bois) dans des poubelles dédiées. C’est le tri 5 flux des déchets."
+                "id" : "trash/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "Depuis juillet 2016, les professionnels ont l’obligation de trier le papier/carton, métal, plastique, verre, et bois dans des poubelles dédiées. C’est le tri 5 flux des déchets."
               }
             ]
           },
@@ -634,10 +634,10 @@ var data =
                 "id" : "mobility/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 10
               },
               {
-                "id" : "mobility/no", "text" : "Non", "score" : 0, "showFeedbackIf" : "activity/services", "feedback" : "Les déplacements professionnels peuvent représenter une partie importante des émissions de votre entreprise, surtout pour une entreprise de services."
+                "id" : "mobility/no", "text" : "Non", "score" : 0, "showFeedbackIf" : "activity/services", "feedback" : "En tant qu'entreprise de services, les déplacements professionnels peuvent représenter une part importante de vos émissions."
               },
               {
-                "id" : "mobility/unknown", "text" : "Je ne sais pas", "score" : 0, "showFeedbackIf" : "activity/services", "feedback" : "Les déplacements professionnels peuvent représenter une partie importante des émissions de votre entreprise, surtout pour une entreprise de services."
+                "id" : "mobility/unknown", "text" : "Je ne sais pas", "score" : 0, "showFeedbackIf" : "activity/services", "feedback" : "En tant qu'entreprise de services, les déplacements professionnels peuvent représenter une part importante de vos émissions."
               }
             ]
           },
@@ -653,10 +653,10 @@ var data =
                 "id" : "transport/justabit", "text" : "Oui, une réflexion a été engagée", "score" : 15
               },
               {
-                "id" : "transport/no", "text" : "Non", "score" : 0, "showFeedbackIf" : "activity/products", "feedback" : "Les émissions du transport font souvent partie des émissions dites significatives d'une entreprise commercialisant des produits."
+                "id" : "transport/no", "text" : "Non", "score" : 0, "showFeedbackIf" : "activity/products", "feedback" : "Pour une entreprise commercialisant des produits, le transport fait souvent partie des émissions dites significatives."
               },
               {
-                "id" : "transport/unknown", "text" : "Je ne sais pas", "score" : 0, "showFeedbackIf" : "activity/products", "feedback" : "Les émissions du transport font souvent partie des émissions dites significatives d'une entreprise commercialisant des produits."
+                "id" : "transport/unknown", "text" : "Je ne sais pas", "score" : 0, "showFeedbackIf" : "activity/products", "feedback" : "Pour une entreprise commercialisant des produits, le transport fait souvent partie des émissions dites significatives."
               }
             ]
           },
@@ -669,10 +669,10 @@ var data =
                 "id" : "supply/yes", "text" : "Oui", "score" : 15, "feedback" : "Une politique d’achats responsables permet de réduire les risques et les impacts sociaux et environnementaux, réduire les coûts, notamment liés aux ruptures d’approvisionnement mais aussi de satisfaire la demande des clients, en se tournant vers des produits ou services durables."
               },
               {
-                "id" : "supply/no", "text" : "Non", "score" : 0, "feedback" : "La dépendance à la chaine de valeur fait que le poste d'émissions des achats de produits ou services est très souvent un des postes d'émissions prépondérants d'une entreprise. La démarche d'acahts responsables sera déterminante dans la réussite de votre stratégie climat !"
+                "id" : "supply/no", "text" : "Non", "score" : 0, "feedback" : "La dépendance à la chaine de valeur fait que le poste d'émissions des achats de produits ou services est très souvent un des postes d'émissions prépondérants pour l'entreprise. La démarche d'achats responsables sera déterminante dans la réussite de votre stratégie climat !"
               },
               {
-                "id" : "supply/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "La dépendance à la chaine de valeur fait que le poste d'émissions des achats de produits ou services est très souvent un des postes d'émissions prépondérants d'une entreprise. La démarche d'acahts responsables sera déterminante dans la réussite de votre stratégie climat !"
+                "id" : "supply/unknown", "text" : "Je ne sais pas", "score" : 0, "feedback" : "La dépendance à la chaine de valeur fait que le poste d'émissions des achats de produits ou services est très souvent un des postes d'émissions prépondérants pour l'entreprise. La démarche d'achats responsables sera déterminante dans la réussite de votre stratégie climat !"
               }
             ]
           },
@@ -697,8 +697,7 @@ var data =
           }
         ]
       }
-    ],
-    "commonOpportunities" : "# Les opportunités à saisir\n\n- Commerciale : le reporting climat est de plus en plus demander pour répondre à des AO\n- Financière : pour accéder à des financements (de la part d'investisseurs, ou dans le cadre de prêts bancaires)"
+    ]
   },
   "rseForm":
   {

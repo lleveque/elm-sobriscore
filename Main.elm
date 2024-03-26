@@ -417,7 +417,7 @@ view model = case model.status of
             [ ul []
               [ p [] [ text (model.name ++ " 👤")]
               , p [] [ text (( getRole model.answers model.role ) ++ " - " ++ model.company ++ " 🏢")]
-              , p [] [ text (model.email ++ " 📨")]
+              --, p [] [ text (model.email ++ " 📨")]
               ]
             ]
           else
@@ -453,9 +453,10 @@ view model = case model.status of
                   , getScore model.showScores form model.answers
                   ]
                 , div [ id "print-credit" ] [ img [ class "logo", src "./logo_ecoco2_transparent.svg" ] [], span [] [ text "Le Sobriscore est un outil développé par Eco CO2,"], span [] [ text "société de conseil et de formation en transition écologique." ]]
+                , getFeedback form model.answers
                 , getOpportunities model.answers
                 , getLaws model.answers
-                , getFeedback form model.answers ]
+                ]
               )
             , div [ id "start-buttons" ] ( getResultsCTA model.climateForm model.rseForm model.answers )
             , if model.showScores then ( vAllAnswers model.answers ) else div [] []
@@ -476,10 +477,10 @@ getRole answers otherJob =
 getOpportunities : Answers -> Html Msg
 getOpportunities answers =
   let
-    opportunities = case ( List.filter (String.startsWith "sector/") ( OrderedSet.toList answers ) |> List.head ) of
+    sectorOpportunities = case ( List.filter (String.startsWith "sector/") ( OrderedSet.toList answers ) |> List.head ) of
       Just "sector/services" -> [ "Développement de services durables", "Conseil en gestion et adaptation aux risques climatiques", "Demande d'expertises des clients sur ces nouveaux sujets : être en avance de phase" ]
-      Just "sector/agriculture" -> [ "Adoption de pratiques agricoles durables et résilientes", "Développement de cultures et de variétés adaptées au climat changeant", "Emergence de nouvelles zones de pêche à mesure que les habitats marins se déplacent", "Promotion de la gestion durable des ressources aquatiques." ]
-      Just "sector/food" -> [ "Changements dans la demande alimentaire : les préférences des consommateurs peuvent évoluer en réponse aux changements climatiques:  demande croissante pour des produits alimentaires durables, locaux et faiblement carbonnée", "Innovation alimentaire et technologique : création de nouveaux produits alimentaires adaptés aux préférences des consommateurs conscients de l'impact climatique" ]
+      Just "sector/agriculture" -> [ "Adoption de pratiques agricoles durables et résilientes", "Développement de cultures et de variétés adaptées au climat changeant", "Émergence de nouvelles zones de pêche à mesure que les habitats marins se déplacent", "Promotion de la gestion durable des ressources aquatiques." ]
+      Just "sector/food" -> [ "Changements dans la demande alimentaire : les préférences des consommateurs peuvent évoluer en réponse aux changements climatiques:  demande croissante pour des produits alimentaires durables, locaux et faiblement carbonés", "Innovation alimentaire et technologique : création de nouveaux produits alimentaires adaptés aux préférences des consommateurs conscients de l'impact climatique" ]
       Just "sector/transport" -> [ "Adoption de modes de transport plus durables pour répondre aux exigences environnementales", "Investissements dans des technologies écoénergétiques et des infrastructures résilientes", "Développement de solutions logistiques innovantes pour atténuer les risques climatiques", "Accroissement de la demande pour des services de transport respectueux de l'environnement" ]
       Just "sector/energy" -> [ "Croissance potentielle des énergies renouvelables et des technologies liées", "Possibilité de développer des solutions énergétiques innovantes et durables" ]
       Just "sector/construction" -> [ "Essor de la demande pour des bâtiments durables et écoénergétiques", "Opportunités d'innovation dans les matériaux de construction plus résilients et respectueux de l'environnement et développement de l'économie circulaire", "Développement de technologies de construction vertes", "Augmentation de la demande pour la rénovation énergétique des bâtiments existants." ]
@@ -488,22 +489,19 @@ getOpportunities answers =
       Just "sector/health" -> [ "Développement de technologies médicales et de pratiques de santé adaptées au changement climatique." ]
       Just "sector/trading" -> [ "Réponse à la demande croissante des consommateurs pour des produits durables", "Adoption de pratiques éco-responsables pour améliorer l'image de marque", "Investissements dans des technologies de chaîne d'approvisionnement verte", "Développement de modèles d'affaires axés sur la circularité et la location pour réduire les déchets et les achats." ]
       Just "sector/chemical" -> [ "Diversification des produits pour répondre à la demande croissante de solutions durables", "R&D sur les solutions plus durables de substitutions pour un marché porteur" ]
-      Just "sector/software" -> [ "éveloppement de technologies plus économes en énergie, dont sont demandeuses clients particuliers & professionnels, ainsi que les entités étatiques", "Opportunités pour les technologies de surveillance et d'atténuation des impacts climatiques" ]
-      Just "sector/clothing" -> [ "se différencier en adoptant des matériaux durables et recyclables", "Opportunités de développer une offre de mode durable et locale" ]
-      Just "sector/manufacture" -> [ "Adoption de pratiques de production plus durables pour répondre à la demande croissante des consommateurs (reformatage)", "Investissements dans des technologies vertes pour réduire l'empreinte carbone", "Développement de produits innovants axés sur la durabilité", "Opportunités de croissance grâce à la fourniture de solutions climatiques et éco-responsables", "Eco-conception des produits permettant une réduciton des coûts de matière première et valorisation de métières issues de l'conomie circulaire (recylcage, upcycling)" ]
+      Just "sector/software" -> [ "Développement de technologies plus économes en énergie, dont sont demandeurs les clients particuliers & professionnels, ainsi que les entités étatiques", "Opportunités pour les technologies de surveillance et d'atténuation des impacts climatiques" ]
+      Just "sector/clothing" -> [ "Différenciation par l'adoption de matériaux durables et recyclables", "Opportunités de développer une offre de mode durable et locale" ]
+      Just "sector/manufacture" -> [ "Adoption de pratiques de production plus durables pour répondre à la demande croissante des consommateurs (reformatage)", "Investissements dans des technologies vertes pour réduire l'empreinte carbone", "Développement de produits innovants axés sur la durabilité", "Opportunités de croissance grâce à la fourniture de solutions climatiques et éco-responsables", "Éco-conception des produits permettant une réduction des coûts de matière première et valorisation de matières issues de l'économie circulaire (recyclage, upcycling)" ]
       Just "sector/arts" -> [ "Sensibilisation accrue aux enjeux climatiques par le biais de l'art et de la culture." ]
-      Just "sector/waste" -> [ "Investissements dans des infrastructures résilientes pour faire face aux changements climatiques,", "Adoption de technologies vertes pour améliorer l'efficacité de la gestion de l'eau et des déchets", "Développement de solutions innovantes pour la récupération des ressources à partir des déchets", "Opportunités de croissance grâce à la demande croissante pour des services de gestion durable de l'eau et des déchets." ]
+      Just "sector/waste" -> [ "Investissements dans des infrastructures résilientes pour faire face aux changements climatiques", "Adoption de technologies vertes pour améliorer l'efficacité de la gestion de l'eau et des déchets", "Développement de solutions innovantes pour la récupération des ressources à partir des déchets", "Opportunités de croissance grâce à la demande croissante pour des services de gestion durable de l'eau et des déchets." ]
       _ -> []
-    b2bOpportunity = if (OrderedSet.member "bizModel/b2b" answers) then Just "Vos clients cherchent vraisemblablement eux-mêmes à décarboner leur chaîne de valeur et il est très probable que vous soyez interrogé/challengé sur votre démarche." else Nothing
-    b2cOpportunity = if (OrderedSet.member "bizModel/b2c" answers) then Just "Les entreprises qui adoptent des mesures et processus plus durable disposent d'un avantage concurrentiel significatif lorsque les organismes de réglementation du secteur adoptent des lois vertes qui obligent les marchés à s'adapter." else Nothing
-    -- TODO add b2bOpportunity and b2cOpportunity to other opportunities
-    allOpportunities =
-      [ "Commerciale : le reporting climat est de plus en plus demander pour répondre à des AO"
-      , "Financière : pour accéder à des financements (de la part d'investisseurs, ou dans le cadre de prêts bancaires)"
-      ] ++ opportunities
+    b2bOpportunity = if (OrderedSet.member "bizModel/b2b" answers) then [ "Vos clients cherchent vraisemblablement eux-mêmes à décarboner leur chaîne de valeur et il est très probable que vous soyez interrogé/challengé sur votre démarche." ] else []
+    b2cOpportunity = if (OrderedSet.member "bizModel/b2c" answers) then [ "Les entreprises qui adoptent des mesures et processus plus durable disposent d'un avantage concurrentiel significatif lorsque les organismes de réglementation du secteur adoptent des lois vertes qui obligent les marchés à s'adapter." ] else []
+    commonOpportunities = [ "Participation aux appels d'offres où un reporting climat est demandé", "Accès facilité à certains financements (de la part d'investisseurs, ou dans le cadre de prêts bancaires)" ]
+    allOpportunities = commonOpportunities ++ b2bOpportunity ++ b2cOpportunity ++ sectorOpportunities
   in
     section []
-      [ h1 [] [ text "Les opportunités pour vous" ]
+      [ h1 [] [ text "Vos opportunités dans la transition" ]
       , ul [] (List.map (\o -> li [] [ text o ]) allOpportunities)
       , getRisks answers
       ]
@@ -513,24 +511,24 @@ getRisks answers =
   let
     risks = case ( List.filter (String.startsWith "sector/") ( OrderedSet.toList answers ) |> List.head ) of
       Just "sector/services" -> [ "Pressions réglementaires : les gouvernements peuvent renforcer les réglementations environnementales en réponse aux changements climatiques, ce qui peut entraîner des coûts supplémentaires et des obligations de conformité pour les entreprises de services", "Réputation et responsabilité sociale : les entreprises du secteur des services peuvent être soumises à une pression accrue pour adopter des pratiques durables" ]
-      Just "sector/agriculture" -> [ "Menaces croissantes pour les rendements agricoles en raison de conditions météorologiques extrêmes et du changement climatique", "Diminution des rendements agricoles du fait de l'erosion de la biodiversité (diminution des polénisateurs, déséquilibre des écosystèmes)", "Augmentation des maladies des cultures et des espèces marines", "Perturbation des saisons de pêche due aux changements dans les températures des océans et des baisse de populations d'éspèces marines" ]
+      Just "sector/agriculture" -> [ "Menaces croissantes pour les rendements agricoles en raison de conditions météorologiques extrêmes et du changement climatique", "Diminution des rendements agricoles du fait de l'érosion de la biodiversité (diminution des pollinisateurs, déséquilibre des écosystèmes)", "Augmentation des maladies des cultures et des espèces marines", "Perturbation des saisons de pêche due aux changements dans les températures des océans et des baisses de populations d'espèces marines" ]
       Just "sector/food" -> [ "Menaces croissantes pour les rendements agricoles en raison de conditions météorologiques extrêmes et du changement climatique", "Changements dans la disponibilité des matières premières", "Pressions sur la gestion de l'eau", "Impact sur les marchés internationaux" ]
-      Just "sector/transport" -> [ "Augmentation des coûts opérationnels dus à des événements météorologiques extrêmes perturbant les infrastructures et les itinéraires", "Pressions réglementaires croissantes pour réduire les émissions de gaz à effet de serre", "Vulnérabilité accrue des chaînes d'approvisionnement aux impacts climatiques" ]
-      Just "sector/energy" -> [ "Perturbations dans la production d'énergie en raison d'événements climatiques extrêmes", "Diminution de la disponibilité des ressources en énergie (eau, uranium, matériaux pour éoliennes, etc.)", "Pression sur la transition (coûts importants) si pas d'anticipation" ]
+      Just "sector/transport" -> [ "Augmentation des coûts opérationnels due à des événements météorologiques extrêmes perturbant les infrastructures et les itinéraires", "Pressions réglementaires croissantes pour réduire les émissions de gaz à effet de serre", "Vulnérabilité accrue des chaînes d'approvisionnement aux impacts climatiques" ]
+      Just "sector/energy" -> [ "Perturbations dans la production d'énergie en raison d'événements climatiques extrêmes", "Diminution de la disponibilité des ressources en énergie (eau, uranium, matériaux pour éoliennes, etc.)", "Coûts de transition importants si elle n'est pas anticipée" ]
       Just "sector/construction" -> [ "Augmentation des coûts de construction en raison de normes renforcées pour la résilience climatique et de la raréfaction des matières premières", "Risques accrus liés à des événements météorologiques extrêmes affectant les chantiers et les infrastructures", "Pression pour l'adaptation des bâtiments aux conditions climatiques changeantes et pour la réduction de leur consommations énergétiques" ]
-      Just "sector/banking" -> [ "Augmentation des pertes financières liées aux événements climatiques extrêmes et aux dommages aux biens assurés", "Risques accrus liés aux investissements dans des secteurs vulnérables aux changements climatiques", "Pression réglementaire croissante pour évaluer, reporter et communiquer sur les impacts sur le changement climatique", "Augmentation des risques réputationnels pour les investissements dans des secteurs très impactants (actifs bloqués)" ]
+      Just "sector/banking" -> [ "Augmentation des pertes financières liées aux événements climatiques extrêmes et aux dommages aux biens assurés", "Risques accrus liés aux investissements dans des secteurs vulnérables aux changements climatiques", "Pression réglementaire croissante pour évaluer, rapporter et communiquer sur les impacts sur le changement climatique", "Augmentation des risques réputationnels pour les investissements dans des secteurs très impactants (actifs bloqués)" ]
       Just "sector/tourism" -> [ "Vulnérabilité accrue aux phénomènes météorologiques extrêmes impactant les opérations (canicules, feux de forêts, tempêtes, innondations, etc)", "Perturbation des chaînes d'approvisionnement alimentaire et augmentation des coûts", "Menace pour les destinations touristiques en raison des changements climatiques (sports d'hiver) " ]
-      Just "sector/health" -> [ "Augmentation des maladies liées au climat, telles que les maladies vectorielles (transmises par les moustiques, etc.)", "Pression sur les systèmes de santé dus à des événements climatiques extrêmes (ex : canicules, hiver rude, catastrophes naturelles)", "Déplacement de populations en raison de la montée du niveau de la mer ou d'événements climatiques" ]
+      Just "sector/health" -> [ "Augmentation des maladies liées au climat, telles que les maladies vectorielles (transmises par les moustiques, etc.)", "Pression sur les systèmes de santé due à des événements climatiques extrêmes (ex : canicules, hiver rude, catastrophes naturelles)", "Déplacement de populations en raison de la montée du niveau de la mer ou d'événements climatiques" ]
       Just "sector/trading" -> [ "Augmentation des coûts logistiques dus à des conditions météorologiques extrêmes et à des perturbations dans la chaîne d'approvisionnement", "Pression pour réduire l'empreinte carbone des opérations", "Risques de pertes de stocks en raison d'événements climatiques", "Risque réputationnel sur l'impact des produits vendus" ]
       Just "sector/chemical" -> [ "Pression accrue pour réduire l'utilisation de produits chimiques nocifs et dépendance aux combustibles fossiles", "Possibilité de perturbation des chaînes d'approvisionnement en matières premières pétrosourcés" ]
-      Just "sector/software" -> [ "Perturbations des infrastructures de communication dues à des événements climatiques extrêmes", "Augmentation de la demande d'énergie pour les alimenter les DATA Centers (4% des émissions de GES mondiales concernent le numérique)" ]
+      Just "sector/software" -> [ "Perturbations des infrastructures de communication dues à des événements climatiques extrêmes", "Augmentation de la demande en énergie pour alimenter les datacenters (4% des émissions de GES mondiales concernent le numérique)" ]
       Just "sector/clothing" -> [ "Perturbations des chaînes d'approvisionnement en coton et en fibres textiles plastiques notamment", "Pression sociétale pour réduire l'empreinte carbone de la production de vêtements (8% des émissions de GES mondiales sont imputables au secteur)" ]
-      Just "sector/manufacture" -> [ "Augmentation des coûts liés à l'adaptation aux normes environnementales et aux interruptions de la chaîne d'approvisionnement", "Augmentation des coûts liés aux coûts des énergies et à la raréfction des matières premières", "Vulnérabilité aux événements climatiques extrêmes affectant les installations de production", "Pressions réglementaires et de la chaine de valeur pour réduire les émissions industrielles" ]
+      Just "sector/manufacture" -> [ "Augmentation des coûts liés à l'adaptation aux normes environnementales et aux interruptions de la chaîne d'approvisionnement", "Augmentation des coûts liés aux coûts des énergies et à la raréfction des matières premières", "Vulnérabilité aux événements climatiques extrêmes affectant les installations de production", "Pressions réglementaires et de la chaîne de valeur pour réduire les émissions industrielles" ]
       Just "sector/arts" -> [ "Menace et perturbations pour les sites culturels via les conséquences du changement climatique (séismes, élévation niveau de la mer, tornades, etc.)" ]
       Just "sector/waste" -> [ "Augmentation des pressions sur les ressources hydriques en raison de phénomènes climatiques extrêmes", "Risques accrus d'inondations et de déversements de déchets liés aux changements dans les modèles climatiques", "Perturbation des infrastructures de gestion de l'eau" ]
       _ -> []
-    b2bRisk = if (OrderedSet.member "bizModel/b2b" answers) then [ "Vos clients et parties prenantes sont de plus en plus exigeants, voire eux-mêmes soumis à la réglementation" ] else []
-    b2cRisk = if (OrderedSet.member "bizModel/b2c" answers) then [ "Attentes de consommateurs de plus en plus attentifs à l'impact environnemental des produits qu'ils consomment" ] else []
+    b2bRisk = if (OrderedSet.member "bizModel/b2b" answers) then [ "Exigence accrue des clients et parties prenantes, potentiellement eux-mêmes soumis à la réglementation" ] else []
+    b2cRisk = if (OrderedSet.member "bizModel/b2c" answers) then [ "Attentes accrues des consommateurs concernant l'impact environnemental des produits qu'ils consomment" ] else []
     allRisks = b2bRisk ++ b2cRisk ++ risks
   in
     div [ id "risks" ]
@@ -541,30 +539,30 @@ getRisks answers =
 getLaws : Answers -> Html Msg
 getLaws answers =
   let
-    header = "Grâce à la loi PACTE (Plan d’Action pour la Croissance et la Transformation des Entreprises) l’entreprise doit prendre en considération les enjeux sociaux et environnementaux de son activité. Elle introduite ainsi la notion de Société à mission, et sa \"raison d’être\". Un organe de surveilleance doit vérifier la conformité des décisions de gestion de l'entreprise avec sa mission."
+    header = "Grâce à la loi PACTE (Plan d’Action pour la Croissance et la Transformation des Entreprises) l’entreprise doit prendre en considération les enjeux sociaux et environnementaux de son activité. Elle introduit ainsi la notion de Société à mission, et sa \"raison d’être\". Un organe de surveillance doit vérifier la conformité des décisions de gestion de l'entreprise avec sa mission."
     
     dpefLaw =
       if (OrderedSet.member "dpef/no" answers)
-      then [ "Même si vous êtes pour le moment pas concerné par ces réglementations, il est tout de même très probable que vous soyez  interrogé/challengé par votre client sur ce sujet pour poursuivre une collaboration, car ce dernier se doit également de décarboner sa chaîne de valeur" ]
+      then [ "Même si pour le moment vous n'êtes pas concerné par ces réglementations, vous serez probablement interrogé/challengé sur le sujet par votre client pour poursuivre une collaboration, car ce-dernier se doit également de décarboner sa chaîne de valeur" ]
       else if (OrderedSet.member "dpef/unknown" answers)
-      then [ "Les PME cotées en bourse et celles qui comptent plus de 250 salariés réalisant plus de 50 M€ et/ou affichent plus de 25 M€ de bilan de CA doivent se mettre en conformité avec la CSRD. Sont également concernées les entreprises non Européennes avec un CA supérieur ou égal à 150 M€ sur le marché de l'UE." ]
+      then [ "Les PME cotées en bourse et celles qui comptent plus de 250 salariés, réalisent plus de 50 M€ et/ou affichent plus de 25 M€ de CA au bilan doivent se mettre en conformité avec la CSRD (directive sur le reporting de durabilité). Sont également concernées les entreprises non-européennes avec un CA supérieur ou égal à 150 M€ sur le marché de l'UE." ]
       else []
     
     laws = case ( List.filter (String.startsWith "sector/") ( OrderedSet.toList answers ) |> List.head ) of
       Just "sector/services" -> [  ]
       Just "sector/agriculture" -> [ "Plan écophyto", "Stratégie nationale de gestion durable des forêts", "Politiques de transition agroécologique et de pêche durable" ]
       Just "sector/food" -> [ "EGALim" ]
-      Just "sector/transport" -> [ "Info GES", "nouvelles normes ISO 14083", "Objectifs de neutralité carbone à 2050 qui implique des actions importantes pour le secteur", "Instauration de ZFE et accès aux villes" ]
-      Just "sector/energy" -> [ "Certificats d'économies d'énergie", "Quota CO2", "obligations d'énergies renouvelables nationales" ]
-      Just "sector/construction" -> [ "RE2020", "décret tertiaire", "multiplication des certifications environnementales des bâtiments (HQE, BREEAM)", "Plan de rénovation énergétique", "Loi ELAN" ]
+      Just "sector/transport" -> [ "Info GES", "Nouvelles normes ISO 14083", "Objectifs de neutralité carbone à 2050 qui impliquent des actions importantes pour le secteur", "Instauration de ZFE et accès aux villes" ]
+      Just "sector/energy" -> [ "Certificats d'économies d'énergie", "Quota CO2", "Obligations d'énergies renouvelables nationales" ]
+      Just "sector/construction" -> [ "RE2020", "Décret tertiaire", "Multiplication des certifications environnementales des bâtiments (HQE, BREEAM)", "Plan de rénovation énergétique", "Loi ELAN" ]
       Just "sector/banking" -> [ "Taxonomie européenne des activités durables", "CSRD", "SFRD (article 29 Loi Energie Climat)" ]
-      Just "sector/tourism" -> [ "Augmentation des certifiations environnementales (charte Engagé pour la Nature)", "Plan National Toursime Durable (PNTD)", "Gestion des déchats", "Loi relative à la lutte contre le gaspillage et à l'économie circulaire (AGEC)" ]
-      Just "sector/health" -> [ "un comité de pilotage de la transition écologique en santé structuré autour de 7 thématiques a été mis en place en mai 2023. Il regroupe les ministères de la santé, de l’autonomie, de la transition écologique et de la cohésion des territoires, de la transformation de la fonction publique, de la caisse nationale d'assurance maladie (CNAM), de la la caisse nationale de solidarité pour l'autonomie (CNSA), de l'agence de l'environnement et de la maîtrise de l'énergie (ADEME), de l'agence nationale de sécurité du médicament et des produits de santé (ANSM) et des agences régionales de santé (ARS) Nouvelle-Aquitaine et Grand-Est au titre des ARS. ", "Décret tertiaire, déchets, BEGES, EGALim, REACH" ]
-      Just "sector/trading" -> [ "Loi de Transition Energétique pour la croissance verte", "Loi REP qui impose aux distributeurs de prendre en charge la fin de vie de leurs produits" ]
+      Just "sector/tourism" -> [ "Augmentation des certifications environnementales (charte Engagé pour la Nature)", "Plan National Tourisme Durable (PNTD)", "Gestion des déchets", "Loi relative à la lutte contre le gaspillage et à l'économie circulaire (AGEC)" ]
+      Just "sector/health" -> [ "Un comité de pilotage de la transition écologique en santé structuré autour de 7 thématiques a été mis en place en mai 2023. Il regroupe les Ministères de la Santé, de l’autonomie, de la transition écologique et de la Cohésion des territoires, de la transformation de la fonction publique, de la Caisse Nationale d'Assurance Maladie (CNAM), de la la Caisse Nationale de Solidarité pour l'Autonomie (CNSA), de l'Agence de l'environnement et de la maîtrise de l'énergie (ADEME), de l'Agence Nationale de Sécurité du Médicament et des produits de santé (ANSM) et des Agences Régionales de Santé (ARS) Nouvelle-Aquitaine et Grand-Est au titre des ARS. ", "Décret tertiaire, déchets, BEGES, EGALim, REACH" ]
+      Just "sector/trading" -> [ "Loi de Transition Energétique pour la Croissance Verte (LTECV)", "Loi REP qui impose aux distributeurs de prendre en charge la fin de vie de leurs produits" ]
       Just "sector/chemical" -> [ "REACH", "ICPE" ]
       Just "sector/software" -> [ "Directive sur la conception écologique" ]
       Just "sector/clothing" -> [ "Normes et labels environnementaux" ]
-      Just "sector/manufacture" -> [ "Loi de Transition Energétique pour la Croissance Verte (LTECV)", "Système des quotas d'émissions", "certifications ISO (dotn ISO 140001)", "REP pour certains secteurs" ]
+      Just "sector/manufacture" -> [ "Loi de Transition Energétique pour la Croissance Verte (LTECV)", "Système des quotas d'émissions", "Certifications ISO (dont ISO 140001)", "REP pour certains secteurs" ]
       Just "sector/arts" -> [  ]
       Just "sector/waste" -> [ "Directive Cadre sur l'eau", "LEMA", "Loi de Transition Energétique pour la Croissance Verte (LTECV)", "Plan National de Gestion des Matières et des Déchets" ]
       _ -> []
@@ -572,7 +570,7 @@ getLaws answers =
     allLaws = dpefLaw ++ laws
   in
     section [ id "laws" ]
-      [ h1 [] [ text "Les règlementations qui s'appliquent" ]
+      [ h1 [] [ text "Les réglementations qui s'appliquent" ]
       , div [] [ text header ]
       , ul [] (List.map (\o -> li [] [ text o ]) allLaws)
       ]
